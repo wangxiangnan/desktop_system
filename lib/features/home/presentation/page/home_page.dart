@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-
-import '../../../../core/constants/app_colors.dart';
-import '../../../../core/constants/app_strings.dart';
-import '../../../auth/presentation/bloc/auth_bloc.dart';
-import '../../../auth/presentation/bloc/auth_state.dart';
+import 'package:desktop_system/core/constants/app_colors.dart';
+import 'package:desktop_system/core/config/app_config.dart';
+import 'package:desktop_system/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:desktop_system/features/auth/presentation/bloc/auth_state.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -20,7 +19,7 @@ class HomePage extends StatelessWidget {
       },
       child: Scaffold(
         backgroundColor: AppColors.background,
-        appBar: AppBar(
+        /* appBar: AppBar(
           title: const Text(AppStrings.appName),
           actions: [
             BlocBuilder<AuthBloc, AuthState>(
@@ -47,7 +46,7 @@ class HomePage extends StatelessWidget {
               },
             ),
           ],
-        ),
+        ), */
         body: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(
@@ -77,6 +76,13 @@ class HomePage extends StatelessWidget {
                       'App settings',
                       Icons.settings,
                       () => context.push('/settings'),
+                    ),
+                    _buildDashboardCard(
+                      context,
+                      'Environment',
+                      'Current: ${AppConfig.environment}',
+                      Icons.cloud,
+                      () => _showEnvironmentInfo(context),
                     ),
                   ],
                 ),
@@ -122,6 +128,32 @@ class HomePage extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  void _showEnvironmentInfo(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Environment Information'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('App Name: ${AppConfig.appName}'),
+            Text('Environment: ${AppConfig.environment}'),
+            Text('API Base URL: ${AppConfig.apiBaseUrl}'),
+            Text('Debug Mode: ${AppConfig.debugMode}'),
+            Text('Log Level: ${AppConfig.logLevel}'),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Close'),
+          ),
+        ],
       ),
     );
   }

@@ -10,55 +10,63 @@ class TicketRepositoryImpl implements TicketRepository {
 
   void _initMockData() {
     final now = DateTime.now();
-    _tickets.addAll([
-      TicketModel(
-        id: '1',
-        ticketNumber: 'TK001',
-        passengerName: 'John Doe',
-        route: 'New York - Boston',
-        departureTime: now.add(const Duration(hours: 2)),
-        status: TicketStatus.completed,
-        price: 45.00,
-        createdAt: now.subtract(const Duration(days: 1)),
-      ),
-      TicketModel(
-        id: '2',
-        ticketNumber: 'TK002',
-        passengerName: 'Jane Smith',
-        route: 'Los Angeles - San Francisco',
-        departureTime: now.add(const Duration(days: 1)),
-        status: TicketStatus.pending,
-        price: 35.00,
-        createdAt: now,
-      ),
-      TicketModel(
-        id: '3',
-        ticketNumber: 'TK003',
-        passengerName: 'Bob Johnson',
-        route: 'Chicago - Detroit',
-        departureTime: now.add(const Duration(hours: 5)),
-        status: TicketStatus.processing,
-        price: 28.50,
-        notes: 'Special assistance required',
-        createdAt: now.subtract(const Duration(hours: 3)),
-      ),
-      TicketModel(
-        id: '4',
-        ticketNumber: 'TK004',
-        passengerName: 'Alice Williams',
-        route: 'Miami - Orlando',
-        departureTime: now.add(const Duration(days: 2)),
-        status: TicketStatus.cancelled,
-        price: 22.00,
-        createdAt: now.subtract(const Duration(days: 2)),
-      ),
-    ]);
+    final names = [
+      'John Doe',
+      'Jane Smith',
+      'Bob Johnson',
+      'Alice Williams',
+      'Charlie Brown',
+      'David Wilson',
+      'Emma Davis',
+      'Frank Miller',
+      'Grace Lee',
+      'Henry Taylor',
+      'Ivy Anderson',
+      'Jack Thomas',
+    ];
+    final routes = [
+      'New York - Boston',
+      'Los Angeles - San Francisco',
+      'Chicago - Detroit',
+      'Miami - Orlando',
+      'Seattle - Portland',
+      'Dallas - Houston',
+      'Atlanta - Charlotte',
+      'Phoenix - Las Vegas',
+    ];
+
+    for (int i = 0; i < 25; i++) {
+      _tickets.add(
+        TicketModel(
+          id: '${i + 1}',
+          ticketNumber: 'TK${(i + 1).toString().padLeft(3, '0')}',
+          passengerName: names[i % names.length],
+          route: routes[i % routes.length],
+          departureTime: now.add(Duration(days: i, hours: i * 2)),
+          status: TicketStatus.values[i % 4],
+          price: 20.0 + (i * 5),
+          notes: i % 3 == 0 ? 'Special assistance required' : null,
+          createdAt: now.subtract(Duration(days: i)),
+        ),
+      );
+    }
   }
 
   @override
-  Future<List<TicketModel>> getTickets() async {
-    await Future.delayed(const Duration(milliseconds: 500));
-    return List.from(_tickets);
+  Future<PaginatedTickets> getTickets({int page = 1, int pageSize = 10}) async {
+    await Future.delayed(const Duration(milliseconds: 300));
+    final start = (page - 1) * pageSize;
+    final end = start + pageSize;
+    final paginatedList = _tickets.length > start
+        ? _tickets.sublist(start, end.clamp(0, _tickets.length))
+        : <TicketModel>[];
+
+    return PaginatedTickets(
+      tickets: paginatedList,
+      total: _tickets.length,
+      page: page,
+      pageSize: pageSize,
+    );
   }
 
   @override
@@ -91,13 +99,23 @@ class TicketRepositoryImpl implements TicketRepository {
   }
 
   @override
-  Future<List<TicketModel>> searchTickets(String query) async {
+  Future<List<TicketModel>> searchTickets(
+    String query, {
+    int page = 1,
+    int pageSize = 10,
+  }) async {
     await Future.delayed(const Duration(milliseconds: 300));
     final lowerQuery = query.toLowerCase();
-    return _tickets.where((t) {
+    final filtered = _tickets.where((t) {
       return t.passengerName.toLowerCase().contains(lowerQuery) ||
           t.ticketNumber.toLowerCase().contains(lowerQuery) ||
           t.route.toLowerCase().contains(lowerQuery);
     }).toList();
+
+    final start = (page - 1) * pageSize;
+    final end = start + pageSize;
+    return filtered.length > start
+        ? filtered.sublist(start, end.clamp(0, filtered.length))
+        : <TicketModel>[];
   }
 }

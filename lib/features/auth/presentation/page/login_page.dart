@@ -1,8 +1,8 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../../../core/constants/app_colors.dart';
-import '../../../../core/constants/app_strings.dart';
+import 'package:desktop_system/core/constants/app_colors.dart';
+import 'package:desktop_system/core/constants/app_strings.dart';
 import '../bloc/auth_bloc.dart';
 import '../bloc/auth_event.dart';
 import '../bloc/auth_state.dart';
@@ -18,13 +18,30 @@ class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _captchaController = TextEditingController();
   bool _obscurePassword = true;
+  String _captchaImage = '';
+  String _captchaUuid = '';
+
+  @override
+  void initState() {
+    super.initState();
+    // 页面初始化时加载验证码
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadCaptcha();
+    });
+  }
 
   @override
   void dispose() {
     _usernameController.dispose();
     _passwordController.dispose();
+    _captchaController.dispose();
     super.dispose();
+  }
+
+  void _loadCaptcha() {
+    context.read<AuthBloc>().add(const AuthCaptchaRequested());
   }
 
   void _onLogin() {
@@ -33,6 +50,8 @@ class _LoginPageState extends State<LoginPage> {
         AuthLoginRequested(
           username: _usernameController.text.trim(),
           password: _passwordController.text,
+          code: _captchaController.text.trim(),
+          uuid: _captchaUuid,
         ),
       );
     }
@@ -51,6 +70,11 @@ class _LoginPageState extends State<LoginPage> {
                 backgroundColor: AppColors.error,
               ),
             );
+          } else if (state is AuthCaptchaLoaded) {
+            setState(() {
+              _captchaImage = state.captchaImage;
+              _captchaUuid = state.uuid;
+            });
           }
         },
         child: Center(
@@ -74,9 +98,9 @@ class _LoginPageState extends State<LoginPage> {
                         color: AppColors.primary,
                       ),
                       const SizedBox(height: 16),
-                      const Text(
+                      Text(
                         AppStrings.appName,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
                           color: AppColors.textPrimary,
@@ -91,7 +115,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Please enter username';
+                            return '请输入用户名';
                           }
                           return null;
                         },
@@ -118,11 +142,55 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Please enter password';
+                            return '请输入密码';
                           }
                           return null;
                         },
-                        onFieldSubmitted: (_) => _onLogin(),
+                      ),
+                      const SizedBox(height: 16),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                              controller: _captchaController,
+                              decoration: const InputDecoration(
+                                labelText: '验证码',
+                                prefixIcon: Icon(Icons.security),
+                              ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return '请输入验证码';
+                                }
+                                return null;
+                              },
+                              onFieldSubmitted: (_) => _onLogin(),
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+                          GestureDetector(
+                            onTap: _loadCaptcha,
+                            child: Container(
+                              width: 120,
+                              height: 48,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: _captchaImage.isNotEmpty
+                                  ? Image.memory(
+                                      base64Decode(
+                                        _captchaImage.split(',').last,
+                                      ),
+                                      fit: BoxFit.contain,
+                                    )
+                                  : const Center(
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                      ),
+                                    ),
+                            ),
+                          ),
+                        ],
                       ),
                       const SizedBox(height: 24),
                       BlocBuilder<AuthBloc, AuthState>(
@@ -148,7 +216,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       const SizedBox(height: 16),
                       const Text(
-                        'Demo: admin/admin123, user/user123',
+                        '点击验证码图片可刷新',
                         style: TextStyle(
                           fontSize: 12,
                           color: AppColors.textSecondary,

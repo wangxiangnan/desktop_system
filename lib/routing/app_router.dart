@@ -1,14 +1,15 @@
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 
-import '../../features/auth/presentation/page/login_page.dart';
-import '../../features/home/presentation/page/home_page.dart';
-import '../../features/tickets/presentation/page/ticket_list_page.dart';
-import '../../features/tickets/presentation/page/ticket_detail_page.dart';
-import '../../features/tickets/presentation/page/ticket_print_page.dart';
-import '../../features/settings/presentation/page/settings_page.dart';
-import '../../services/permission_service.dart';
-import '../../shared/widgets/app_shell.dart';
+import 'package:desktop_system/features/auth/presentation/page/login_page.dart';
+import 'package:desktop_system/features/home/presentation/page/home_page.dart';
+import 'package:desktop_system/features/tickets/presentation/page/ticket_list_page.dart';
+import 'package:desktop_system/features/tickets/presentation/page/ticket_detail_page.dart';
+import 'package:desktop_system/features/svg/presentation/page/svg_list_page.dart';
+import 'package:desktop_system/features/svg/presentation/page/svg_editor_page.dart';
+import 'package:desktop_system/features/settings/presentation/page/settings_page.dart';
+import 'package:desktop_system/services/permission_service.dart';
+import 'package:desktop_system/shared/widgets/app_shell.dart';
 
 class AppRouter {
   final PermissionService? permissionService;
@@ -51,15 +52,19 @@ class AppRouter {
             },
           ),
           GoRoute(
-            path: '/tickets/:id/print',
-            builder: (context, state) {
-              final id = state.pathParameters['id']!;
-              return TicketPrintPage(ticketId: id);
-            },
-          ),
-          GoRoute(
             path: '/settings',
             builder: (context, state) => const SettingsPage(),
+          ),
+          GoRoute(
+            path: '/svg',
+            builder: (context, state) => const SvgListPage(),
+          ),
+          GoRoute(
+            path: '/svg/:id',
+            builder: (context, state) {
+              final id = state.pathParameters['id']!;
+              return SvgEditorPage(canvasId: id);
+            },
           ),
         ],
       ),

@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import '../../../../data/models/user_model.dart';
+import 'package:desktop_system/data/models/user_model.dart';
 
 abstract class AuthState extends Equatable {
   const AuthState();
@@ -36,4 +36,18 @@ class AuthError extends AuthState {
 
   @override
   List<Object?> get props => [message];
+}
+
+class AuthCaptchaLoaded extends AuthState {
+  final String captchaImage;
+  final String uuid;
+
+  const AuthCaptchaLoaded({required this.captchaImage, required this.uuid});
+
+  @override
+  List<Object?> get props => [captchaImage, uuid];
+}
+
+class AuthCaptchaLoading extends AuthState {
+  const AuthCaptchaLoading();
 }

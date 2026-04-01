@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import '../../../../data/models/ticket_model.dart';
+import 'package:desktop_system/data/models/ticket_model.dart';
 
 abstract class TicketState extends Equatable {
   const TicketState();
@@ -19,11 +19,26 @@ class TicketLoading extends TicketState {
 class TicketLoaded extends TicketState {
   final List<TicketModel> tickets;
   final String? searchQuery;
+  final int currentPage;
+  final int totalPages;
+  final int total;
 
-  const TicketLoaded({required this.tickets, this.searchQuery});
+  const TicketLoaded({
+    required this.tickets,
+    this.searchQuery,
+    required this.currentPage,
+    required this.totalPages,
+    required this.total,
+  });
 
   @override
-  List<Object?> get props => [tickets, searchQuery];
+  List<Object?> get props => [
+    tickets,
+    searchQuery,
+    currentPage,
+    totalPages,
+    total,
+  ];
 }
 
 class TicketError extends TicketState {

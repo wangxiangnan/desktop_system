@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../data/repositories/auth_repository.dart';
-import '../../../../data/models/user_model.dart';
+import 'package:desktop_system/data/repositories/auth_repository.dart';
+import 'package:desktop_system/data/models/user_model.dart';
 import 'auth_event.dart';
 import 'auth_state.dart';
 
@@ -13,6 +13,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthLoginRequested>(_onLoginRequested);
     on<AuthLogoutRequested>(_onLogoutRequested);
     on<AuthCheckRequested>(_onCheckRequested);
+    on<AuthCaptchaRequested>(_onCaptchaRequested);
   }
 
   UserModel? get currentUser => _currentUser;
@@ -24,7 +25,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(const AuthLoading());
 
     try {
-      final user = await _authRepository.login(event.username, event.password);
+      final user = await _authRepository.login(
+        event.username,
+        event.password,
+        event.code,
+        event.uuid,
+      );
       _currentUser = user;
       emit(AuthAuthenticated(user));
     } catch (e) {
@@ -61,6 +67,25 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       }
     } catch (e) {
       emit(const AuthUnauthenticated());
+    }
+  }
+
+  Future<void> _onCaptchaRequested(
+    AuthCaptchaRequested event,
+    Emitter<AuthState> emit,
+  ) async {
+    emit(const AuthCaptchaLoading());
+
+    try {
+      final captchaData = await _authRepository.getCaptchaImage();
+      emit(
+        AuthCaptchaLoaded(
+          captchaImage: captchaData['img']!,
+          uuid: captchaData['uuid']!,
+        ),
+      );
+    } catch (e) {
+      emit(AuthError(e.toString()));
     }
   }
 }

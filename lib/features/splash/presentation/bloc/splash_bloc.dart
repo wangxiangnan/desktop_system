@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../services/storage_service.dart';
-import '../../../../core/di/setup_dependencies.dart';
+import 'package:desktop_system/services/storage_service.dart';
+import 'package:desktop_system/core/di/setup_dependencies.dart';
 import 'splash_event.dart';
 import 'splash_state.dart';
 

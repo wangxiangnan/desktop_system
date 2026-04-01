@@ -1,65 +1,70 @@
 import '../models/user_model.dart';
 import 'auth_repository.dart';
 import '../../services/storage_service.dart';
+import '../../services/api_service.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   final StorageService _storageService;
+  final ApiService _apiService;
 
-  AuthRepositoryImpl(this._storageService);
+  AuthRepositoryImpl(this._storageService, this._apiService);
 
   @override
-  Future<UserModel> login(String username, String password) async {
-    await Future.delayed(const Duration(seconds: 1));
+  Future<UserModel> login(
+    String username,
+    String password,
+    String code,
+    String uuid,
+  ) async {
+    try {
+      final response = await _apiService.login(
+        username: username,
+        password: password,
+        code: code,
+        uuid: uuid,
+      );
 
-    if (username == 'admin' && password == 'admin123') {
-      const user = UserModel(
-        id: '1',
-        username: 'admin',
-        name: 'Administrator',
-        role: UserRole.admin,
-        permissions: [
-          'view_ticket',
-          'create_ticket',
-          'edit_ticket',
-          'delete_ticket',
-          'print_ticket',
-          'manage_users',
-        ],
-      );
+      // 保存token
       await _storageService.setLoggedIn(true);
-      await _storageService.setUserToken('mock_token_123');
+      await _storageService.setUserToken(response.token);
+
+      // 解析用户信息
+      final userInfo = response.userInfo ?? {};
+      final user = UserModel(
+        id: userInfo['id']?.toString() ?? '1',
+        username: userInfo['username'] ?? username,
+        name: userInfo['name'] ?? username,
+        role: _parseUserRole(userInfo['role']),
+        permissions: _parsePermissions(userInfo['permissions']),
+      );
+
       await _storageService.setUserId(user.id);
       await _storageService.setUserName(user.name);
+
       return user;
-    } else if (username == 'user' && password == 'user123') {
-      const user = UserModel(
-        id: '2',
-        username: 'user',
-        name: 'Regular User',
-        role: UserRole.user,
-        permissions: ['view_ticket', 'create_ticket', 'print_ticket'],
-      );
-      await _storageService.setLoggedIn(true);
-      await _storageService.setUserToken('mock_token_456');
-      await _storageService.setUserId(user.id);
-      await _storageService.setUserName(user.name);
-      return user;
-    } else if (username == 'viewer' && password == 'viewer123') {
-      const user = UserModel(
-        id: '3',
-        username: 'viewer',
-        name: 'Viewer',
-        role: UserRole.viewer,
-        permissions: ['view_ticket'],
-      );
-      await _storageService.setLoggedIn(true);
-      await _storageService.setUserToken('mock_token_789');
-      await _storageService.setUserId(user.id);
-      await _storageService.setUserName(user.name);
-      return user;
+    } catch (e) {
+      throw Exception('登录失败: $e');
     }
+  }
 
-    throw Exception('Invalid username or password');
+  UserRole _parseUserRole(String? role) {
+    switch (role) {
+      case 'admin':
+        return UserRole.admin;
+      case 'user':
+        return UserRole.user;
+      case 'viewer':
+        return UserRole.viewer;
+      default:
+        return UserRole.user;
+    }
+  }
+
+  List<String> _parsePermissions(dynamic permissions) {
+    if (permissions is List) {
+      return permissions.map((e) => e.toString()).toList();
+    }
+    return ['view_ticket'];
   }
 
   @override
@@ -88,5 +93,15 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<bool> isLoggedIn() async {
     return _storageService.isLoggedIn;
+  }
+
+  @override
+  Future<Map<String, String>> getCaptchaImage() async {
+    try {
+      final response = await _apiService.getCaptchaImage();
+      return {'img': response.fullBase64Image, 'uuid': response.uuid};
+    } catch (e) {
+      throw Exception('获取验证码失败: $e');
+    }
   }
 }

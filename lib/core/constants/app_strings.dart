@@ -1,7 +1,9 @@
+import '../config/app_config.dart';
+
 class AppStrings {
   AppStrings._();
 
-  static const String appName = '桌面管理系统';
+  static String get appName => AppConfig.appName;
   static const String splashTitle = '桌面管理系统启动页';
   static const String login = 'Login';
   static const String username = 'Username';
