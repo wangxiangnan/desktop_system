@@ -1,13 +1,13 @@
 import '../models/user_model.dart';
 import 'auth_repository.dart';
 import '../../services/storage_service.dart';
-import '../../services/api_service.dart';
+import '../../services/auth_service.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   final StorageService _storageService;
-  final ApiService _apiService;
+  final AuthService _authService;
 
-  AuthRepositoryImpl(this._storageService, this._apiService);
+  AuthRepositoryImpl(this._storageService, this._authService);
 
   @override
   Future<UserModel> login(
@@ -17,7 +17,7 @@ class AuthRepositoryImpl implements AuthRepository {
     String uuid,
   ) async {
     try {
-      final response = await _apiService.login(
+      final response = await _authService.login(
         username: username,
         password: password,
         code: code,
@@ -98,7 +98,7 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<Map<String, String>> getCaptchaImage() async {
     try {
-      final response = await _apiService.getCaptchaImage();
+      final response = await _authService.getCaptchaImage();
       return {'img': response.fullBase64Image, 'uuid': response.uuid};
     } catch (e) {
       throw Exception('获取验证码失败: $e');

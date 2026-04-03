@@ -78,6 +78,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     try {
       final captchaData = await _authRepository.getCaptchaImage();
+      print('Captcha data: $captchaData');
       emit(
         AuthCaptchaLoaded(
           captchaImage: captchaData['img']!,

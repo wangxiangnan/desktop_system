@@ -1,10 +1,13 @@
 import '../models/ticket_model.dart';
 import 'ticket_repository.dart';
+import '../../services/ticket_service.dart';
 
 class TicketRepositoryImpl implements TicketRepository {
+  final TicketService? _ticketService;
   final List<TicketModel> _tickets = [];
 
-  TicketRepositoryImpl() {
+  TicketRepositoryImpl({TicketService? ticketService})
+    : _ticketService = ticketService {
     _initMockData();
   }
 
@@ -54,6 +57,10 @@ class TicketRepositoryImpl implements TicketRepository {
 
   @override
   Future<PaginatedTickets> getTickets({int page = 1, int pageSize = 10}) async {
+    if (_ticketService != null) {
+      return await _ticketService.getTickets(page: page, pageSize: pageSize);
+    }
+
     await Future.delayed(const Duration(milliseconds: 300));
     final start = (page - 1) * pageSize;
     final end = start + pageSize;
@@ -71,12 +78,20 @@ class TicketRepositoryImpl implements TicketRepository {
 
   @override
   Future<TicketModel> getTicketById(String id) async {
+    if (_ticketService != null) {
+      return await _ticketService.getTicketById(id);
+    }
+
     await Future.delayed(const Duration(milliseconds: 300));
     return _tickets.firstWhere((t) => t.id == id);
   }
 
   @override
   Future<TicketModel> createTicket(TicketModel ticket) async {
+    if (_ticketService != null) {
+      return await _ticketService.createTicket(ticket);
+    }
+
     await Future.delayed(const Duration(milliseconds: 500));
     _tickets.add(ticket);
     return ticket;
@@ -84,6 +99,10 @@ class TicketRepositoryImpl implements TicketRepository {
 
   @override
   Future<TicketModel> updateTicket(TicketModel ticket) async {
+    if (_ticketService != null) {
+      return await _ticketService.updateTicket(ticket);
+    }
+
     await Future.delayed(const Duration(milliseconds: 500));
     final index = _tickets.indexWhere((t) => t.id == ticket.id);
     if (index != -1) {
@@ -94,6 +113,11 @@ class TicketRepositoryImpl implements TicketRepository {
 
   @override
   Future<void> deleteTicket(String id) async {
+    if (_ticketService != null) {
+      await _ticketService.deleteTicket(id);
+      return;
+    }
+
     await Future.delayed(const Duration(milliseconds: 300));
     _tickets.removeWhere((t) => t.id == id);
   }
@@ -104,6 +128,14 @@ class TicketRepositoryImpl implements TicketRepository {
     int page = 1,
     int pageSize = 10,
   }) async {
+    if (_ticketService != null) {
+      return await _ticketService.searchTickets(
+        query,
+        page: page,
+        pageSize: pageSize,
+      );
+    }
+
     await Future.delayed(const Duration(milliseconds: 300));
     final lowerQuery = query.toLowerCase();
     final filtered = _tickets.where((t) {

@@ -1,10 +1,12 @@
 import '../models/svg_model.dart';
 import 'svg_repository.dart';
+import '../../services/svg_service.dart';
 
 class SvgRepositoryImpl implements SvgRepository {
+  final SvgService? _svgService;
   final List<SvgCanvasModel> _canvases = [];
 
-  SvgRepositoryImpl() {
+  SvgRepositoryImpl({SvgService? svgService}) : _svgService = svgService {
     _initMockData();
   }
 
@@ -76,18 +78,30 @@ class SvgRepositoryImpl implements SvgRepository {
 
   @override
   Future<List<SvgCanvasModel>> getCanvases() async {
+    if (_svgService != null) {
+      return await _svgService.getCanvases();
+    }
+
     await Future.delayed(const Duration(milliseconds: 300));
     return List.from(_canvases);
   }
 
   @override
   Future<SvgCanvasModel> getCanvasById(String id) async {
+    if (_svgService != null) {
+      return await _svgService.getCanvasById(id);
+    }
+
     await Future.delayed(const Duration(milliseconds: 200));
     return _canvases.firstWhere((c) => c.id == id);
   }
 
   @override
   Future<SvgCanvasModel> createCanvas(SvgCanvasModel canvas) async {
+    if (_svgService != null) {
+      return await _svgService.createCanvas(canvas);
+    }
+
     await Future.delayed(const Duration(milliseconds: 300));
     _canvases.add(canvas);
     return canvas;
@@ -95,6 +109,10 @@ class SvgRepositoryImpl implements SvgRepository {
 
   @override
   Future<SvgCanvasModel> updateCanvas(SvgCanvasModel canvas) async {
+    if (_svgService != null) {
+      return await _svgService.updateCanvas(canvas);
+    }
+
     await Future.delayed(const Duration(milliseconds: 300));
     final index = _canvases.indexWhere((c) => c.id == canvas.id);
     if (index != -1) {
@@ -105,6 +123,11 @@ class SvgRepositoryImpl implements SvgRepository {
 
   @override
   Future<void> deleteCanvas(String id) async {
+    if (_svgService != null) {
+      await _svgService.deleteCanvas(id);
+      return;
+    }
+
     await Future.delayed(const Duration(milliseconds: 200));
     _canvases.removeWhere((c) => c.id == id);
   }

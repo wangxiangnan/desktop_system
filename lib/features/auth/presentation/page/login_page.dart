@@ -26,10 +26,9 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    // 页面初始化时加载验证码
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    /* WidgetsBinding.instance.addPostFrameCallback((_) {
       _loadCaptcha();
-    });
+    }); */
   }
 
   @override
@@ -57,6 +56,13 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
+  void _updateCaptcha(String image, String uuid) {
+    setState(() {
+      _captchaImage = image;
+      _captchaUuid = uuid;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,10 +77,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
             );
           } else if (state is AuthCaptchaLoaded) {
-            setState(() {
-              _captchaImage = state.captchaImage;
-              _captchaUuid = state.uuid;
-            });
+            _updateCaptcha(state.captchaImage, state.uuid);
           }
         },
         child: Center(
@@ -182,6 +185,7 @@ class _LoginPageState extends State<LoginPage> {
                                         _captchaImage.split(',').last,
                                       ),
                                       fit: BoxFit.contain,
+                                      key: ValueKey(_captchaUuid),
                                     )
                                   : const Center(
                                       child: CircularProgressIndicator(

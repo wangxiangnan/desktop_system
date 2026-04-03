@@ -48,21 +48,23 @@ class _AppState extends State<App> {
 
     return BlocProvider(
       create: (_) => getIt<AuthBloc>()..add(const AuthCheckRequested()),
-      child: BlocBuilder<AuthBloc, AuthState>(
-        builder: (context, state) {
-          final permissionService = state is AuthAuthenticated
-              ? PermissionService(state.user)
-              : null;
+      child: Builder(
+        builder: (context) => BlocBuilder<AuthBloc, AuthState>(
+          builder: (context, state) {
+            final permissionService = state is AuthAuthenticated
+                ? PermissionService(state.user)
+                : null;
 
-          final appRouter = AppRouter(permissionService: permissionService);
+            final appRouter = AppRouter(permissionService: permissionService);
 
-          return MaterialApp.router(
-            title: AppStrings.appName,
-            theme: AppTheme.lightTheme,
-            debugShowCheckedModeBanner: false,
-            routerConfig: appRouter.router,
-          );
-        },
+            return MaterialApp.router(
+              title: AppStrings.appName,
+              theme: AppTheme.lightTheme,
+              debugShowCheckedModeBanner: false,
+              routerConfig: appRouter.router,
+            );
+          },
+        ),
       ),
     );
   }
