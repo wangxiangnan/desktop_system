@@ -72,6 +72,9 @@ class AppConfig {
   /// 获取环境名称
   static String get environment => getString('ENVIRONMENT', 'production');
 
+  /// 是否使用模拟数据（开发/测试时绕过API）
+  static bool get useMockData => getBool('USE_MOCK_DATA', false);
+
   /// 是否为开发环境
   static bool get isDevelopment => environment == 'development';
 
@@ -83,6 +86,12 @@ class AppConfig {
 
   /// 是否为生产环境
   static bool get isProduction => environment == 'production';
+
+  /// 获取连接超时时间（毫秒）
+  static int get connectTimeout => getInt('CONNECT_TIMEOUT', 30000);
+
+  /// 获取接收超时时间（毫秒）
+  static int get receiveTimeout => getInt('RECEIVE_TIMEOUT', 30000);
 
   /// 获取所有环境变量（用于调试）
   static Map<String, String> get allVars => dotenv.env;

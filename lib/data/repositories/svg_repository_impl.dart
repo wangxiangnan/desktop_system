@@ -1,134 +1,81 @@
-import '../models/svg_model.dart';
-import 'svg_repository.dart';
-import '../../services/svg_service.dart';
+import '../../domain/entities/svg_entity.dart';
+import '../../domain/repositories/svg_repository.dart';
+import '../datasources/remote/svg_remote_datasource.dart';
+import '../datasources/local/svg_local_datasource.dart';
+import '../../core/config/app_config.dart';
 
+/// Implementation of SvgRepository
+/// Automatically selects local or remote based on AppConfig
 class SvgRepositoryImpl implements SvgRepository {
-  final SvgService? _svgService;
-  final List<SvgCanvasModel> _canvases = [];
+  final SvgRemoteDataSource? _remoteDataSource;
+  final SvgLocalDataSource? _localDataSource;
 
-  SvgRepositoryImpl({SvgService? svgService}) : _svgService = svgService {
-    _initMockData();
+  SvgRepositoryImpl({
+    SvgRemoteDataSource? remoteDataSource,
+    SvgLocalDataSource? localDataSource,
+  })  : _remoteDataSource = remoteDataSource,
+        _localDataSource = localDataSource;
+
+  /// Factory constructor for remote data source
+  factory SvgRepositoryImpl.remote(SvgRemoteDataSource remoteDataSource) {
+    return SvgRepositoryImpl(remoteDataSource: remoteDataSource);
   }
 
-  void _initMockData() {
-    final now = DateTime.now();
-    _canvases.addAll([
-      SvgCanvasModel(
-        id: '1',
-        name: 'Logo Design',
-        width: 200,
-        height: 200,
-        elements: [
-          const SvgElementModel(
-            id: 'e1',
-            type: 'rect',
-            x: 50,
-            y: 50,
-            width: 100,
-            height: 100,
-            attributes: {
-              'fill': '#3498db',
-              'stroke': '#2980b9',
-              'strokeWidth': 2,
-            },
-          ),
-          const SvgElementModel(
-            id: 'e2',
-            type: 'circle',
-            x: 100,
-            y: 100,
-            width: 50,
-            height: 50,
-            attributes: {'fill': '#e74c3c'},
-          ),
-        ],
-        createdAt: now.subtract(const Duration(days: 2)),
-        updatedAt: now.subtract(const Duration(days: 1)),
-      ),
-      SvgCanvasModel(
-        id: '2',
-        name: 'Banner',
-        width: 800,
-        height: 400,
-        elements: [
-          const SvgElementModel(
-            id: 'e3',
-            type: 'rect',
-            x: 0,
-            y: 0,
-            width: 800,
-            height: 400,
-            attributes: {'fill': '#2ecc71'},
-          ),
-          const SvgElementModel(
-            id: 'e4',
-            type: 'text',
-            x: 400,
-            y: 200,
-            width: 200,
-            height: 40,
-            attributes: {'fill': '#ffffff', 'fontSize': 32, 'text': 'Welcome'},
-          ),
-        ],
-        createdAt: now.subtract(const Duration(days: 5)),
-        updatedAt: now.subtract(const Duration(days: 3)),
-      ),
-    ]);
+  /// Factory constructor for local (mock) data source
+  factory SvgRepositoryImpl.local(SvgLocalDataSource localDataSource) {
+    return SvgRepositoryImpl(localDataSource: localDataSource);
+  }
+
+  /// Create repository based on configuration
+  factory SvgRepositoryImpl.fromConfig({
+    required SvgRemoteDataSource remoteDataSource,
+    required SvgLocalDataSource localDataSource,
+  }) {
+    if (AppConfig.useMockData) {
+      return SvgRepositoryImpl(localDataSource: localDataSource);
+    }
+    return SvgRepositoryImpl(remoteDataSource: remoteDataSource);
+  }
+
+  bool get _useRemote => _remoteDataSource != null;
+
+  @override
+  Future<List<SvgCanvas>> getCanvases() {
+    if (_useRemote) {
+      return _remoteDataSource!.getCanvases();
+    }
+    return _localDataSource!.getCanvases();
   }
 
   @override
-  Future<List<SvgCanvasModel>> getCanvases() async {
-    if (_svgService != null) {
-      return await _svgService.getCanvases();
+  Future<SvgCanvas> getCanvasById(String id) {
+    if (_useRemote) {
+      return _remoteDataSource!.getCanvasById(id);
     }
-
-    await Future.delayed(const Duration(milliseconds: 300));
-    return List.from(_canvases);
+    return _localDataSource!.getCanvasById(id);
   }
 
   @override
-  Future<SvgCanvasModel> getCanvasById(String id) async {
-    if (_svgService != null) {
-      return await _svgService.getCanvasById(id);
+  Future<SvgCanvas> createCanvas(SvgCanvas canvas) {
+    if (_useRemote) {
+      return _remoteDataSource!.createCanvas(canvas);
     }
-
-    await Future.delayed(const Duration(milliseconds: 200));
-    return _canvases.firstWhere((c) => c.id == id);
+    return _localDataSource!.createCanvas(canvas);
   }
 
   @override
-  Future<SvgCanvasModel> createCanvas(SvgCanvasModel canvas) async {
-    if (_svgService != null) {
-      return await _svgService.createCanvas(canvas);
+  Future<SvgCanvas> updateCanvas(SvgCanvas canvas) {
+    if (_useRemote) {
+      return _remoteDataSource!.updateCanvas(canvas);
     }
-
-    await Future.delayed(const Duration(milliseconds: 300));
-    _canvases.add(canvas);
-    return canvas;
+    return _localDataSource!.updateCanvas(canvas);
   }
 
   @override
-  Future<SvgCanvasModel> updateCanvas(SvgCanvasModel canvas) async {
-    if (_svgService != null) {
-      return await _svgService.updateCanvas(canvas);
+  Future<void> deleteCanvas(String id) {
+    if (_useRemote) {
+      return _remoteDataSource!.deleteCanvas(id);
     }
-
-    await Future.delayed(const Duration(milliseconds: 300));
-    final index = _canvases.indexWhere((c) => c.id == canvas.id);
-    if (index != -1) {
-      _canvases[index] = canvas;
-    }
-    return canvas;
-  }
-
-  @override
-  Future<void> deleteCanvas(String id) async {
-    if (_svgService != null) {
-      await _svgService.deleteCanvas(id);
-      return;
-    }
-
-    await Future.delayed(const Duration(milliseconds: 200));
-    _canvases.removeWhere((c) => c.id == id);
+    return _localDataSource!.deleteCanvas(id);
   }
 }

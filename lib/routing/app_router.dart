@@ -1,37 +1,23 @@
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
-
-import 'package:desktop_system/features/auth/presentation/page/login_page.dart';
-import 'package:desktop_system/features/home/presentation/page/home_page.dart';
-import 'package:desktop_system/features/tickets/presentation/page/ticket_list_page.dart';
-import 'package:desktop_system/features/tickets/presentation/page/ticket_detail_page.dart';
-import 'package:desktop_system/features/svg/presentation/page/svg_list_page.dart';
-import 'package:desktop_system/features/svg/presentation/page/svg_editor_page.dart';
-import 'package:desktop_system/features/settings/presentation/page/settings_page.dart';
-import 'package:desktop_system/services/permission_service.dart';
+import 'package:desktop_system/features/auth/pages/login_page.dart';
+import 'package:desktop_system/features/home/pages/home_page.dart';
+import 'package:desktop_system/features/tickets/pages/ticket_list_page.dart';
+import 'package:desktop_system/features/tickets/pages/ticket_detail_page.dart';
+import 'package:desktop_system/features/svg/pages/svg_list_page.dart';
+import 'package:desktop_system/features/svg/pages/svg_editor_page.dart';
+import 'package:desktop_system/features/settings/pages/settings_page.dart';
 import 'package:desktop_system/shared/widgets/app_shell.dart';
 
 class AppRouter {
-  final PermissionService? permissionService;
+  AppRouter();
 
-  AppRouter({this.permissionService});
+  static final GlobalKey<NavigatorState> navigatorKey =
+      GlobalKey<NavigatorState>();
 
   late final GoRouter router = GoRouter(
+    navigatorKey: navigatorKey,
     initialLocation: '/login',
-    redirect: (context, state) {
-      final isLoggedIn = permissionService?.isLoggedIn ?? false;
-      final isLoginPage = state.matchedLocation == '/login';
-
-      if (!isLoggedIn && !isLoginPage) {
-        return '/login';
-      }
-
-      if (isLoggedIn && isLoginPage) {
-        return '/home';
-      }
-
-      return null;
-    },
     routes: [
       GoRoute(path: '/login', builder: (context, state) => const LoginPage()),
       ShellRoute(

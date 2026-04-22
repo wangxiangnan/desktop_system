@@ -16,6 +16,7 @@ void main() async {
   // 初始化依赖
   await setupDependencies();
 
+
   runApp(const MainApp());
 }
 

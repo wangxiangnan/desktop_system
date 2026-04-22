@@ -1,153 +1,93 @@
-import '../models/ticket_model.dart';
-import 'ticket_repository.dart';
-import '../../services/ticket_service.dart';
+import '../../domain/entities/ticket_entity.dart';
+import '../../domain/repositories/ticket_repository.dart';
+import '../datasources/remote/ticket_remote_datasource.dart';
+import '../datasources/local/ticket_local_datasource.dart';
+import '../../core/config/app_config.dart';
 
+/// Implementation of TicketRepository
+/// Automatically selects local or remote based on AppConfig
 class TicketRepositoryImpl implements TicketRepository {
-  final TicketService? _ticketService;
-  final List<TicketModel> _tickets = [];
+  final TicketRemoteDataSource? _remoteDataSource;
+  final TicketLocalDataSource? _localDataSource;
 
-  TicketRepositoryImpl({TicketService? ticketService})
-    : _ticketService = ticketService {
-    _initMockData();
+  TicketRepositoryImpl({
+    TicketRemoteDataSource? remoteDataSource,
+    TicketLocalDataSource? localDataSource,
+  })  : _remoteDataSource = remoteDataSource,
+        _localDataSource = localDataSource;
+
+  /// Factory constructor for remote data source
+  factory TicketRepositoryImpl.remote(TicketRemoteDataSource remoteDataSource) {
+    return TicketRepositoryImpl(remoteDataSource: remoteDataSource);
   }
 
-  void _initMockData() {
-    final now = DateTime.now();
-    final names = [
-      'John Doe',
-      'Jane Smith',
-      'Bob Johnson',
-      'Alice Williams',
-      'Charlie Brown',
-      'David Wilson',
-      'Emma Davis',
-      'Frank Miller',
-      'Grace Lee',
-      'Henry Taylor',
-      'Ivy Anderson',
-      'Jack Thomas',
-    ];
-    final routes = [
-      'New York - Boston',
-      'Los Angeles - San Francisco',
-      'Chicago - Detroit',
-      'Miami - Orlando',
-      'Seattle - Portland',
-      'Dallas - Houston',
-      'Atlanta - Charlotte',
-      'Phoenix - Las Vegas',
-    ];
+  /// Factory constructor for local (mock) data source
+  factory TicketRepositoryImpl.local(TicketLocalDataSource localDataSource) {
+    return TicketRepositoryImpl(localDataSource: localDataSource);
+  }
 
-    for (int i = 0; i < 25; i++) {
-      _tickets.add(
-        TicketModel(
-          id: '${i + 1}',
-          ticketNumber: 'TK${(i + 1).toString().padLeft(3, '0')}',
-          passengerName: names[i % names.length],
-          route: routes[i % routes.length],
-          departureTime: now.add(Duration(days: i, hours: i * 2)),
-          status: TicketStatus.values[i % 4],
-          price: 20.0 + (i * 5),
-          notes: i % 3 == 0 ? 'Special assistance required' : null,
-          createdAt: now.subtract(Duration(days: i)),
-        ),
-      );
+  /// Create repository based on configuration
+  factory TicketRepositoryImpl.fromConfig({
+    required TicketRemoteDataSource remoteDataSource,
+    required TicketLocalDataSource localDataSource,
+  }) {
+    if (AppConfig.useMockData) {
+      return TicketRepositoryImpl(localDataSource: localDataSource);
     }
+    return TicketRepositoryImpl(remoteDataSource: remoteDataSource);
+  }
+
+  bool get _useRemote => _remoteDataSource != null;
+
+  @override
+  Future<PaginatedTickets> getTickets({int page = 1, int pageSize = 10}) {
+    if (_useRemote) {
+      return _remoteDataSource!.getTickets(page: page, pageSize: pageSize);
+    }
+    return _localDataSource!.getTickets(page: page, pageSize: pageSize);
   }
 
   @override
-  Future<PaginatedTickets> getTickets({int page = 1, int pageSize = 10}) async {
-    if (_ticketService != null) {
-      return await _ticketService.getTickets(page: page, pageSize: pageSize);
+  Future<Ticket> getTicketById(String id) {
+    if (_useRemote) {
+      return _remoteDataSource!.getTicketById(id);
     }
-
-    await Future.delayed(const Duration(milliseconds: 300));
-    final start = (page - 1) * pageSize;
-    final end = start + pageSize;
-    final paginatedList = _tickets.length > start
-        ? _tickets.sublist(start, end.clamp(0, _tickets.length))
-        : <TicketModel>[];
-
-    return PaginatedTickets(
-      tickets: paginatedList,
-      total: _tickets.length,
-      page: page,
-      pageSize: pageSize,
-    );
+    return _localDataSource!.getTicketById(id);
   }
 
   @override
-  Future<TicketModel> getTicketById(String id) async {
-    if (_ticketService != null) {
-      return await _ticketService.getTicketById(id);
+  Future<Ticket> createTicket(Ticket ticket) {
+    if (_useRemote) {
+      return _remoteDataSource!.createTicket(ticket);
     }
-
-    await Future.delayed(const Duration(milliseconds: 300));
-    return _tickets.firstWhere((t) => t.id == id);
+    return _localDataSource!.createTicket(ticket);
   }
 
   @override
-  Future<TicketModel> createTicket(TicketModel ticket) async {
-    if (_ticketService != null) {
-      return await _ticketService.createTicket(ticket);
+  Future<Ticket> updateTicket(Ticket ticket) {
+    if (_useRemote) {
+      return _remoteDataSource!.updateTicket(ticket);
     }
-
-    await Future.delayed(const Duration(milliseconds: 500));
-    _tickets.add(ticket);
-    return ticket;
+    return _localDataSource!.updateTicket(ticket);
   }
 
   @override
-  Future<TicketModel> updateTicket(TicketModel ticket) async {
-    if (_ticketService != null) {
-      return await _ticketService.updateTicket(ticket);
+  Future<void> deleteTicket(String id) {
+    if (_useRemote) {
+      return _remoteDataSource!.deleteTicket(id);
     }
-
-    await Future.delayed(const Duration(milliseconds: 500));
-    final index = _tickets.indexWhere((t) => t.id == ticket.id);
-    if (index != -1) {
-      _tickets[index] = ticket;
-    }
-    return ticket;
+    return _localDataSource!.deleteTicket(id);
   }
 
   @override
-  Future<void> deleteTicket(String id) async {
-    if (_ticketService != null) {
-      await _ticketService.deleteTicket(id);
-      return;
-    }
-
-    await Future.delayed(const Duration(milliseconds: 300));
-    _tickets.removeWhere((t) => t.id == id);
-  }
-
-  @override
-  Future<List<TicketModel>> searchTickets(
+  Future<List<Ticket>> searchTickets(
     String query, {
     int page = 1,
     int pageSize = 10,
-  }) async {
-    if (_ticketService != null) {
-      return await _ticketService.searchTickets(
-        query,
-        page: page,
-        pageSize: pageSize,
-      );
+  }) {
+    if (_useRemote) {
+      return _remoteDataSource!.searchTickets(query, page: page, pageSize: pageSize);
     }
-
-    await Future.delayed(const Duration(milliseconds: 300));
-    final lowerQuery = query.toLowerCase();
-    final filtered = _tickets.where((t) {
-      return t.passengerName.toLowerCase().contains(lowerQuery) ||
-          t.ticketNumber.toLowerCase().contains(lowerQuery) ||
-          t.route.toLowerCase().contains(lowerQuery);
-    }).toList();
-
-    final start = (page - 1) * pageSize;
-    final end = start + pageSize;
-    return filtered.length > start
-        ? filtered.sublist(start, end.clamp(0, filtered.length))
-        : <TicketModel>[];
+    return _localDataSource!.searchTickets(query, page: page, pageSize: pageSize);
   }
 }
