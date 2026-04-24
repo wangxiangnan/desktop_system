@@ -23,14 +23,16 @@ class LoginUseCase {
 
   Future<Result<User>> call(LoginParams params) async {
     try {
-      final result = await _repository.login(
+      await _repository.login(
         username: params.username,
         password: params.password,
         code: params.code,
         uuid: params.uuid,
       );
-      if (result.user != null) {
-        return Success(result.user!);
+      final user = await _repository.getInfo();
+
+      if (user != null) {
+        return Success(user);
       }
       return const Failure(
         AppError(message: 'Login failed: No user returned'),

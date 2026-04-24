@@ -1,5 +1,9 @@
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
+import 'package:desktop_system/core/navigation/auth_change_notifier.dart';
+import 'package:desktop_system/core/navigation/routes.dart';
+import 'package:desktop_system/features/auth/bloc/auth_bloc.dart';
+import 'package:desktop_system/features/auth/bloc/auth_state.dart';
 import 'package:desktop_system/features/auth/pages/login_page.dart';
 import 'package:desktop_system/features/home/pages/home_page.dart';
 import 'package:desktop_system/features/tickets/pages/ticket_list_page.dart';
@@ -10,24 +14,52 @@ import 'package:desktop_system/features/settings/pages/settings_page.dart';
 import 'package:desktop_system/shared/widgets/app_shell.dart';
 
 class AppRouter {
-  AppRouter();
+  final AuthBloc authBloc;
+
+  AppRouter({required this.authBloc});
 
   static final GlobalKey<NavigatorState> navigatorKey =
       GlobalKey<NavigatorState>();
 
   late final GoRouter router = GoRouter(
     navigatorKey: navigatorKey,
-    initialLocation: '/login',
+    initialLocation: Routes.login,
+    refreshListenable: AuthChangeNotifier(authBloc),
+    redirect: (context, state) {
+      final authState = authBloc.state;
+      final currentLocation = state.matchedLocation;
+
+      final isAuthenticated =
+          authState.status == AuthStatus.authenticated && authState.user != null;
+      final isLoading = authState.status == AuthStatus.loading ||
+          authState.status == AuthStatus.captchaLoading;
+
+      final isPublicRoute = currentLocation == Routes.login;
+
+      if (isLoading) {
+        return null;
+      }
+
+      if (!isAuthenticated && !isPublicRoute) {
+        return Routes.login;
+      }
+
+      if (isAuthenticated && isPublicRoute) {
+        return Routes.home;
+      }
+
+      return null;
+    },
     routes: [
-      GoRoute(path: '/login', builder: (context, state) => const LoginPage()),
+      GoRoute(path: Routes.login, builder: (context, state) => const LoginPage()),
       ShellRoute(
         builder: (context, state, child) {
           return AppShell(currentPath: state.uri.path, child: child);
         },
         routes: [
-          GoRoute(path: '/home', builder: (context, state) => const HomePage()),
+          GoRoute(path: Routes.home, builder: (context, state) => const HomePage()),
           GoRoute(
-            path: '/tickets',
+            path: Routes.tickets,
             builder: (context, state) => const TicketListPage(),
           ),
           GoRoute(
@@ -38,11 +70,11 @@ class AppRouter {
             },
           ),
           GoRoute(
-            path: '/settings',
+            path: Routes.settings,
             builder: (context, state) => const SettingsPage(),
           ),
           GoRoute(
-            path: '/svg',
+            path: Routes.svg,
             builder: (context, state) => const SvgListPage(),
           ),
           GoRoute(

@@ -37,9 +37,10 @@ class _AppState extends State<App> {
       );
     }
 
-    final appRouter = AppRouter();
-    return BlocProvider(
-      create: (_) => getIt<AuthBloc>()..add(const AuthCheckRequested()),
+    final authBloc = getIt<AuthBloc>()..add(const AuthCheckRequested());
+    final appRouter = AppRouter(authBloc: authBloc);
+    return BlocProvider.value(
+      value: authBloc,
       child: MaterialApp.router(
         title: AppStrings.appName,
         theme: AppTheme.lightTheme,

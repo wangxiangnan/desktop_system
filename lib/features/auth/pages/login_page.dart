@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:desktop_system/core/constants/app_colors.dart';
-import '../bloc/auth_bloc.dart';
-import '../bloc/auth_event.dart';
-import '../bloc/auth_state.dart';
-import '../widgets/widgets.dart';
+import 'package:desktop_system/features/auth/bloc/auth_bloc.dart';
+import 'package:desktop_system/features/auth/bloc/auth_event.dart';
+import 'package:desktop_system/features/auth/bloc/auth_state.dart';
+import 'package:desktop_system/features/auth/widgets/widgets.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -72,10 +73,12 @@ class _LoginPageState extends State<LoginPage> {
       backgroundColor: AppColors.background,
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
-          if (state is AuthError) {
-            _loadCaptcha(); // 登录失败时刷新验证码
-          } else if (state is AuthCaptchaLoaded) {
-            _updateCaptcha(state.captchaImage, state.uuid);
+          if (state.status == AuthStatus.authenticated) {
+            context.go('/home');
+          } else if (state.status == AuthStatus.failure) {
+            _loadCaptcha();
+          } else if (state.status == AuthStatus.captchaLoaded) {
+            _updateCaptcha(state.captchaImage!, state.uuid!);
           }
         },
         child: Center(

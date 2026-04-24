@@ -9,7 +9,7 @@ class GetCurrentUserUseCase {
 
   Future<Result<User?>> call() async {
     try {
-      final user = await _repository.getCurrentUser();
+      final user = await _repository.getInfo();
       return Success(user);
     } catch (e) {
       return Failure(

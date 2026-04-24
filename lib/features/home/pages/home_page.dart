@@ -13,7 +13,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
-        if (state is AuthUnauthenticated) {
+        if (state.status == AuthStatus.unauthenticated) {
           context.go('/login');
         }
       },
@@ -24,8 +24,8 @@ class HomePage extends StatelessWidget {
           actions: [
             BlocBuilder<AuthBloc, AuthState>(
               builder: (context, state) {
-                final userName = state is AuthAuthenticated
-                    ? state.user.name
+                final userName = state.status == AuthStatus.authenticated
+                    ? state.user?.name
                     : 'User';
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),

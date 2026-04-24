@@ -14,22 +14,8 @@ class CaptchaData {
 /// Login result data
 class LoginResult {
   final String token;
-  final User? user;
 
-  LoginResult({required this.token, this.user});
-}
-
-/// User info result data (from getInfo API)
-class UserInfoResult {
-  final List<String> permissions;
-  final List<String> roles;
-  final User? user;
-
-  UserInfoResult({
-    required this.permissions,
-    required this.roles,
-    this.user,
-  });
+  LoginResult({required this.token});
 }
 
 /// Abstract repository interface for authentication
@@ -49,10 +35,7 @@ abstract class AuthRepository {
   Future<void> logout();
 
   /// Get user info (permissions, roles, user)
-  Future<UserInfoResult> getInfo();
-
-  /// Get current user
-  Future<User?> getCurrentUser();
+  Future<User?> getInfo();
 
   /// Check if user is logged in
   Future<bool> isLoggedIn();

@@ -13,7 +13,7 @@ class LoginButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) {
-        final isLoading = state is AuthLoading;
+        final isLoading = state.status == AuthStatus.loading;
         return SizedBox(
           width: double.infinity,
           child: ElevatedButton(

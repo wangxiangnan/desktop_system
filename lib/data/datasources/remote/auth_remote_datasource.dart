@@ -1,6 +1,6 @@
-import '../../../core/network/dio_client.dart';
-import '../../../domain/entities/user_entity.dart';
-import '../../../domain/repositories/auth_repository.dart';
+import 'package:desktop_system/core/network/dio_client.dart';
+import 'package:desktop_system/domain/entities/user_entity.dart';
+import 'package:desktop_system/domain/repositories/auth_repository.dart';
 
 /// Remote data source for authentication using Dio
 class AuthRemoteDataSource {
@@ -35,7 +35,7 @@ class AuthRemoteDataSource {
     final data = response.data;
     final token = data['token'] as String? ?? '';
 
-    return LoginResult(token: token, user: null);
+    return LoginResult(token: token);
   }
 
   /// Logout
@@ -44,7 +44,7 @@ class AuthRemoteDataSource {
   }
 
   /// Get user info (permissions, roles, user)
-  Future<UserInfoResult> getInfo() async {
+  Future<User?> getInfo() async {
     final response = await _dioClient.get('/getInfo');
     final data = response.data;
 
@@ -57,15 +57,17 @@ class AuthRemoteDataSource {
         id: data['user']['id'] as String? ?? '',
         username: data['user']['username'] as String? ?? '',
         name: data['user']['name'] as String? ?? '',
+        deptId: data['user']['deptId'] as int? ?? 0,
+        deptName: data['user']['deptName'] as String? ?? '',
         role: UserRole.values.firstWhere(
-          (e) => e.name == data['user']['role'],
+          (e) => e.name == roles[0],
           orElse: () => UserRole.user,
         ),
         permissions: permissions,
       );
     }
 
-    return UserInfoResult(permissions: permissions, roles: roles, user: user);
+    return user;
   }
 
   /// Refresh token

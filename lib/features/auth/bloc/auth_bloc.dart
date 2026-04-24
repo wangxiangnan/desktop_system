@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../domain/usecases/usecases.dart';
-import 'auth_event.dart';
-import 'auth_state.dart';
+import 'package:desktop_system/domain/usecases/usecases.dart';
+import 'package:desktop_system/features/auth/bloc/auth_event.dart';
+import 'package:desktop_system/features/auth/bloc/auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final LoginUseCase _loginUseCase;
@@ -19,7 +19,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         _logoutUseCase = logoutUseCase,
         _getCurrentUserUseCase = getCurrentUserUseCase,
         _getCaptchaUseCase = getCaptchaUseCase,
-        super(const AuthInitial()) {
+        super(const AuthState()) {
     on<AuthLoginRequested>(_onLoginRequested);
     on<AuthLogoutRequested>(_onLogoutRequested);
     on<AuthCheckRequested>(_onCheckRequested);
@@ -30,7 +30,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     AuthLoginRequested event,
     Emitter<AuthState> emit,
   ) async {
-    emit(const AuthLoading());
+    emit(state.copyWith(status: AuthStatus.loading));
 
     final result = await _loginUseCase(LoginParams(
       username: event.username,
@@ -40,8 +40,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     ));
 
     result.when(
-      success: (user) => emit(AuthAuthenticated(user)),
-      failure: (error) => emit(AuthError(error.message)),
+      success: (user) => emit(state.copyWith(
+        status: AuthStatus.authenticated,
+        user: user,
+      )),
+      failure: (error) => emit(state.copyWith(
+        status: AuthStatus.failure,
+        errorMessage: error.message,
+      )),
     );
   }
 
@@ -49,13 +55,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     AuthLogoutRequested event,
     Emitter<AuthState> emit,
   ) async {
-    emit(const AuthLoading());
+    emit(state.copyWith(status: AuthStatus.loading));
 
     final result = await _logoutUseCase();
 
     result.when(
-      success: (_) => emit(const AuthUnauthenticated()),
-      failure: (error) => emit(AuthError(error.message)),
+      success: (_) => emit(state.copyWith(status: AuthStatus.unauthenticated)),
+      failure: (error) => emit(state.copyWith(
+        status: AuthStatus.failure,
+        errorMessage: error.message,
+      )),
     );
   }
 
@@ -68,12 +77,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     result.when(
       success: (user) {
         if (user != null) {
-          emit(AuthAuthenticated(user));
+          emit(state.copyWith(
+            status: AuthStatus.authenticated,
+            user: user,
+          ));
         } else {
-          emit(const AuthUnauthenticated());
+          emit(state.copyWith(status: AuthStatus.unauthenticated));
         }
       },
-      failure: (_) => emit(const AuthUnauthenticated()),
+      failure: (_) => emit(state.copyWith(status: AuthStatus.unauthenticated)),
     );
   }
 
@@ -81,16 +93,20 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     AuthCaptchaRequested event,
     Emitter<AuthState> emit,
   ) async {
-    emit(const AuthCaptchaLoading());
+    emit(state.copyWith(status: AuthStatus.captchaLoading));
 
     final result = await _getCaptchaUseCase();
 
     result.when(
-      success: (captcha) => emit(AuthCaptchaLoaded(
+      success: (captcha) => emit(state.copyWith(
+        status: AuthStatus.captchaLoaded,
         captchaImage: captcha.imageBase64,
         uuid: captcha.uuid,
       )),
-      failure: (error) => emit(AuthError(error.message)),
+      failure: (error) => emit(state.copyWith(
+        status: AuthStatus.failure,
+        errorMessage: error.message,
+      )),
     );
   }
 }

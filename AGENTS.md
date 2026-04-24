@@ -228,6 +228,55 @@ final items = list.where((item) => item != null).toList();
 late final SharedPreferences prefs;
 ```
 
+### BLoC Guidelines
+
+#### State Design
+- Use a single state class instead of multiple state classes (e.g., `AuthState`)
+- Include all state properties in one class with nullable types
+- Use status enum or flags to distinguish states
+
+```dart
+// Good - single state class
+class AuthState {
+  final AuthStatus status;
+  final User? user;
+  final String? errorMessage;
+  final CaptchaData? captcha;
+
+  const AuthState({
+    this.status = AuthStatus.initial,
+    this.user,
+    this.errorMessage,
+    this.captcha,
+  });
+
+  AuthState copyWith({
+    AuthStatus? status,
+    User? user,
+    String? errorMessage,
+    CaptchaData? captcha,
+  }) {
+    return AuthState(
+      status: status ?? this.status,
+      user: user ?? this.user,
+      errorMessage: errorMessage ?? this.errorMessage,
+      captcha: captcha ?? this.captcha,
+    );
+  }
+}
+
+enum AuthStatus { initial, loading, success, failure }
+
+// Bad - multiple state classes
+// class AuthLoading {}
+// class AuthSuccess { user }
+// class AuthFailure { error }
+```
+
+#### Event Design
+- Use sealed classes or simple events for better pattern matching
+- Keep events focused and single-purpose
+
 ### Widget Guidelines
 
 #### Build Methods

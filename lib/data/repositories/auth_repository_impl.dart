@@ -35,19 +35,7 @@ class AuthRepositoryImpl implements AuthRepository {
 
     await _storageDataSource.saveToken(result.token);
 
-    final infoResult = await _remoteDataSource.getInfo();
-    if (infoResult.user != null) {
-      await _storageDataSource.saveUserInfo(
-        userId: infoResult.user!.id,
-        username: infoResult.user!.username,
-        role: infoResult.user!.role.name,
-        name: infoResult.user!.name,
-        permissions: infoResult.permissions,
-        roles: infoResult.roles,
-      );
-    }
-
-    return LoginResult(token: result.token, user: infoResult.user);
+    return LoginResult(token: result.token);
   }
 
   @override
@@ -60,44 +48,8 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<UserInfoResult> getInfo() async {
-    final result = await _remoteDataSource.getInfo();
-
-    if (result.user != null) {
-      await _storageDataSource.saveUserInfo(
-        userId: result.user!.id,
-        username: result.user!.username,
-        role: result.user!.role.name,
-        name: result.user!.name,
-        permissions: result.permissions,
-        roles: result.roles,
-      );
-    }
-
-    return result;
-  }
-
-  @override
-  Future<User?> getCurrentUser() async {
-    if (!_storageDataSource.isLoggedIn()) {
-      return null;
-    }
-
-    final userInfo = _storageDataSource.getUserInfo();
-    if (userInfo['userId'] == null) {
-      return null;
-    }
-
-    return User(
-      id: userInfo['userId']!,
-      username: userInfo['username'] ?? '',
-      name: userInfo['name'] as String? ?? userInfo['username'] ?? '',
-      role: UserRole.values.firstWhere(
-        (e) => e.name == userInfo['role'],
-        orElse: () => UserRole.user,
-      ),
-      permissions: List<String>.from(userInfo['permissions'] ?? []),
-    );
+  Future<User?> getInfo() async {
+    return await _remoteDataSource.getInfo();
   }
 
   @override
