@@ -1,4 +1,4 @@
-import '../../core/result/result.dart';
+import 'package:desktop_system/core/result/result.dart';
 import '../repositories/auth_repository.dart';
 
 class LogoutUseCase {

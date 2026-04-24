@@ -1,5 +1,5 @@
-import '../../domain/entities/user_entity.dart';
-import '../../domain/repositories/auth_repository.dart';
+import 'package:desktop_system/domain/entities/user_entity.dart';
+import 'package:desktop_system/domain/repositories/auth_repository.dart';
 import '../datasources/remote/auth_remote_datasource.dart';
 import '../datasources/local/storage_datasource.dart';
 

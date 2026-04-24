@@ -1,8 +1,8 @@
-import '../../domain/entities/ticket_entity.dart';
-import '../../domain/repositories/ticket_repository.dart';
-import '../datasources/remote/ticket_remote_datasource.dart';
-import '../datasources/local/ticket_local_datasource.dart';
-import '../../core/config/app_config.dart';
+import 'package:desktop_system/domain/entities/ticket_entity.dart';
+import 'package:desktop_system/domain/repositories/ticket_repository.dart';
+import 'package:desktop_system/core/config/app_config.dart';
+import 'package:desktop_system/data/datasources/remote/ticket_remote_datasource.dart';
+import 'package:desktop_system/data/datasources/local/ticket_local_datasource.dart';
 
 /// Implementation of TicketRepository
 /// Automatically selects local or remote based on AppConfig

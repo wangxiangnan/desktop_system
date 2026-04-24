@@ -5,29 +5,29 @@ import '../network/dio_client.dart';
 import '../config/app_config.dart';
 
 // Data sources
-import '../../data/datasources/remote/ticket_remote_datasource.dart';
-import '../../data/datasources/remote/svg_remote_datasource.dart';
-import '../../data/datasources/remote/auth_remote_datasource.dart';
-import '../../data/datasources/local/ticket_local_datasource.dart';
-import '../../data/datasources/local/svg_local_datasource.dart';
-import '../../data/datasources/local/storage_datasource.dart';
+import 'package:desktop_system/data/datasources/remote/ticket_remote_datasource.dart';
+import 'package:desktop_system/data/datasources/remote/svg_remote_datasource.dart';
+import 'package:desktop_system/data/datasources/remote/auth_remote_datasource.dart';
+import 'package:desktop_system/data/datasources/local/ticket_local_datasource.dart';
+import 'package:desktop_system/data/datasources/local/svg_local_datasource.dart';
+import 'package:desktop_system/data/datasources/local/storage_datasource.dart';
 
 // Repositories (using domain interfaces)
-import '../../domain/repositories/ticket_repository.dart';
-import '../../domain/repositories/svg_repository.dart';
-import '../../domain/repositories/auth_repository.dart';
-import '../../data/repositories/ticket_repository_impl.dart';
-import '../../data/repositories/svg_repository_impl.dart';
-import '../../data/repositories/auth_repository_impl.dart';
+import 'package:desktop_system/domain/repositories/ticket_repository.dart';
+import 'package:desktop_system/domain/repositories/svg_repository.dart';
+import 'package:desktop_system/domain/repositories/auth_repository.dart';
+import 'package:desktop_system/data/repositories/ticket_repository_impl.dart';
+import 'package:desktop_system/data/repositories/svg_repository_impl.dart';
+import 'package:desktop_system/data/repositories/auth_repository_impl.dart';
 
 // BLoCs
-import '../../features/splash/bloc/splash_bloc.dart';
-import '../../features/auth/bloc/auth_bloc.dart';
-import '../../features/tickets/bloc/ticket_bloc.dart';
-import '../../features/svg/bloc/svg_bloc.dart';
+import 'package:desktop_system/features/splash/bloc/splash_bloc.dart';
+import 'package:desktop_system/features/auth/bloc/auth_bloc.dart';
+import 'package:desktop_system/features/tickets/bloc/ticket_bloc.dart';
+import 'package:desktop_system/features/svg/bloc/svg_bloc.dart';
 
 // Auth Use Cases
-import '../../domain/usecases/usecases.dart';
+import 'package:desktop_system/domain/usecases/usecases.dart';
 
 final GetIt getIt = GetIt.instance;
 

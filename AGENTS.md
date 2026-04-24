@@ -94,6 +94,26 @@ import '../models/ticket_model.dart';
 import '../../core/constants/app_colors.dart';
 ```
 
+#### Import Path Rules
+
+| 引用范围 | 导入方式 | 示例 |
+|---------|---------|------|
+| 同一模块内的文件 | 相对路径 | `../entities/user_entity.dart` |
+| 跨模块引用（一级模块外） | package 路径 | `package:desktop_system/core/constants/app_colors.dart` |
+
+```dart
+// Good - 同一 domain 模块内，使用相对路径
+import '../entities/user_entity.dart';
+
+// Good - features 引用 core，使用 package 路径
+import 'package:desktop_system/core/constants/app_colors.dart';
+
+// Bad - 跨模块却用相对路径（避免多层 ../..）
+import '../../core/constants/app_colors.dart';
+```
+
+一级模块包括：`app`, `core`, `data`, `domain`, `features`, `routing`, `services`, `shared`
+
 - Use relative imports for files within the same package
 - Avoid `export` files unless creating a public API
 - Group imports with blank lines between groups

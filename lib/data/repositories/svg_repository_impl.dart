@@ -1,8 +1,8 @@
-import '../../domain/entities/svg_entity.dart';
-import '../../domain/repositories/svg_repository.dart';
-import '../datasources/remote/svg_remote_datasource.dart';
-import '../datasources/local/svg_local_datasource.dart';
-import '../../core/config/app_config.dart';
+import 'package:desktop_system/domain/entities/svg_entity.dart';
+import 'package:desktop_system/domain/repositories/svg_repository.dart';
+import 'package:desktop_system/core/config/app_config.dart';
+import 'package:desktop_system/data/datasources/remote/svg_remote_datasource.dart';
+import 'package:desktop_system/data/datasources/local/svg_local_datasource.dart';
 
 /// Implementation of SvgRepository
 /// Automatically selects local or remote based on AppConfig

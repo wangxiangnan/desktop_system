@@ -31,7 +31,7 @@ class _SplashPageState extends State<SplashPage> {
   Widget build(BuildContext context) {
     return BlocListener<SplashBloc, SplashState>(
       listener: (context, state) {
-        if (state is SplashCompleted) {
+        if (state.isCompleted) {
           widget.onCompleted();
         }
       },
@@ -72,9 +72,7 @@ class _SplashPageState extends State<SplashPage> {
                 child: Center(
                   child: BlocBuilder<SplashBloc, SplashState>(
                     builder: (context, state) {
-                      final remaining = state is SplashLoading
-                          ? state.remainingSeconds
-                          : 3;
+                      final remaining = state.remainingSeconds;
                       return Column(
                         children: [
                           Text(

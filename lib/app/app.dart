@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../core/theme/app_theme.dart';
-import '../core/constants/app_strings.dart';
-import '../core/di/setup_dependencies.dart';
-import '../features/auth/bloc/auth_bloc.dart';
-import '../features/auth/bloc/auth_event.dart';
-import '../features/splash/bloc/splash_bloc.dart';
-import '../features/splash/pages/splash_page.dart';
-import '../routing/app_router.dart';
+import 'package:desktop_system/core/theme/app_theme.dart';
+import 'package:desktop_system/core/constants/app_strings.dart';
+import 'package:desktop_system/core/di/setup_dependencies.dart';
+import 'package:desktop_system/features/auth/bloc/auth_bloc.dart';
+import 'package:desktop_system/features/auth/bloc/auth_event.dart';
+import 'package:desktop_system/features/splash/bloc/splash_bloc.dart';
+import 'package:desktop_system/features/splash/pages/splash_page.dart';
+import 'package:desktop_system/routing/app_router.dart';
 
 class App extends StatefulWidget {
   const App({super.key});

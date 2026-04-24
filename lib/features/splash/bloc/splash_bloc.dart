@@ -6,9 +6,8 @@ import 'splash_event.dart';
 import 'splash_state.dart';
 
 class SplashBloc extends Bloc<SplashEvent, SplashState> {
-  static const int _totalSeconds = 3;
 
-  SplashBloc() : super(const SplashInitial()) {
+  SplashBloc() : super(const SplashState()) {
     on<SplashStarted>(_onSplashStarted);
     on<SplashSkipRequested>(_onSplashSkipRequested);
   }
@@ -17,17 +16,17 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
     SplashStarted event,
     Emitter<SplashState> emit,
   ) async {
-    emit(SplashLoading(remainingSeconds: _totalSeconds));
+    emit(state.copyWith(isLoading: true));
     await _countdown(emit);
   }
 
   Future<void> _countdown(Emitter<SplashState> emit) async {
-    for (int i = _totalSeconds - 1; i >= 0; i--) {
+    for (int i = state.remainingSeconds; i >= 0; i--) {
       await Future.delayed(const Duration(seconds: 1));
       if (i == 0) {
-        emit(const SplashCompleted());
+        emit(state.copyWith(isCompleted: true, isLoading: false));
       } else {
-        emit(SplashLoading(remainingSeconds: i));
+        emit(state.copyWith(remainingSeconds: i));
       }
     }
   }
@@ -36,6 +35,6 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
     SplashSkipRequested event,
     Emitter<SplashState> emit,
   ) async {
-    emit(const SplashCompleted());
+    emit(state.copyWith(isCompleted: true, isLoading: false));
   }
 }
