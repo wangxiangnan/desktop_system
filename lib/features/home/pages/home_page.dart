@@ -1,23 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:desktop_system/core/constants/app_colors.dart';
 import 'package:desktop_system/core/config/app_config.dart';
-import 'package:desktop_system/features/auth/bloc/auth_bloc.dart';
-import 'package:desktop_system/features/auth/bloc/auth_state.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<AuthBloc, AuthState>(
-      listener: (context, state) {
-        if (state.status == AuthStatus.unauthenticated) {
-          context.go('/login');
-        }
-      },
-      child: Scaffold(
+    return Scaffold(
         backgroundColor: AppColors.background,
         /* appBar: AppBar(
           title: const Text(AppStrings.appName),
@@ -90,7 +81,6 @@ class HomePage extends StatelessWidget {
             ],
           ),
         ),
-      ),
     );
   }
 

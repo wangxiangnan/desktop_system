@@ -29,6 +29,7 @@ class TicketBloc extends Bloc<TicketEvent, TicketState> {
         page: event.page,
         pageSize: event.pageSize,
       );
+      print('Loaded ${result.tickets.length} tickets (Page ${result.page}/${result.totalPages})');
       emit(
         TicketLoaded(
           tickets: result.tickets,

@@ -1,9 +1,42 @@
+import 'dart:convert';
+
+import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+
 import '../config/app_config.dart';
 import 'package:desktop_system/routing/app_router.dart';
 import 'package:desktop_system/data/datasources/local/storage_datasource.dart';
+
+/// Recursively sort all map keys in ascending order.
+dynamic _sortMap(dynamic value) {
+  if (value is Map<String, dynamic>) {
+    final sorted = Map.fromEntries(
+      value.entries.toList()..sort((a, b) => a.key.compareTo(b.key)),
+    );
+    return sorted.map((k, v) => MapEntry(k, _sortMap(v)));
+  }
+  if (value is List) {
+    return value.map(_sortMap).toList();
+  }
+  return value;
+}
+
+/// Generate sign value for request body.
+///
+/// 1. Recursively sort all keys in ascending order
+/// 2. Serialize to JSON string
+/// 3. Append salt "ctms"
+/// 4. MD5 hash
+String _generateSign(Map<String, dynamic> data) {
+  if (data.isEmpty) return '';
+
+  final sorted = _sortMap(data);
+  final plain = '${jsonEncode(sorted)}ctms';
+
+  return md5.convert(utf8.encode(plain)).toString();
+}
 
 class ApiException implements Exception {
   final int code;
@@ -170,6 +203,11 @@ class _AuthInterceptor extends Interceptor {
     if (token != null && token.isNotEmpty) {
       options.headers['Authorization'] = 'Bearer $token';
     }
+
+    if (options.data is Map<String, dynamic>) {
+      options.headers['sign'] = _generateSign(options.data);
+    }
+
     handler.next(options);
   }
 

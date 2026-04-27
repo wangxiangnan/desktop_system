@@ -6,6 +6,7 @@ import 'package:desktop_system/core/constants/app_strings.dart';
 import 'package:desktop_system/core/di/setup_dependencies.dart';
 import 'package:desktop_system/features/auth/bloc/auth_bloc.dart';
 import 'package:desktop_system/features/auth/bloc/auth_event.dart';
+import 'package:desktop_system/features/auth/bloc/auth_state.dart';
 import 'package:desktop_system/features/splash/bloc/splash_bloc.dart';
 import 'package:desktop_system/features/splash/pages/splash_page.dart';
 import 'package:desktop_system/routing/app_router.dart';
@@ -19,28 +20,32 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> {
   bool _showSplash = true;
+  late final AuthBloc _authBloc = getIt<AuthBloc>()..add(const AuthCheckRequested());
 
   void _onSplashCompleted() {
-    setState(() {
-      _showSplash = false;
-    });
+    final status = _authBloc.state.status;
+    if (status != AuthStatus.initial) {
+      setState(() {
+        _showSplash = false;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     if (_showSplash) {
-      return BlocProvider(
-        create: (_) => getIt<SplashBloc>(),
-        child: SplashPage(
-          onCompleted: _onSplashCompleted,
+      return BlocProvider.value(
+        value: _authBloc,
+        child: BlocProvider(
+          create: (_) => getIt<SplashBloc>(),
+          child: SplashPage(onCompleted: _onSplashCompleted),
         ),
       );
     }
 
-    final authBloc = getIt<AuthBloc>()..add(const AuthCheckRequested());
-    final appRouter = AppRouter(authBloc: authBloc);
+    final appRouter = AppRouter(authBloc: _authBloc);
     return BlocProvider.value(
-      value: authBloc,
+      value: _authBloc,
       child: MaterialApp.router(
         title: AppStrings.appName,
         theme: AppTheme.lightTheme,

@@ -1,4 +1,4 @@
-import '../../../domain/entities/ticket_entity.dart';
+import 'package:desktop_system/domain/entities/ticket_entity.dart';
 
 /// Local data source for tickets (Mock implementation)
 /// Used for development and testing without API

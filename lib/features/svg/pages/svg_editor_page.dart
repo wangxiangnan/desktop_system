@@ -4,9 +4,9 @@ import 'package:desktop_system/core/constants/app_colors.dart';
 import 'package:desktop_system/core/di/setup_dependencies.dart';
 import 'package:desktop_system/domain/repositories/svg_repository.dart';
 import 'package:desktop_system/domain/entities/svg_entity.dart';
-import 'package:desktop_system/features/svg/bloc/svg_bloc.dart';
-import 'package:desktop_system/features/svg/bloc/svg_event.dart';
-import 'package:desktop_system/features/svg/bloc/svg_state.dart';
+import '../bloc/svg_bloc.dart';
+import '../bloc/svg_event.dart';
+import '../bloc/svg_state.dart';
 
 class SvgEditorPage extends StatelessWidget {
   final String canvasId;

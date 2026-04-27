@@ -1,4 +1,4 @@
-import '../../../domain/entities/svg_entity.dart';
+import 'package:desktop_system/domain/entities/svg_entity.dart';
 
 /// Local data source for SVG canvases (Mock implementation)
 class SvgLocalDataSource {

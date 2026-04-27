@@ -23,7 +23,7 @@ import 'package:desktop_system/data/repositories/auth_repository_impl.dart';
 // BLoCs
 import 'package:desktop_system/features/splash/bloc/splash_bloc.dart';
 import 'package:desktop_system/features/auth/bloc/auth_bloc.dart';
-import 'package:desktop_system/features/tickets/bloc/ticket_bloc.dart';
+import 'package:desktop_system/features/ticket/bloc/ticket_bloc.dart';
 import 'package:desktop_system/features/svg/bloc/svg_bloc.dart';
 
 // Auth Use Cases

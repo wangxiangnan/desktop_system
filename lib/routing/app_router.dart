@@ -1,17 +1,17 @@
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
-import 'package:desktop_system/core/navigation/auth_change_notifier.dart';
-import 'package:desktop_system/core/navigation/routes.dart';
+import 'package:desktop_system/routing/auth_change_notifier.dart';
+import 'package:desktop_system/routing/routes.dart';
 import 'package:desktop_system/features/auth/bloc/auth_bloc.dart';
 import 'package:desktop_system/features/auth/bloc/auth_state.dart';
 import 'package:desktop_system/features/auth/pages/login_page.dart';
 import 'package:desktop_system/features/home/pages/home_page.dart';
-import 'package:desktop_system/features/tickets/pages/ticket_list_page.dart';
-import 'package:desktop_system/features/tickets/pages/ticket_detail_page.dart';
+import 'package:desktop_system/features/ticket/pages/ticket_list_page.dart';
+import 'package:desktop_system/features/ticket/pages/ticket_detail_page.dart';
 import 'package:desktop_system/features/svg/pages/svg_list_page.dart';
 import 'package:desktop_system/features/svg/pages/svg_editor_page.dart';
 import 'package:desktop_system/features/settings/pages/settings_page.dart';
-import 'package:desktop_system/shared/widgets/app_shell.dart';
+import 'package:desktop_system/core/widgets/app_shell.dart';
 
 class AppRouter {
   final AuthBloc authBloc;
@@ -32,7 +32,8 @@ class AppRouter {
       final isAuthenticated =
           authState.status == AuthStatus.authenticated && authState.user != null;
       final isLoading = authState.status == AuthStatus.loading ||
-          authState.status == AuthStatus.captchaLoading;
+          authState.status == AuthStatus.captchaLoading ||
+          authState.status == AuthStatus.initial;
 
       final isPublicRoute = currentLocation == Routes.login;
 

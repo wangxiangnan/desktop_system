@@ -1,5 +1,5 @@
-import '../../../core/network/dio_client.dart';
-import '../../../domain/entities/svg_entity.dart';
+import 'package:desktop_system/core/network/dio_client.dart';
+import 'package:desktop_system/domain/entities/svg_entity.dart';
 
 /// Remote data source for SVG canvases using Dio
 class SvgRemoteDataSource {

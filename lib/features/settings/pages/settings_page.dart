@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:desktop_system/core/constants/app_colors.dart';
 import 'package:desktop_system/core/constants/app_strings.dart';
 import 'package:desktop_system/features/auth/bloc/auth_bloc.dart';
@@ -89,7 +88,6 @@ class SettingsPage extends StatelessWidget {
                         context.read<AuthBloc>().add(
                           const AuthLogoutRequested(),
                         );
-                        context.go('/login');
                       },
                       child: const Text('Logout'),
                     ),

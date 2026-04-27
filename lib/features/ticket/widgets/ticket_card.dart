@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../../../core/constants/app_colors.dart';
-import '../../../../domain/entities/ticket_entity.dart';
+import 'package:desktop_system/core/constants/app_colors.dart';
+import 'package:desktop_system/domain/entities/ticket_entity.dart';
 
 class TicketCard extends StatelessWidget {
   final Ticket ticket;

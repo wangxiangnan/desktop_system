@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git mv *)",
+      "Bash(git rm *)",
+      "Bash(git add *)",
+      "Bash(flutter pub *)",
+      "Bash(dart -e ' *)"
+    ]
+  }
+}
