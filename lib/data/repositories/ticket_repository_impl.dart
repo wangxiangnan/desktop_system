@@ -1,3 +1,4 @@
+import 'package:desktop_system/core/models/paginated.dart';
 import 'package:desktop_system/domain/entities/ticket_entity.dart';
 import 'package:desktop_system/domain/repositories/ticket_repository.dart';
 import 'package:desktop_system/core/config/app_config.dart';
@@ -40,11 +41,11 @@ class TicketRepositoryImpl implements TicketRepository {
   bool get _useRemote => _remoteDataSource != null;
 
   @override
-  Future<PaginatedTickets> getTickets({int page = 1, int pageSize = 10}) {
+  Future<Paginated<Ticket>> getTickets({int pageNum = 1, int pageSize = 10}) {
     if (_useRemote) {
-      return _remoteDataSource!.getTickets(page: page, pageSize: pageSize);
+      return _remoteDataSource!.getTickets(pageNum: pageNum, pageSize: pageSize);
     }
-    return _localDataSource!.getTickets(page: page, pageSize: pageSize);
+    return _localDataSource!.getTickets(pageNum: pageNum, pageSize: pageSize);
   }
 
   @override
@@ -53,41 +54,5 @@ class TicketRepositoryImpl implements TicketRepository {
       return _remoteDataSource!.getTicketById(id);
     }
     return _localDataSource!.getTicketById(id);
-  }
-
-  @override
-  Future<Ticket> createTicket(Ticket ticket) {
-    if (_useRemote) {
-      return _remoteDataSource!.createTicket(ticket);
-    }
-    return _localDataSource!.createTicket(ticket);
-  }
-
-  @override
-  Future<Ticket> updateTicket(Ticket ticket) {
-    if (_useRemote) {
-      return _remoteDataSource!.updateTicket(ticket);
-    }
-    return _localDataSource!.updateTicket(ticket);
-  }
-
-  @override
-  Future<void> deleteTicket(String id) {
-    if (_useRemote) {
-      return _remoteDataSource!.deleteTicket(id);
-    }
-    return _localDataSource!.deleteTicket(id);
-  }
-
-  @override
-  Future<List<Ticket>> searchTickets(
-    String query, {
-    int page = 1,
-    int pageSize = 10,
-  }) {
-    if (_useRemote) {
-      return _remoteDataSource!.searchTickets(query, page: page, pageSize: pageSize);
-    }
-    return _localDataSource!.searchTickets(query, page: page, pageSize: pageSize);
   }
 }

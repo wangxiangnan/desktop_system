@@ -49,7 +49,17 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<User?> getInfo() async {
-    return await _remoteDataSource.getInfo();
+    final result = await _remoteDataSource.getInfo();
+    if (result.user == null) return null;
+
+    final role = result.roles.isNotEmpty
+        ? UserRole.values.firstWhere(
+            (e) => e.name == result.roles.first,
+            orElse: () => UserRole.user,
+          )
+        : UserRole.user;
+
+    return result.user!.toEntity(role: role, permissions: result.permissions);
   }
 
   @override

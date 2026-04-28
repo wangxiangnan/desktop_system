@@ -1,6 +1,8 @@
 import 'package:desktop_system/core/network/dio_client.dart';
-import 'package:desktop_system/domain/entities/user_entity.dart';
+import 'package:desktop_system/data/models/user_model.dart';
 import 'package:desktop_system/domain/repositories/auth_repository.dart';
+
+const _authBasePath = '/api/auth/v1/auth';
 
 /// Remote data source for authentication using Dio
 class AuthRemoteDataSource {
@@ -10,7 +12,7 @@ class AuthRemoteDataSource {
 
   /// Get captcha image
   Future<CaptchaData> getCaptchaImage() async {
-    final response = await _dioClient.get('/captchaImage');
+    final response = await _dioClient.get('$_authBasePath/captchaImage');
     final data = response.data;
     return CaptchaData(img: data['img'] ?? '', uuid: data['uuid'] ?? '');
   }
@@ -23,7 +25,7 @@ class AuthRemoteDataSource {
     required String uuid,
   }) async {
     final response = await _dioClient.post(
-      '/login',
+      '$_authBasePath/login',
       data: {
         'username': username,
         'password': password,
@@ -40,39 +42,28 @@ class AuthRemoteDataSource {
 
   /// Logout
   Future<void> logout() async {
-    await _dioClient.post('/logout');
+    await _dioClient.post('$_authBasePath/logout');
   }
 
   /// Get user info (permissions, roles, user)
-  Future<User?> getInfo() async {
-    final response = await _dioClient.get('/getInfo');
+  Future<({UserModel? user, List<String> permissions, List<String> roles})> getInfo() async {
+    final response = await _dioClient.get('$_authBasePath/getInfo');
     final data = response.data;
 
     final permissions = List<String>.from(data['permissions'] ?? []);
     final roles = List<String>.from(data['roles'] ?? []);
+    final userJson = data['user'] as Map<String, dynamic>?;
 
-    User? user;
-    if (data['user'] != null) {
-      user = User(
-        id: data['user']['id'] as String? ?? '',
-        username: data['user']['username'] as String? ?? '',
-        name: data['user']['name'] as String? ?? '',
-        deptId: data['user']['deptId'] as int? ?? 0,
-        deptName: data['user']['deptName'] as String? ?? '',
-        role: UserRole.values.firstWhere(
-          (e) => e.name == roles[0],
-          orElse: () => UserRole.user,
-        ),
-        permissions: permissions,
-      );
-    }
-
-    return user;
+    return (
+      user: userJson != null ? UserModel.fromJson(userJson) : null,
+      permissions: permissions,
+      roles: roles,
+    );
   }
 
   /// Refresh token
   Future<String> refreshToken() async {
-    final response = await _dioClient.post('/refresh-token');
+    final response = await _dioClient.post('$_authBasePath/refresh-token');
     return response.data['token'] as String? ?? '';
   }
 }

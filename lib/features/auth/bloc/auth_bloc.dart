@@ -5,20 +5,10 @@ import 'auth_event.dart';
 import 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  final LoginUseCase _loginUseCase;
-  final LogoutUseCase _logoutUseCase;
-  final GetCurrentUserUseCase _getCurrentUserUseCase;
-  final GetCaptchaUseCase _getCaptchaUseCase;
+  final AuthUseCase _authUseCase;
 
-  AuthBloc({
-    required LoginUseCase loginUseCase,
-    required LogoutUseCase logoutUseCase,
-    required GetCurrentUserUseCase getCurrentUserUseCase,
-    required GetCaptchaUseCase getCaptchaUseCase,
-  })  : _loginUseCase = loginUseCase,
-        _logoutUseCase = logoutUseCase,
-        _getCurrentUserUseCase = getCurrentUserUseCase,
-        _getCaptchaUseCase = getCaptchaUseCase,
+  AuthBloc({required AuthUseCase authUseCase})
+      : _authUseCase = authUseCase,
         super(const AuthState()) {
     on<AuthLoginRequested>(_onLoginRequested);
     on<AuthLogoutRequested>(_onLogoutRequested);
@@ -32,7 +22,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   ) async {
     emit(state.copyWith(status: AuthStatus.loading));
 
-    final result = await _loginUseCase(LoginParams(
+    final result = await _authUseCase.login(LoginParams(
       username: event.username,
       password: event.password,
       code: event.code,
@@ -57,7 +47,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   ) async {
     emit(state.copyWith(status: AuthStatus.loading));
 
-    final result = await _logoutUseCase();
+    final result = await _authUseCase.logout();
 
     result.when(
       success: (_) => emit(state.copyWith(status: AuthStatus.unauthenticated)),
@@ -72,7 +62,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     AuthCheckRequested event,
     Emitter<AuthState> emit,
   ) async {
-    final result = await _getCurrentUserUseCase();
+    final result = await _authUseCase.getCurrentUser();
 
     result.when(
       success: (user) {
@@ -95,7 +85,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   ) async {
     emit(state.copyWith(status: AuthStatus.captchaLoading));
 
-    final result = await _getCaptchaUseCase();
+    final result = await _authUseCase.getCaptcha();
 
     result.when(
       success: (captcha) => emit(state.copyWith(

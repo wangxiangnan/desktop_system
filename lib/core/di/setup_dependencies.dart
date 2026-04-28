@@ -8,6 +8,7 @@ import '../config/app_config.dart';
 import 'package:desktop_system/data/datasources/remote/ticket_remote_datasource.dart';
 import 'package:desktop_system/data/datasources/remote/svg_remote_datasource.dart';
 import 'package:desktop_system/data/datasources/remote/auth_remote_datasource.dart';
+import 'package:desktop_system/data/datasources/remote/system_remote_datasource.dart';
 import 'package:desktop_system/data/datasources/local/ticket_local_datasource.dart';
 import 'package:desktop_system/data/datasources/local/svg_local_datasource.dart';
 import 'package:desktop_system/data/datasources/local/storage_datasource.dart';
@@ -56,6 +57,9 @@ Future<void> setupDependencies() async {
   getIt.registerLazySingleton<AuthRemoteDataSource>(
     () => AuthRemoteDataSource(getIt<DioClient>()),
   );
+  getIt.registerLazySingleton<SystemRemoteDataSource>(
+    () => SystemRemoteDataSource(getIt<DioClient>()),
+  );
 
   // Local data sources
   getIt.registerLazySingleton<TicketLocalDataSource>(
@@ -87,30 +91,16 @@ Future<void> setupDependencies() async {
     ),
   );
 
-  // ========== Auth Use Cases ==========
-  getIt.registerLazySingleton<LoginUseCase>(
-    () => LoginUseCase(getIt<AuthRepository>()),
-  );
-  getIt.registerLazySingleton<LogoutUseCase>(
-    () => LogoutUseCase(getIt<AuthRepository>()),
-  );
-  getIt.registerLazySingleton<GetCurrentUserUseCase>(
-    () => GetCurrentUserUseCase(getIt<AuthRepository>()),
-  );
-  getIt.registerLazySingleton<GetCaptchaUseCase>(
-    () => GetCaptchaUseCase(getIt<AuthRepository>()),
+  // ========== Auth Use Case ==========
+  getIt.registerLazySingleton<AuthUseCase>(
+    () => AuthUseCase(getIt<AuthRepository>()),
   );
 
   // ========== BLoCs ==========
   getIt.registerFactory<SplashBloc>(() => SplashBloc());
 
   getIt.registerFactory<AuthBloc>(
-    () => AuthBloc(
-      loginUseCase: getIt<LoginUseCase>(),
-      logoutUseCase: getIt<LogoutUseCase>(),
-      getCurrentUserUseCase: getIt<GetCurrentUserUseCase>(),
-      getCaptchaUseCase: getIt<GetCaptchaUseCase>(),
-    ),
+    () => AuthBloc(authUseCase: getIt<AuthUseCase>()),
   );
 
   getIt.registerFactory<TicketBloc>(

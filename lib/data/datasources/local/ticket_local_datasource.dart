@@ -1,3 +1,4 @@
+import 'package:desktop_system/core/models/paginated.dart';
 import 'package:desktop_system/domain/entities/ticket_entity.dart';
 
 /// Local data source for tickets (Mock implementation)
@@ -54,18 +55,18 @@ class TicketLocalDataSource {
   }
 
   /// Get paginated tickets
-  Future<PaginatedTickets> getTickets({int page = 1, int pageSize = 10}) async {
+  Future<Paginated<Ticket>> getTickets({int pageNum = 1, int pageSize = 10}) async {
     await Future.delayed(const Duration(milliseconds: 300));
-    final start = (page - 1) * pageSize;
+    final start = (pageNum - 1) * pageSize;
     final end = start + pageSize;
     final paginatedList = _tickets.length > start
         ? _tickets.sublist(start, end.clamp(0, _tickets.length))
         : <Ticket>[];
 
-    return PaginatedTickets(
-      tickets: paginatedList,
+    return Paginated<Ticket>(
+      rows: paginatedList,
       total: _tickets.length,
-      page: page,
+      pageNum: pageNum,
       pageSize: pageSize,
     );
   }
@@ -74,49 +75,5 @@ class TicketLocalDataSource {
   Future<Ticket> getTicketById(String id) async {
     await Future.delayed(const Duration(milliseconds: 300));
     return _tickets.firstWhere((t) => t.id == id);
-  }
-
-  /// Create ticket
-  Future<Ticket> createTicket(Ticket ticket) async {
-    await Future.delayed(const Duration(milliseconds: 500));
-    _tickets.add(ticket);
-    return ticket;
-  }
-
-  /// Update ticket
-  Future<Ticket> updateTicket(Ticket ticket) async {
-    await Future.delayed(const Duration(milliseconds: 500));
-    final index = _tickets.indexWhere((t) => t.id == ticket.id);
-    if (index != -1) {
-      _tickets[index] = ticket;
-    }
-    return ticket;
-  }
-
-  /// Delete ticket
-  Future<void> deleteTicket(String id) async {
-    await Future.delayed(const Duration(milliseconds: 300));
-    _tickets.removeWhere((t) => t.id == id);
-  }
-
-  /// Search tickets
-  Future<List<Ticket>> searchTickets(
-    String query, {
-    int page = 1,
-    int pageSize = 10,
-  }) async {
-    await Future.delayed(const Duration(milliseconds: 300));
-    final lowerQuery = query.toLowerCase();
-    final filtered = _tickets.where((t) {
-      return t.passengerName.toLowerCase().contains(lowerQuery) ||
-          t.ticketNumber.toLowerCase().contains(lowerQuery) ||
-          t.route.toLowerCase().contains(lowerQuery);
-    }).toList();
-
-    final start = (page - 1) * pageSize;
-    final end = start + pageSize;
-    return filtered.length > start
-        ? filtered.sublist(start, end.clamp(0, filtered.length))
-        : <Ticket>[];
   }
 }

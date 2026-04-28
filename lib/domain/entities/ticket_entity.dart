@@ -65,22 +65,3 @@ class Ticket extends Equatable {
         createdAt,
       ];
 }
-
-/// Paginated tickets result
-class PaginatedTickets {
-  final List<Ticket> tickets;
-  final int total;
-  final int page;
-  final int pageSize;
-
-  const PaginatedTickets({
-    required this.tickets,
-    required this.total,
-    required this.page,
-    required this.pageSize,
-  });
-
-  int get totalPages => (total / pageSize).ceil();
-  bool get hasNextPage => page < totalPages;
-  bool get hasPreviousPage => page > 1;
-}

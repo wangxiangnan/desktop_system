@@ -1,6 +1,8 @@
 import 'package:desktop_system/core/network/dio_client.dart';
 import 'package:desktop_system/domain/entities/svg_entity.dart';
 
+const _svgBasePath = '/canvases';
+
 /// Remote data source for SVG canvases using Dio
 class SvgRemoteDataSource {
   final DioClient _dioClient;
@@ -9,7 +11,7 @@ class SvgRemoteDataSource {
 
   /// Fetch all canvases from API
   Future<List<SvgCanvas>> getCanvases() async {
-    final response = await _dioClient.get('/canvases');
+    final response = await _dioClient.get(_svgBasePath);
     final List<dynamic> canvasesJson = response.data['canvases'] ?? [];
     return canvasesJson
         .map((json) => _canvasFromJson(json as Map<String, dynamic>))
@@ -18,20 +20,20 @@ class SvgRemoteDataSource {
 
   /// Fetch canvas by ID from API
   Future<SvgCanvas> getCanvasById(String id) async {
-    final response = await _dioClient.get('/canvases/$id');
+    final response = await _dioClient.get('$_svgBasePath/$id');
     return _canvasFromJson(response.data as Map<String, dynamic>);
   }
 
   /// Create canvas via API
   Future<SvgCanvas> createCanvas(SvgCanvas canvas) async {
-    final response = await _dioClient.post('/canvases', data: _canvasToJson(canvas));
+    final response = await _dioClient.post(_svgBasePath, data: _canvasToJson(canvas));
     return _canvasFromJson(response.data as Map<String, dynamic>);
   }
 
   /// Update canvas via API
   Future<SvgCanvas> updateCanvas(SvgCanvas canvas) async {
     final response = await _dioClient.put(
-      '/canvases/${canvas.id}',
+      '$_svgBasePath/${canvas.id}',
       data: _canvasToJson(canvas),
     );
     return _canvasFromJson(response.data as Map<String, dynamic>);
@@ -39,7 +41,7 @@ class SvgRemoteDataSource {
 
   /// Delete canvas via API
   Future<void> deleteCanvas(String id) async {
-    await _dioClient.delete('/canvases/$id');
+    await _dioClient.delete('$_svgBasePath/$id');
   }
 
   // JSON conversion helpers

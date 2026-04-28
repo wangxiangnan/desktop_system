@@ -8,32 +8,32 @@ abstract class TicketEvent extends Equatable {
 }
 
 class TicketLoadRequested extends TicketEvent {
-  final int page;
+  final int pageNum;
   final int pageSize;
 
-  const TicketLoadRequested({this.page = 1, this.pageSize = 10});
+  const TicketLoadRequested({this.pageNum = 1, this.pageSize = 10});
 
   @override
-  List<Object?> get props => [page, pageSize];
+  List<Object?> get props => [pageNum, pageSize];
 }
 
 class TicketPageChanged extends TicketEvent {
-  final int page;
+  final int pageNum;
 
-  const TicketPageChanged(this.page);
+  const TicketPageChanged(this.pageNum);
 
   @override
-  List<Object?> get props => [page];
+  List<Object?> get props => [pageNum];
 }
 
 class TicketSearchRequested extends TicketEvent {
   final String query;
-  final int page;
+  final int pageNum;
 
-  const TicketSearchRequested(this.query, {this.page = 1});
+  const TicketSearchRequested(this.query, {this.pageNum = 1});
 
   @override
-  List<Object?> get props => [query, page];
+  List<Object?> get props => [query, pageNum];
 }
 
 class TicketDeleteRequested extends TicketEvent {
