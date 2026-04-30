@@ -5,7 +5,7 @@ import '../entities/ticket_entity.dart';
 /// This defines the contract that any data source must implement
 abstract class TicketRepository {
   /// Get paginated list of tickets
-  Future<Paginated<Ticket>> getOrders({int pageNum = 1, int pageSize = 10});
+  Future<Paginated<Ticket>> getTickets({int pageNum = 1, int pageSize = 10});
 
   /// Get ticket by ID
   Future<Ticket> getTicketById(String id);

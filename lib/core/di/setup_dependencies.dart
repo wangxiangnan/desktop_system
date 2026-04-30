@@ -9,6 +9,7 @@ import 'package:desktop_system/data/datasources/remote/ticket_remote_datasource.
 import 'package:desktop_system/data/datasources/remote/svg_remote_datasource.dart';
 import 'package:desktop_system/data/datasources/remote/auth_remote_datasource.dart';
 import 'package:desktop_system/data/datasources/remote/system_remote_datasource.dart';
+import 'package:desktop_system/data/datasources/remote/order_remote_datasource.dart';
 import 'package:desktop_system/data/datasources/local/ticket_local_datasource.dart';
 import 'package:desktop_system/data/datasources/local/svg_local_datasource.dart';
 import 'package:desktop_system/data/datasources/local/storage_datasource.dart';
@@ -17,18 +18,22 @@ import 'package:desktop_system/data/datasources/local/storage_datasource.dart';
 import 'package:desktop_system/domain/repositories/ticket_repository.dart';
 import 'package:desktop_system/domain/repositories/svg_repository.dart';
 import 'package:desktop_system/domain/repositories/auth_repository.dart';
+import 'package:desktop_system/domain/repositories/order_repository.dart';
 import 'package:desktop_system/data/repositories/ticket_repository_impl.dart';
 import 'package:desktop_system/data/repositories/svg_repository_impl.dart';
 import 'package:desktop_system/data/repositories/auth_repository_impl.dart';
+import 'package:desktop_system/data/repositories/order_repository_impl.dart';
 
 // BLoCs
 import 'package:desktop_system/features/splash/bloc/splash_bloc.dart';
 import 'package:desktop_system/features/auth/bloc/auth_bloc.dart';
 import 'package:desktop_system/features/ticket/bloc/ticket_bloc.dart';
 import 'package:desktop_system/features/svg/bloc/svg_bloc.dart';
+import 'package:desktop_system/features/order/bloc/order_bloc.dart';
 
-// Auth Use Cases
+// Use Cases
 import 'package:desktop_system/domain/usecases/usecases.dart';
+import 'package:desktop_system/domain/usecases/order_usecase.dart';
 
 final GetIt getIt = GetIt.instance;
 
@@ -59,6 +64,9 @@ Future<void> setupDependencies() async {
   );
   getIt.registerLazySingleton<SystemRemoteDataSource>(
     () => SystemRemoteDataSource(getIt<DioClient>()),
+  );
+  getIt.registerLazySingleton<OrderRemoteDataSource>(
+    () => OrderRemoteDataSource(getIt<DioClient>()),
   );
 
   // Local data sources
@@ -91,9 +99,19 @@ Future<void> setupDependencies() async {
     ),
   );
 
-  // ========== Auth Use Case ==========
+  getIt.registerLazySingleton<OrderRepository>(
+    () => OrderRepositoryImpl(
+      remoteDataSource: getIt<OrderRemoteDataSource>(),
+    ),
+  );
+
+  // ========== Use Cases ==========
   getIt.registerLazySingleton<AuthUseCase>(
     () => AuthUseCase(getIt<AuthRepository>()),
+  );
+
+  getIt.registerLazySingleton<OrderUsecase>(
+    () => OrderUsecase(getIt<OrderRepository>()),
   );
 
   // ========== BLoCs ==========
@@ -109,6 +127,10 @@ Future<void> setupDependencies() async {
 
   getIt.registerFactory<SvgBloc>(
     () => SvgBloc(getIt<SvgRepository>()),
+  );
+
+  getIt.registerFactory<OrderBloc>(
+    () => OrderBloc(orderUsecase: getIt<OrderUsecase>()),
   );
 
   // Log configuration

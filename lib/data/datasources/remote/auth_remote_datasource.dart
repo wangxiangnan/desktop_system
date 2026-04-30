@@ -2,7 +2,7 @@ import 'package:desktop_system/core/network/dio_client.dart';
 import 'package:desktop_system/data/models/user_model.dart';
 import 'package:desktop_system/domain/repositories/auth_repository.dart';
 
-const _authBasePath = '/api/auth/v1/auth';
+const _authBasePath = '';
 
 /// Remote data source for authentication using Dio
 class AuthRemoteDataSource {

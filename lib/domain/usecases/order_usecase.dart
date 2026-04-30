@@ -20,11 +20,11 @@ class OrderUsecase {
     }
   }
 
-  Future<Order> getOrderById(String id) async {
+  /* Future<Order> getOrderById(String id) async {
     try {
       return await orderRepository.getOrderById(id);
     } catch (e) {
       throw AppError(message: '获取订单详情失败: ${e.toString()}');
     }
-  }
+  } */
 }

@@ -65,6 +65,12 @@ class _AppSidebarState extends State<AppSidebar> {
                 _buildMenuItem(context, 'Home', Icons.home, '/home'),
                 _buildMenuItem(
                   context,
+                  'Orders',
+                  Icons.shopping_cart,
+                  '/orders',
+                ),
+                _buildMenuItem(
+                  context,
                   'Tickets',
                   Icons.confirmation_number,
                   '/tickets',
