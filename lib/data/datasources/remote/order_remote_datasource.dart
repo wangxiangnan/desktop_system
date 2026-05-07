@@ -4,7 +4,7 @@ import 'package:desktop_system/core/network/dio_client.dart';
 import '../../models/order_model.dart';
 import 'package:desktop_system/core/models/paginated.dart';
 
-const _orderBasePath = '/api/order/v1/auth/performance/infoMain';
+const _orderBasePath = '/api/orders/v1/auth/orders/info';
 
 class OrderRemoteDataSource {
   final DioClient _dioClient;
@@ -12,9 +12,9 @@ class OrderRemoteDataSource {
   OrderRemoteDataSource(this._dioClient);
 
   Future<Paginated<OrderModel>> getOrders({int pageNum = 1, int pageSize = 10}) async {
-    final response = await _dioClient.get(
+    final response = await _dioClient.post(
       '$_orderBasePath/listPage',
-      queryParameters: {'pageNum': pageNum, 'pageSize': pageSize},
+      data: {'pageNum': pageNum, 'pageSize': pageSize},
     );
     final data = response.data['data'] as Map<String, dynamic>?;
     final List<dynamic> ordersJson = data?['rows'] ?? [];

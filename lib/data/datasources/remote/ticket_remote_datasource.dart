@@ -17,8 +17,7 @@ class TicketRemoteDataSource {
       data: {'pageNum': pageNum, 'pageSize': pageSize},
     );
     final data = response.data['data'] as Map<String, dynamic>?;
-    final List<dynamic> ticketsJson = data?['rows'] ?? [];
-    print('API Response: ${ticketsJson}'); // Debug log for API response
+    final List<dynamic> ticketsJson = data?['rows'] ?? [];// Debug log for API response
     final tickets = ticketsJson
         .map((json) => _ticketFromJson(json as Map<String, dynamic>))
         .toList();

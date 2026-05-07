@@ -157,6 +157,8 @@ class _LoginPageState extends State<LoginPage> {
                   child: Column(
                     children: [
                       const Text(AppStrings.recordNumber, style: TextStyle(color: Colors.white)),
+                      const SizedBox(height: 4),
+                      const Text(AppStrings.internetFilingNumber, style: TextStyle(color: Colors.white)),
                       if (state.copyrightText.isNotEmpty)
                         Padding(
                           padding: const EdgeInsets.only(top: 4),

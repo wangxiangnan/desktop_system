@@ -7,6 +7,7 @@ class AppStrings {
   static String logoUrl = 'assets/images/logo.png';
   static const String splashTitle = '桌面管理系统启动页-展示新功能';
   static const String recordNumber = '京ICP备2022030824号-1';
+  static const String internetFilingNumber = '京公网安备11010502059128号';
   static const String login = '登录';
   static const String username = '用户名';
   static const String password = '密码';

@@ -4,13 +4,13 @@ class OrderModel {
   final String id;
   final String channelType;
   final double amount;
-  final double num;
-  final double checkUpNum;
+  final int num;
+  final int checkUpNum;
   final String paymentType;
   final String paymentStatus;
   final String refundStatus;
-  final String drawOutType;
-  final String drawOutStatus;
+  final int drawOutType;
+  final int drawOutStatus;
   final String invoiceStatus;
   final String customerName;
   final String customerPhone;
@@ -50,13 +50,13 @@ class OrderModel {
       id: json['id'] as String? ?? '',
       channelType: json['channelType'] as String? ?? '',
       amount: (json['amount'] as double?)?.toDouble() ?? 0.0,
-      num: (json['num'] as double?)?.toDouble() ?? 0.0,
-      checkUpNum: (json['checkUpNum'] as double?)?.toDouble() ?? 0.0,
+      num: (json['num'] as int?)?.toInt() ?? 0,
+      checkUpNum: (json['checkUpNum'] as int?) ?? 0,
       paymentType: json['paymentType'] as String? ?? '',
       paymentStatus: json['paymentStatus'] as String? ?? '',
       refundStatus: json['refundStatus'] as String? ?? '',
-      drawOutType: json['drawOutType'] as String? ?? '',
-      drawOutStatus: json['drawOutStatus'] as String? ?? '',
+      drawOutType: json['drawOutType'] as int? ?? 0,
+      drawOutStatus: json['drawOutStatus'] as int? ?? 0,
       invoiceStatus: json['invoiceStatus'] as String? ?? '',
       customerName: json['customerName'] as String? ?? '',
       customerPhone: json['customerPhone'] as String? ?? '',
@@ -81,8 +81,8 @@ class OrderModel {
       paymentType: paymentType,
       paymentStatus: paymentStatus,
       refundStatus: refundStatus,
-      drawOutType: drawOutType,
-      drawOutStatus: drawOutStatus,
+      drawOutType: drawOutType.toString(),
+      drawOutStatus: drawOutStatus.toString(),
       invoiceStatus: invoiceStatus,
       customerName: customerName,
       customerPhone: customerPhone,

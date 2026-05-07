@@ -4,8 +4,8 @@ class Order extends Equatable {
   final String id;
   final String channelType;
   final double amount;
-  final double num;
-  final double checkUpNum;
+  final int num;
+  final int checkUpNum;
   final String paymentType;
   final String paymentStatus;
   final String refundStatus;
