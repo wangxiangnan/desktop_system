@@ -71,4 +71,17 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<String?> getToken() async {
     return _storageDataSource.getToken();
   }
+
+  @override
+  Future<LoginConfig> getLoginConfig() async {
+    const copyrightKey = 'ctms.cms.common.conf.10106';
+    const backgroundKey = 'ctms.cms.common.conf.10105';
+    final items = await _remoteDataSource.getLoginConfig();
+    final copyrightIndex = items.indexWhere((e) => e.keyNum == copyrightKey);
+    final backgroundIndex = items.indexWhere((e) => e.keyNum == backgroundKey);
+    return LoginConfig(
+      copyrightText: copyrightIndex >= 0 ? items[copyrightIndex].keyValue : '',
+      backgroundImageUrl: backgroundIndex >= 0 ? items[backgroundIndex].keyValue : '',
+    );
+  }
 }

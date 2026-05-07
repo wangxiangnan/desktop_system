@@ -35,3 +35,7 @@ class AuthCheckRequested extends AuthEvent {
 class AuthCaptchaRequested extends AuthEvent {
   const AuthCaptchaRequested();
 }
+
+class AuthCopyrightRequested extends AuthEvent {
+  const AuthCopyrightRequested();
+}

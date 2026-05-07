@@ -15,9 +15,10 @@ class AppConfig {
   /// 先加载通用基础配置(.env)，再加载环境特定配置(.env.xxx)
   static Future<void> load(String env) async {
     // 先加载基础配置
-    await dotenv.load(fileName: '.env');
-    // 合并环境特定配置（会覆盖基础配置中的相同项）
-    await dotenv.load(fileName: '.env.$env', mergeWith: dotenv.env);
+    await dotenv.load(
+      fileName: '.env',
+      overrideWithFiles: ['.env.$env'], // 允许环境特定配置覆盖基础配置
+    );
   }
 
   /// 获取环境变量
@@ -57,7 +58,7 @@ class AppConfig {
   }
 
   /// 获取应用名称
-  static String get appName => getString('APP_NAME', 'Desktop System');
+  static String get appName => getString('APP_NAME', 'Desktop System1111');
 
   /// 获取API基础URL
   static String get apiBaseUrl =>

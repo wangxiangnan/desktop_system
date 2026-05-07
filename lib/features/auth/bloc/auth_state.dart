@@ -9,6 +9,8 @@ class AuthState extends Equatable {
   final String? errorMessage;
   final String? captchaImage;
   final String? uuid;
+  final String copyrightText;
+  final String backgroundImageUrl;
 
   const AuthState({
     this.status = AuthStatus.initial,
@@ -16,6 +18,8 @@ class AuthState extends Equatable {
     this.errorMessage,
     this.captchaImage,
     this.uuid,
+    this.copyrightText = '',
+    this.backgroundImageUrl = '',
   });
 
   AuthState copyWith({
@@ -24,6 +28,8 @@ class AuthState extends Equatable {
     String? errorMessage,
     String? captchaImage,
     String? uuid,
+    String? copyrightText,
+    String? backgroundImageUrl,
   }) {
     return AuthState(
       status: status ?? this.status,
@@ -31,9 +37,11 @@ class AuthState extends Equatable {
       errorMessage: errorMessage ?? this.errorMessage,
       captchaImage: captchaImage ?? this.captchaImage,
       uuid: uuid ?? this.uuid,
+      copyrightText: copyrightText ?? this.copyrightText,
+      backgroundImageUrl: backgroundImageUrl ?? this.backgroundImageUrl,
     );
   }
 
   @override
-  List<Object?> get props => [status, user, errorMessage, captchaImage, uuid];
+  List<Object?> get props => [status, user, errorMessage, captchaImage, uuid, copyrightText, backgroundImageUrl];
 }

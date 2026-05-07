@@ -14,6 +14,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthLogoutRequested>(_onLogoutRequested);
     on<AuthCheckRequested>(_onCheckRequested);
     on<AuthCaptchaRequested>(_onCaptchaRequested);
+    on<AuthCopyrightRequested>(_onCopyrightRequested);
   }
 
   Future<void> _onLoginRequested(
@@ -97,6 +98,20 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         status: AuthStatus.failure,
         errorMessage: error.message,
       )),
+    );
+  }
+
+  Future<void> _onCopyrightRequested(
+    AuthCopyrightRequested event,
+    Emitter<AuthState> emit,
+  ) async {
+    final result = await _authUseCase.getLoginConfig();
+    result.when(
+      success: (config) => emit(state.copyWith(
+        copyrightText: config.copyrightText,
+        backgroundImageUrl: config.backgroundImageUrl,
+      )),
+      failure: (_) {}, // silently ignore login config fetch failure
     );
   }
 }

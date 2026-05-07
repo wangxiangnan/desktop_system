@@ -30,11 +30,10 @@ dynamic _sortMap(dynamic value) {
 /// 3. Append salt "ctms"
 /// 4. MD5 hash
 String _generateSign(Map<String, dynamic> data) {
-  if (data.isEmpty) return '';
+  // if (data.isEmpty) return '';
 
   final sorted = _sortMap(data);
   final plain = '${jsonEncode(sorted)}ctms';
-
   return md5.convert(utf8.encode(plain)).toString();
 }
 
@@ -204,7 +203,9 @@ class _AuthInterceptor extends Interceptor {
       options.headers['Authorization'] = 'Bearer $token';
     }
 
-    if (options.data is Map<String, dynamic>) {
+    if (options.method != 'GET') {
+      final Map<String, dynamic> defaultData = {};
+      options.data = options.data ?? defaultData;
       options.headers['sign'] = _generateSign(options.data);
     }
 

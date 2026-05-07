@@ -74,6 +74,19 @@ class AuthUseCase {
     return await _repository.isLoggedIn();
   }
 
+  Future<Result<LoginConfig>> getLoginConfig() async {
+    try {
+      final config = await _repository.getLoginConfig();
+      return Success(config);
+    } catch (e) {
+      return Failure(
+        e is AppError
+            ? e
+            : AppError.unknown(message: 'Failed to get login config: ${e.toString()}'),
+      );
+    }
+  }
+
   Future<Result<CaptchaData>> getCaptcha() async {
     try {
       final result = await _repository.getCaptchaImage();

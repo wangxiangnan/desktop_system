@@ -8,13 +8,14 @@ class AppHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Icon(Icons.directions_bus, size: 64, color: AppColors.primary),
+        const Text('👏 Hi，欢迎登录～'),
         const SizedBox(height: 16),
         Text(
           AppStrings.appName,
           style: const TextStyle(
-            fontSize: 24,
+            fontSize: 34,
             fontWeight: FontWeight.bold,
             color: AppColors.textPrimary,
           ),

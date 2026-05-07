@@ -11,6 +11,14 @@ class CaptchaData {
   String get fullBase64Image => 'data:image/gif;base64,$img';
 }
 
+/// Login page configuration data
+class LoginConfig {
+  final String copyrightText;
+  final String backgroundImageUrl;
+
+  const LoginConfig({this.copyrightText = '', this.backgroundImageUrl = ''});
+}
+
 /// Login result data
 class LoginResult {
   final String token;
@@ -42,4 +50,7 @@ abstract class AuthRepository {
 
   /// Get stored token
   Future<String?> getToken();
+
+  /// Get login page configuration (copyright, background image)
+  Future<LoginConfig> getLoginConfig();
 }

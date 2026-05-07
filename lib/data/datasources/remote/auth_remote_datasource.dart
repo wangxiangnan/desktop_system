@@ -1,5 +1,6 @@
 import 'package:desktop_system/core/network/dio_client.dart';
 import 'package:desktop_system/data/models/user_model.dart';
+import 'package:desktop_system/data/models/login_config_item.dart';
 import 'package:desktop_system/domain/repositories/auth_repository.dart';
 
 const _authBasePath = '';
@@ -65,5 +66,14 @@ class AuthRemoteDataSource {
   Future<String> refreshToken() async {
     final response = await _dioClient.post('$_authBasePath/refresh-token');
     return response.data['token'] as String? ?? '';
+  }
+
+  /// Get login page configuration (copyright, etc.)
+  Future<List<LoginConfigItem>> getLoginConfig() async {
+    final response = await _dioClient.post('/api/cms/v1/auth/cms/other/loginUrl');
+    final List<dynamic> data = response.data['data'] as List<dynamic>? ?? [];
+    return data
+        .map((json) => LoginConfigItem.fromJson(json as Map<String, dynamic>))
+        .toList();
   }
 }

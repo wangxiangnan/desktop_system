@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:desktop_system/core/constants/app_colors.dart';
+import 'package:desktop_system/core/constants/app_strings.dart';
 import '../bloc/auth_bloc.dart';
 import '../bloc/auth_event.dart';
 import '../bloc/auth_state.dart';
@@ -26,6 +27,7 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
     _loadCaptcha();
+    context.read<AuthBloc>().add(const AuthCopyrightRequested());
   }
 
   @override
@@ -78,41 +80,94 @@ class _LoginPageState extends State<LoginPage> {
             _updateCaptcha(state.captchaImage!, state.uuid!);
           }
         },
-        child: Center(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24),
-            child: LoginCard(
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const AppHeader(),
-                    const SizedBox(height: 32),
-                    UsernameField(controller: _usernameController),
-                    const SizedBox(height: 16),
-                    PasswordField(
-                      controller: _passwordController,
-                      obscurePassword: _obscurePassword,
-                      onToggleVisibility: _onTogglePasswordVisibility,
+        child: BlocBuilder<AuthBloc, AuthState>(
+          buildWhen: (previous, current) =>
+              previous.copyrightText != current.copyrightText ||
+              previous.backgroundImageUrl != current.backgroundImageUrl,
+          builder: (context, state) {
+            return Stack(
+              children: [
+                if (state.backgroundImageUrl.isNotEmpty)
+                  Positioned.fill(
+                    child: Image.network(
+                      state.backgroundImageUrl,
+                      fit: BoxFit.cover,
+                      errorBuilder: (_, _, _) => const SizedBox.shrink(),
                     ),
-                    const SizedBox(height: 16),
-                    CaptchaField(
-                      controller: _captchaController,
-                      captchaImage: _captchaImage,
-                      captchaUuid: _captchaUuid,
-                      onRefreshCaptcha: _loadCaptcha,
-                      onFieldSubmitted: (_) => _onLogin(),
-                    ),
-                    const SizedBox(height: 24),
-                    LoginButton(onPressed: _onLogin),
-                    const SizedBox(height: 16),
-                    const CaptchaHint(),
-                  ],
+                  ),
+                Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.only(topLeft: Radius.circular(32), bottomLeft: Radius.circular(32)),
+                        child: Image.network(
+                          'https://res.dasheng.top/ctms_log/log_two_bg.png',
+                          height: 586,
+                        ),
+                      ),
+                      Container(
+                        width: 463,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(24),
+                          color: Colors.white,
+                        ),
+                        padding: EdgeInsets.fromLTRB(50, 76, 50, 76),
+                        child: Form(
+                          key: _formKey,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const AppHeader(),
+                              const SizedBox(height: 66),
+                              UsernameField(controller: _usernameController),
+                              const SizedBox(height: 24),
+                              PasswordField(
+                                controller: _passwordController,
+                                obscurePassword: _obscurePassword,
+                                onToggleVisibility: _onTogglePasswordVisibility,
+                              ),
+                              const SizedBox(height: 24),
+                              CaptchaField(
+                                controller: _captchaController,
+                                captchaImage: _captchaImage,
+                                captchaUuid: _captchaUuid,
+                                onRefreshCaptcha: _loadCaptcha,
+                                onFieldSubmitted: (_) => _onLogin(),
+                              ),
+                              const SizedBox(height: 56),
+                              LoginButton(onPressed: _onLogin),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ),
-          ),
+                Positioned(
+                  left: 60,
+                  top: 26,
+                  child: Image.asset(AppStrings.logoUrl, width: 260,),
+                ),
+                Positioned(
+                  bottom: 10,
+                  left: 0,
+                  right: 0,
+                  child: Column(
+                    children: [
+                      const Text(AppStrings.recordNumber, style: TextStyle(color: Colors.white)),
+                      if (state.copyrightText.isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 4),
+                          child: Text(state.copyrightText, style: const TextStyle(color: Colors.white, fontSize: 12)),
+                        ),
+                    ],
+                  ),
+                ),
+              ],
+            );
+          },
         ),
       ),
     );
