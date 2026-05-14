@@ -8,12 +8,9 @@ class OrderUsecase {
 
   OrderUsecase(this.orderRepository);
 
-  Future<Paginated<Order>> getOrders({int pageNum = 1, int pageSize = 10}) async {
+  Future<Paginated<Order>> getOrders(Map<String, Object?> params) async {
     try {
-      final result = await orderRepository.getOrders(pageNum: pageNum, pageSize: pageSize);
-      if (result.rows.isEmpty) {
-        throw AppError(message: '订单列表为空');
-      }
+      final result = await orderRepository.getOrders(params);
       return result;
     } catch (e) {
       throw AppError(message: '获取订单列表失败: ${e.toString()}');

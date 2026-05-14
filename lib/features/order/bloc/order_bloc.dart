@@ -30,10 +30,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     emit(state.copyWith(status: OrderListStatus.loading, pageNum: 1));
 
     try {
-      final result = await _orderUsecase.getOrders(
-        pageNum: 1,
-        pageSize: state.pageSize,
-      );
+      final result = await _orderUsecase.getOrders(state.searchParams.toJson());
       emit(state.copyWith(
         status: OrderListStatus.success,
         orders: result.rows,
@@ -55,10 +52,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     emit(state.copyWith(status: OrderListStatus.loading));
 
     try {
-      final result = await _orderUsecase.getOrders(
-        pageNum: event.pageNum,
-        pageSize: state.pageSize,
-      );
+      final result = await _orderUsecase.getOrders(state.searchParams.toJson());
       emit(state.copyWith(
         status: OrderListStatus.success,
         orders: result.rows,

@@ -60,6 +60,36 @@ class Order extends Equatable {
     required this.price,
   });
 
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'channelType': channelType,
+      'amount': amount,
+      'num': num,
+      'checkUpNum': checkUpNum,
+      'paymentType': paymentType,
+      'paymentStatus': paymentStatus,
+      'discountPolicyName': discountPolicyName,
+      'refundStatus': refundStatus,
+      'drawOutStatus': drawOutStatus,
+      'invoiceStatus': invoiceStatus,
+      'customerName': customerName,
+      'customerPhone': customerPhone,
+      'mainOrderInfoId': mainOrderInfoId,
+      'packageOrderActivityId': packageOrderActivityId,
+      'ticketOutletName': ticketOutletName,
+      'createTime': createTime,
+      'paymentTime': paymentTime,
+      'performanceId': performanceId,
+      'performanceName': performanceName,
+      'showName': showName,
+      'drawOutControl': drawOutControl,
+      'date': date,
+      'location': location,
+      'price': price,
+    };
+  }
+
   @override
   List<Object?> get props => [
     id,

@@ -9,7 +9,8 @@
       "Bash(dart analyze *)",
       "Bash(dart pub *)",
       "Read(//c/Users/39364/**)",
-      "Read(//c/Users/39364/AppData/Local/Pub/**)"
+      "Read(//c/Users/39364/AppData/Local/Pub/**)",
+      "Bash(dart run *)"
     ]
   }
 }

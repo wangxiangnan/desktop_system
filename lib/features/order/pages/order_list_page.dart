@@ -81,9 +81,15 @@ class _OrderListView extends StatefulWidget {
 
 class _OrderListViewState extends State<_OrderListView> {
   final _controllers = <String, TextEditingController>{};
+  List<int>? _calendarValue;
+  int _calendarKey = 0;
 
-  TextEditingController _controller(String key) {
-    return _controllers.putIfAbsent(key, () => TextEditingController());
+  TextEditingController _controller(String field) {
+    return _controllers.putIfAbsent(field, () => TextEditingController());
+  }
+
+  void _onSearch() {
+    context.read<OrderBloc>().add(const OrderSearchSubmitted());
   }
 
   OrderSearchParams _buildSearchParams() {
@@ -95,20 +101,38 @@ class _OrderListViewState extends State<_OrderListView> {
       ticketNo: _controller('ticketNo').text,
       createBeginTime: _controller('createBeginTime').text,
       createEndTime: _controller('createEndTime').text,
+      pageSize: 30,
+      pageNum: 1
     );
   }
 
-  void _onSearch() {
+  void _onUpdateParams() {
     final params = _buildSearchParams();
     context.read<OrderBloc>().add(OrderSearchParamsChanged(params));
-    context.read<OrderBloc>().add(const OrderSearchSubmitted());
   }
 
   void _onReset() {
     for (final c in _controllers.values) {
       c.clear();
     }
+    setState(() {
+      _calendarValue = null;
+    });
+    _calendarKey++;
     context.read<OrderBloc>().add(const OrderReset());
+  }
+
+  void _onCalendarConfirm(List<int> value) {
+    setState(() {
+      _calendarValue = value;
+    });
+    if (value.length == 2) {
+      _controller('createBeginTime').text =
+          DateTime.fromMillisecondsSinceEpoch(value[0]).toString().substring(0, 19);
+      _controller('createEndTime').text =
+          DateTime.fromMillisecondsSinceEpoch(value[1]).toString().substring(0, 19);
+    }
+    _onUpdateParams();
   }
 
   @override
@@ -128,7 +152,13 @@ class _OrderListViewState extends State<_OrderListView> {
         child: Column(
           children: [
             SearchForm(
+              key: ValueKey(_calendarKey),
               onSearch: _onSearch,
+              onReset: _onReset,
+              onUpdateParams: _onUpdateParams,
+              controller: _controller,
+              calendarValue: _calendarValue,
+              onCalendarConfirm: _onCalendarConfirm,
             ),
             const SizedBox(height: 16),
             Expanded(child: _buildTable()),
@@ -161,7 +191,12 @@ class _OrderListViewState extends State<_OrderListView> {
           );
         }
 
-        return  PaginatedDataTable(
+        return OrderTable(
+          orders: state.orders,
+        );
+        
+        
+        /* PaginatedDataTable(
             header: Text('共 ${state.total} 条记录'),
             columns: const [
               DataColumn(label: Text('订单ID')),
@@ -198,7 +233,7 @@ class _OrderListViewState extends State<_OrderListView> {
               context.read<OrderBloc>().add(OrderPageChanged(page + 1));
             },
             showEmptyRows: false,
-          );
+          ); */
       },
     );
   }

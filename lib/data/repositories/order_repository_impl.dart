@@ -11,8 +11,8 @@ class OrderRepositoryImpl extends OrderRepository {
   }) : _remoteDataSource = remoteDataSource;
 
   @override
-  Future<Paginated<Order>> getOrders({int pageNum = 1, int pageSize = 10}) async {
-    final paginatedOrders = await _remoteDataSource.getOrders(pageNum: pageNum, pageSize: pageSize);
+  Future<Paginated<Order>> getOrders(Map<String, Object?> params) async {
+    final paginatedOrders = await _remoteDataSource.getOrders(params);
     final orders = paginatedOrders.rows.map((orderModel) => orderModel.toEntity()).toList();
     return Paginated(
       rows: orders,

@@ -2,6 +2,6 @@ import 'package:desktop_system/core/models/paginated.dart';
 import '../entities/order_entity.dart';
 
 abstract class OrderRepository {
-  Future<Paginated<Order>> getOrders({int pageNum = 1, int pageSize = 10});
+  Future<Paginated<Order>> getOrders(Map<String, Object?> params);
   Future<Order> getOrderById(String id);
 }

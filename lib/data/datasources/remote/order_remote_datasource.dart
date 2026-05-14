@@ -11,10 +11,10 @@ class OrderRemoteDataSource {
 
   OrderRemoteDataSource(this._dioClient);
 
-  Future<Paginated<OrderModel>> getOrders({int pageNum = 1, int pageSize = 10}) async {
+  Future<Paginated<OrderModel>> getOrders(Map<String, Object?> params) async {
     final response = await _dioClient.post(
       '$_orderBasePath/listPage',
-      data: {'pageNum': pageNum, 'pageSize': pageSize},
+      data: params,
     );
     final data = response.data['data'] as Map<String, dynamic>?;
     final List<dynamic> ordersJson = data?['rows'] ?? [];
@@ -25,8 +25,8 @@ class OrderRemoteDataSource {
     return Paginated<OrderModel>(
       rows: orders,
       total: data?['total'] ?? 0,
-      pageNum: data?['pageNum'] ?? pageNum,
-      pageSize: data?['pageSize'] ?? pageSize,
+      pageNum: data?['pageNum'] ?? params['pageNum'],
+      pageSize: data?['pageSize'] ?? params['pageSize'],
     );
   }
 }
