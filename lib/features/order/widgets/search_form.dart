@@ -22,6 +22,9 @@ class SearchForm extends StatelessWidget {
   });
 
   String get _calendarButtonLabel {
+    print('当前时间');
+    print(DateTime.now());
+    print(DateTime.fromMicrosecondsSinceEpoch(DateTime.now().microsecondsSinceEpoch));
     if (calendarValue != null && calendarValue!.length == 2) {
       final begin =
           DateFormat('yyyy-MM-dd').format(
@@ -128,8 +131,8 @@ class SearchForm extends StatelessWidget {
                       title: '请选择日期区间',
                       type: CalendarType.range,
                       height: 500,
-                      minDate: DateTime.now().subtract(const Duration(days: 182)).microsecondsSinceEpoch,
-                      maxDate: DateTime.now().microsecondsSinceEpoch,
+                      minDate: DateTime.now().subtract(const Duration(days: 182)).millisecondsSinceEpoch,
+                      maxDate: DateTime.now().millisecondsSinceEpoch,
                       value: calendarValue,
                     ),
                   );

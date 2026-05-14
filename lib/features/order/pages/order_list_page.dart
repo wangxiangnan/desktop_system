@@ -136,6 +136,20 @@ class _OrderListViewState extends State<_OrderListView> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    final now = DateTime.now();
+    final begin = DateTime(now.year, now.month, now.day);
+    final end = DateTime(now.year, now.month, now.day, 23, 59, 59);
+    _calendarValue = [begin.millisecondsSinceEpoch, end.millisecondsSinceEpoch];
+    _controller('createBeginTime').text = begin.toString().substring(0, 19);
+    _controller('createEndTime').text = end.toString().substring(0, 19);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _onUpdateParams();
+    });
+  }
+
+  @override
   void dispose() {
     for (final c in _controllers.values) {
       c.dispose();
