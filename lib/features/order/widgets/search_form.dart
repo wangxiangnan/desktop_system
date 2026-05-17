@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 class SearchForm extends StatelessWidget {
   final VoidCallback onSearch;
@@ -52,91 +51,81 @@ class SearchForm extends StatelessWidget {
           children: [
             SizedBox(
               width: 200,
-              child: TDInput(
+              child: TextFormField(
                 controller: controller('orderInfoId'),
-                needClear: true,
-                hintText: '订单ID',
-                onChanged: (text) {
-                  onUpdateParams();
-                },
-                onClearTap: () {
-                },
+                decoration: const InputDecoration(
+                  labelText: '订单ID',
+                  border: OutlineInputBorder(),
+                  isDense: true,
+                ),
               ),
             ),
             SizedBox(
               width: 200,
-              child: TDInput(
+              child: TextFormField(
                 controller: controller('thirdOrderNoId'),
-                needClear: true,
-                hintText: '项目ID',
-                onChanged: (text) {
-                  onUpdateParams();
-                },
-                onClearTap: () {
-                },
+                decoration: const InputDecoration(
+                  labelText: '项目ID',
+                  border: OutlineInputBorder(),
+                  isDense: true,
+                ),
               ),
             ),
             SizedBox(
               width: 200,
-              child: TDInput(
+              child: TextFormField(
                 controller: controller('packageOrderActivityId'),
-                needClear: true,
-                hintText: '套票活动ID',
-                onChanged: (text) {
-                  onUpdateParams();
-                },
-                onClearTap: () {
-                },
+                decoration: const InputDecoration(
+                  labelText: '套票活动ID',
+                  border: OutlineInputBorder(),
+                  isDense: true,
+                ),
               ),
             ),
             SizedBox(
               width: 200,
-              child: TDInput(
+              child: TextFormField(
                 controller: controller('mainOrderInfoId'),
-                needClear: true,
-                hintText: '邀请函code',
-                onChanged: (text) {
-                  onUpdateParams();
-                },
-                onClearTap: () {
-                },
+                decoration: const InputDecoration(
+                  labelText: '邀请函code',
+                  border: OutlineInputBorder(),
+                  isDense: true,
+                ),
               ),
             ),
             SizedBox(
               width: 200,
-              child: TDInput(
+              child: TextFormField(
                 controller: controller('ticketNo'),
-                needClear: true,
-                hintText: '票号',
-                onChanged: (text) {
-                  onUpdateParams();
-                },
-                onClearTap: () {
-                },
+                decoration: const InputDecoration(
+                  labelText: '票号',
+                  border: OutlineInputBorder(),
+                  isDense: true,
+                ),
               ),
             ),
             SizedBox(
-              width: 260,
-              child: TDButton(
-                text: _calendarButtonLabel,
-                size: TDButtonSize.large,
-                type: TDButtonType.text,
-                shape: TDButtonShape.rectangle,
-                onTap: () {
-                  TDCalendarPopup(
-                    context,
-                    visible: true,
-                    onConfirm: onCalendarConfirm,
-                    child: TDCalendar(
-                      title: '请选择日期区间',
-                      type: CalendarType.range,
-                      height: 500,
-                      minDate: DateTime.now().subtract(const Duration(days: 182)).millisecondsSinceEpoch,
-                      maxDate: DateTime.now().millisecondsSinceEpoch,
-                      value: calendarValue,
-                    ),
-                  );
-                },
+              width: 200,
+              child: TextFormField(
+                controller: controller('createBeginTime'),
+                decoration: const InputDecoration(
+                  labelText: '创建开始时间',
+                  hintText: 'YYYY-MM-DD',
+                  border: OutlineInputBorder(),
+                  isDense: true,
+                ),
+              ),
+            ),
+            SizedBox(
+              width: 200,
+              child: TextFormField(
+                controller: controller('createEndTime'),
+                decoration: const InputDecoration(
+                  labelText: '创建结束时间',
+                  hintText: 'YYYY-MM-DD',
+                  border: OutlineInputBorder(),
+                  isDense: true,
+                ),
               ),
             ),
             SizedBox(

@@ -1,89 +1,113 @@
 import 'package:flutter/material.dart';
-import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:data_table_2/data_table_2.dart';
 import 'package:desktop_system/domain/entities/order_entity.dart';
+
 
 class OrderTable extends StatelessWidget {
   final List<Order> orders;
+  final int pageNum;
+  final int pageSize;
+  final int total;
 
   const OrderTable({
     super.key,
     required this.orders,
+    required this.pageNum,
+    required this.pageSize,
+    required this.total,
   });
-
-  List<Map<String, String>> _buildDisplayData() {
-    return orders.map((order) {
-      return {
-        'id': order.id,
-        'channelType': order.channelType,
-        'amount': '¥${order.amount.toStringAsFixed(2)}',
-        'num': order.num.toString(),
-        'checkUpNum': order.checkUpNum.toString(),
-        'paymentType': order.paymentType,
-        'paymentStatus': order.paymentStatus,
-        'refundStatus': order.refundStatus,
-        'drawOutType': order.drawOutType,
-        'drawOutStatus': order.drawOutStatus,
-        'invoiceStatus': order.invoiceStatus,
-        'customerName': order.customerName,
-        'customerPhone': order.customerPhone,
-        'mainOrderInfoId': order.mainOrderInfoId,
-        'organizerName': order.organizerName,
-        'packageOrderActivityId': order.packageOrderActivityId,
-        'ticketOutletName': order.ticketOutletName,
-        'createTime': order.createTime,
-        'paymentTime': order.paymentTime,
-        'performanceId': order.performanceId,
-        'performanceName': order.performanceName,
-        'showName': order.showName,
-        'discountPolicyName': order.discountPolicyName,
-        'drawOutControl': order.drawOutControl ? '是' : '否',
-        'date': order.date.toString().substring(0, 10),
-        'location': order.location,
-        'price': '¥${order.price.toStringAsFixed(2)}',
-      };
-    }).toList();
-  }
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return TDTable(
-          bordered: true,
-          width: constraints.maxWidth,
-          height: constraints.maxHeight - 40,
-          columns: [
-            TDTableCol(title: '订单ID', width: 160, colKey: 'id'),
-            TDTableCol(title: '渠道类型', width: 100, colKey: 'channelType'),
-            TDTableCol(title: '金额', width: 120, colKey: 'amount'),
-            TDTableCol(title: '数量', width: 80, colKey: 'num'),
-            TDTableCol(title: '核销数量', width: 100, colKey: 'checkUpNum'),
-            TDTableCol(title: '支付方式', width: 100, colKey: 'paymentType'),
-            TDTableCol(title: '支付状态', width: 100, colKey: 'paymentStatus'),
-            TDTableCol(title: '退款状态', width: 100, colKey: 'refundStatus'),
-            TDTableCol(title: '出票类型', width: 100, colKey: 'drawOutType'),
-            TDTableCol(title: '出票状态', width: 100, colKey: 'drawOutStatus'),
-            TDTableCol(title: '发票状态', width: 100, colKey: 'invoiceStatus'),
-            TDTableCol(title: '客户名称', width: 120, colKey: 'customerName'),
-            TDTableCol(title: '客户电话', width: 120, colKey: 'customerPhone'),
-            TDTableCol(title: '邀请函code', width: 180, colKey: 'mainOrderInfoId'),
-            TDTableCol(title: '主办方', width: 120, colKey: 'organizerName'),
-            TDTableCol(title: '套票活动ID', width: 160, colKey: 'packageOrderActivityId'),
-            TDTableCol(title: '售票点', width: 120, colKey: 'ticketOutletName'),
-            TDTableCol(title: '创建时间', width: 160, colKey: 'createTime'),
-            TDTableCol(title: '支付时间', width: 160, colKey: 'paymentTime'),
-            TDTableCol(title: '演出ID', width: 160, colKey: 'performanceId'),
-            TDTableCol(title: '演出名称', width: 160, colKey: 'performanceName'),
-            TDTableCol(title: '场次名称', width: 160, colKey: 'showName'),
-            TDTableCol(title: '优惠策略', width: 120, colKey: 'discountPolicyName'),
-            TDTableCol(title: '出票控制', width: 100, colKey: 'drawOutControl'),
-            TDTableCol(title: '日期', width: 120, colKey: 'date'),
-            TDTableCol(title: '地点', width: 160, colKey: 'location'),
-            TDTableCol(title: '票价', width: 100, colKey: 'price'),
-          ],
-          data: _buildDisplayData(),
-        );
+    return PaginatedDataTable2(
+      columns: const [
+        DataColumn2(label: Text('订单ID'), minWidth: 120),
+        DataColumn2(label: Text('渠道类型'), minWidth: 120),
+        DataColumn2(label: Text('金额'), minWidth: 120),
+        DataColumn2(label: Text('数量'), minWidth: 120),
+        DataColumn2(label: Text('核销数量'), minWidth: 120),
+        DataColumn2(label: Text('支付方式'), minWidth: 120),
+        DataColumn2(label: Text('支付状态'), minWidth: 120),
+        DataColumn2(label: Text('退款状态'), minWidth: 120),
+        DataColumn2(label: Text('出票类型'), minWidth: 120),
+        DataColumn2(label: Text('出票状态'), minWidth: 120),
+        DataColumn2(label: Text('发票状态'), minWidth: 120),
+        DataColumn2(label: Text('客户名称'), minWidth: 120),
+        DataColumn2(label: Text('客户电话'), minWidth: 120),
+        DataColumn2(label: Text('邀请函code'), minWidth: 120),
+        DataColumn2(label: Text('主办方'), minWidth: 120),
+        DataColumn2(label: Text('套票活动ID'), minWidth: 120),
+        DataColumn2(label: Text('售票点'), minWidth: 120),
+        DataColumn2(label: Text('创建时间'), minWidth: 120),
+        DataColumn2(label: Text('支付时间'), minWidth: 120),
+        DataColumn2(label: Text('演出ID'), minWidth: 120),
+        DataColumn2(label: Text('演出名称'), minWidth: 180),
+        DataColumn2(label: Text('场次名称'), minWidth: 220),
+        DataColumn2(label: Text('优惠策略'), minWidth: 120),
+        DataColumn2(label: Text('出票控制'), minWidth: 120),
+        DataColumn2(label: Text('日期'), minWidth: 180),
+        DataColumn2(label: Text('地点'), minWidth: 120),
+        DataColumn2(label: Text('票价'), minWidth: 120),
+      ],
+      source: OrderDataSource(orders, total),
+      rowsPerPage: pageSize,
+      onPageChanged: (page) {
+        // context.read<OrderBloc>().add(OrderPageChanged(page + 1));
       },
     );
+    
   }
+}
+
+class OrderDataSource extends DataTableSource {
+  final List<Order> orders;
+  final int total;
+
+  OrderDataSource(this.orders, this.total);
+
+  @override
+  DataRow? getRow(int index) {
+    if (index >= orders.length) return null;
+    final order = orders[index];
+    return DataRow(
+      cells: [
+        DataCell(Text(order.id)),
+        DataCell(Text(order.channelType)),
+        DataCell(Text(order.amount.toStringAsFixed(2))),
+        DataCell(Text(order.num.toString())),
+        DataCell(Text(order.checkUpNum.toString())),
+        DataCell(Text(order.paymentType)),
+        DataCell(Text(order.paymentStatus)),
+        DataCell(Text(order.refundStatus)),
+        DataCell(Text(order.drawOutType)),
+        DataCell(Text(order.drawOutStatus)),
+        DataCell(Text(order.invoiceStatus)),
+        DataCell(Text(order.customerName)),
+        DataCell(Text(order.customerPhone)),
+        DataCell(Text(order.mainOrderInfoId)),
+        DataCell(Text(order.organizerName)),
+        DataCell(Text(order.packageOrderActivityId)),
+        DataCell(Text(order.ticketOutletName)),
+        DataCell(Text(order.createTime)),
+        DataCell(Text(order.paymentTime)),
+        DataCell(Text(order.performanceId)),
+        DataCell(Text(order.performanceName)),
+        DataCell(Text(order.showName)),
+        DataCell(Text(order.discountPolicyName)),
+        DataCell(Text(order.drawOutControl ? '是' : '否')),
+        DataCell(Text(order.date.toString().substring(0, 10))),
+        DataCell(Text(order.location)),
+        DataCell(Text(order.price.toStringAsFixed(2))),
+      ],
+    );
+  }
+
+  @override
+  bool get isRowCountApproximate => false;
+
+  @override
+  int get rowCount => total;
+
+  @override
+  int get selectedRowCount => 0;
 }

@@ -1,64 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:desktop_system/core/di/setup_dependencies.dart';
-import 'package:desktop_system/domain/entities/order_entity.dart';
 import 'package:desktop_system/domain/usecases/order_usecase.dart';
 import '../bloc/order_bloc.dart';
 import '../bloc/order_event.dart';
 import '../bloc/order_state.dart';
 import '../widgets/widgets.dart';
-
-class OrderDataSource extends DataTableSource {
-  final List<Order> orders;
-
-  OrderDataSource(this.orders);
-
-  @override
-  DataRow? getRow(int index) {
-    if (index >= orders.length) return null;
-    final order = orders[index];
-    return DataRow(
-      cells: [
-        DataCell(Text(order.id)),
-        DataCell(Text(order.channelType)),
-        DataCell(Text(order.amount.toStringAsFixed(2))),
-        DataCell(Text(order.num.toString())),
-        DataCell(Text(order.checkUpNum.toString())),
-        DataCell(Text(order.paymentType)),
-        DataCell(Text(order.paymentStatus)),
-        DataCell(Text(order.refundStatus)),
-        DataCell(Text(order.drawOutType)),
-        DataCell(Text(order.drawOutStatus)),
-        DataCell(Text(order.invoiceStatus)),
-        DataCell(Text(order.customerName)),
-        DataCell(Text(order.customerPhone)),
-        DataCell(Text(order.mainOrderInfoId)),
-        DataCell(Text(order.organizerName)),
-        DataCell(Text(order.packageOrderActivityId)),
-        DataCell(Text(order.ticketOutletName)),
-        DataCell(Text(order.createTime)),
-        DataCell(Text(order.paymentTime)),
-        DataCell(Text(order.performanceId)),
-        DataCell(Text(order.performanceName)),
-        DataCell(Text(order.showName)),
-        DataCell(Text(order.discountPolicyName)),
-        DataCell(Text(order.drawOutControl ? '是' : '否')),
-        DataCell(Text(order.date.toString().substring(0, 10))),
-        DataCell(Text(order.location)),
-        DataCell(Text(order.price.toStringAsFixed(2))),
-      ],
-    );
-  }
-
-  @override
-  bool get isRowCountApproximate => false;
-
-  @override
-  int get rowCount => orders.length;
-
-  @override
-  int get selectedRowCount => 0;
-}
 
 class OrderListPage extends StatelessWidget {
   const OrderListPage({super.key});
@@ -93,14 +40,23 @@ class _OrderListViewState extends State<_OrderListView> {
   }
 
   OrderSearchParams _buildSearchParams() {
+    final orderInfoId = _controller('orderInfoId').text;
+    final thirdOrderNoId = _controller('thirdOrderNoId').text;
+    final thirdOrderNo = _controller('thirdOrderNo').text;
+    final packageOrderActivityId = _controller('packageOrderActivityId').text;
+    final mainOrderInfoId = _controller('mainOrderInfoId').text;
+    final ticketNo = _controller('ticketNo').text;
+    final createBeginTime = _controller('createBeginTime').text;
+    final createEndTime = _controller('createEndTime').text;
     return OrderSearchParams(
-      orderInfoId: _controller('orderInfoId').text,
-      thirdOrderNoId: _controller('thirdOrderNoId').text,
-      packageOrderActivityId: _controller('packageOrderActivityId').text,
-      mainOrderInfoId: _controller('mainOrderInfoId').text,
-      ticketNo: _controller('ticketNo').text,
-      createBeginTime: _controller('createBeginTime').text,
-      createEndTime: _controller('createEndTime').text,
+      orderInfoId: orderInfoId.isNotEmpty ? orderInfoId : null,
+      thirdOrderNoId: thirdOrderNoId.isNotEmpty ? thirdOrderNoId : null,
+      thirdOrderNo: thirdOrderNo.isNotEmpty ? thirdOrderNo : null,
+      packageOrderActivityId: packageOrderActivityId.isNotEmpty ? packageOrderActivityId : null,
+      mainOrderInfoId: mainOrderInfoId.isNotEmpty ? mainOrderInfoId : null,
+      ticketNo: ticketNo.isNotEmpty ? ticketNo : null,
+      createBeginTime: createBeginTime.isNotEmpty ? createBeginTime : null,
+      createEndTime: createEndTime.isNotEmpty ? createEndTime : null,
       pageSize: 30,
       pageNum: 1
     );
@@ -139,7 +95,7 @@ class _OrderListViewState extends State<_OrderListView> {
   void initState() {
     super.initState();
     final now = DateTime.now();
-    final begin = DateTime(now.year, now.month, now.day);
+    final begin = DateTime.now().subtract(Duration(days: 20));
     final end = DateTime(now.year, now.month, now.day, 23, 59, 59);
     _calendarValue = [begin.millisecondsSinceEpoch, end.millisecondsSinceEpoch];
     _controller('createBeginTime').text = begin.toString().substring(0, 19);
@@ -207,47 +163,10 @@ class _OrderListViewState extends State<_OrderListView> {
 
         return OrderTable(
           orders: state.orders,
+          total: state.total,
+          pageSize: state.pageSize,
+          pageNum: state.pageNum,
         );
-        
-        
-        /* PaginatedDataTable(
-            header: Text('共 ${state.total} 条记录'),
-            columns: const [
-              DataColumn(label: Text('订单ID')),
-              DataColumn(label: Text('渠道类型')),
-              DataColumn(label: Text('金额')),
-              DataColumn(label: Text('数量')),
-              DataColumn(label: Text('核销数量')),
-              DataColumn(label: Text('支付方式')),
-              DataColumn(label: Text('支付状态')),
-              DataColumn(label: Text('退款状态')),
-              DataColumn(label: Text('出票类型')),
-              DataColumn(label: Text('出票状态')),
-              DataColumn(label: Text('发票状态')),
-              DataColumn(label: Text('客户名称')),
-              DataColumn(label: Text('客户电话')),
-              DataColumn(label: Text('邀请函code')),
-              DataColumn(label: Text('主办方')),
-              DataColumn(label: Text('套票活动ID')),
-              DataColumn(label: Text('售票点')),
-              DataColumn(label: Text('创建时间')),
-              DataColumn(label: Text('支付时间')),
-              DataColumn(label: Text('演出ID')),
-              DataColumn(label: Text('演出名称')),
-              DataColumn(label: Text('场次名称')),
-              DataColumn(label: Text('优惠策略')),
-              DataColumn(label: Text('出票控制')),
-              DataColumn(label: Text('日期')),
-              DataColumn(label: Text('地点')),
-              DataColumn(label: Text('票价')),
-            ],
-            source: OrderDataSource(state.orders),
-            rowsPerPage: state.pageSize,
-            onPageChanged: (page) {
-              context.read<OrderBloc>().add(OrderPageChanged(page + 1));
-            },
-            showEmptyRows: false,
-          ); */
       },
     );
   }

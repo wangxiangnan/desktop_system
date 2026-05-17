@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$OrderSearchParams implements DiagnosticableTreeMixin {
 
- String? get orderInfoId; String? get thirdOrderNoId; String? get packageOrderActivityId; String? get mainOrderInfoId; String? get ticketNo; String? get createBeginTime; String? get createEndTime; int get pageNum; int get pageSize;
+ String? get orderInfoId; String? get thirdOrderNoId; String? get thirdOrderNo; String? get packageOrderActivityId; String? get mainOrderInfoId; String? get ticketNo; String? get createBeginTime; String? get createEndTime; int get pageNum; int get pageSize;
 /// Create a copy of OrderSearchParams
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -29,21 +29,21 @@ $OrderSearchParamsCopyWith<OrderSearchParams> get copyWith => _$OrderSearchParam
 void debugFillProperties(DiagnosticPropertiesBuilder properties) {
   properties
     ..add(DiagnosticsProperty('type', 'OrderSearchParams'))
-    ..add(DiagnosticsProperty('orderInfoId', orderInfoId))..add(DiagnosticsProperty('thirdOrderNoId', thirdOrderNoId))..add(DiagnosticsProperty('packageOrderActivityId', packageOrderActivityId))..add(DiagnosticsProperty('mainOrderInfoId', mainOrderInfoId))..add(DiagnosticsProperty('ticketNo', ticketNo))..add(DiagnosticsProperty('createBeginTime', createBeginTime))..add(DiagnosticsProperty('createEndTime', createEndTime))..add(DiagnosticsProperty('pageNum', pageNum))..add(DiagnosticsProperty('pageSize', pageSize));
+    ..add(DiagnosticsProperty('orderInfoId', orderInfoId))..add(DiagnosticsProperty('thirdOrderNoId', thirdOrderNoId))..add(DiagnosticsProperty('thirdOrderNo', thirdOrderNo))..add(DiagnosticsProperty('packageOrderActivityId', packageOrderActivityId))..add(DiagnosticsProperty('mainOrderInfoId', mainOrderInfoId))..add(DiagnosticsProperty('ticketNo', ticketNo))..add(DiagnosticsProperty('createBeginTime', createBeginTime))..add(DiagnosticsProperty('createEndTime', createEndTime))..add(DiagnosticsProperty('pageNum', pageNum))..add(DiagnosticsProperty('pageSize', pageSize));
 }
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is OrderSearchParams&&(identical(other.orderInfoId, orderInfoId) || other.orderInfoId == orderInfoId)&&(identical(other.thirdOrderNoId, thirdOrderNoId) || other.thirdOrderNoId == thirdOrderNoId)&&(identical(other.packageOrderActivityId, packageOrderActivityId) || other.packageOrderActivityId == packageOrderActivityId)&&(identical(other.mainOrderInfoId, mainOrderInfoId) || other.mainOrderInfoId == mainOrderInfoId)&&(identical(other.ticketNo, ticketNo) || other.ticketNo == ticketNo)&&(identical(other.createBeginTime, createBeginTime) || other.createBeginTime == createBeginTime)&&(identical(other.createEndTime, createEndTime) || other.createEndTime == createEndTime)&&(identical(other.pageNum, pageNum) || other.pageNum == pageNum)&&(identical(other.pageSize, pageSize) || other.pageSize == pageSize));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is OrderSearchParams&&(identical(other.orderInfoId, orderInfoId) || other.orderInfoId == orderInfoId)&&(identical(other.thirdOrderNoId, thirdOrderNoId) || other.thirdOrderNoId == thirdOrderNoId)&&(identical(other.thirdOrderNo, thirdOrderNo) || other.thirdOrderNo == thirdOrderNo)&&(identical(other.packageOrderActivityId, packageOrderActivityId) || other.packageOrderActivityId == packageOrderActivityId)&&(identical(other.mainOrderInfoId, mainOrderInfoId) || other.mainOrderInfoId == mainOrderInfoId)&&(identical(other.ticketNo, ticketNo) || other.ticketNo == ticketNo)&&(identical(other.createBeginTime, createBeginTime) || other.createBeginTime == createBeginTime)&&(identical(other.createEndTime, createEndTime) || other.createEndTime == createEndTime)&&(identical(other.pageNum, pageNum) || other.pageNum == pageNum)&&(identical(other.pageSize, pageSize) || other.pageSize == pageSize));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,orderInfoId,thirdOrderNoId,packageOrderActivityId,mainOrderInfoId,ticketNo,createBeginTime,createEndTime,pageNum,pageSize);
+int get hashCode => Object.hash(runtimeType,orderInfoId,thirdOrderNoId,thirdOrderNo,packageOrderActivityId,mainOrderInfoId,ticketNo,createBeginTime,createEndTime,pageNum,pageSize);
 
 @override
 String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
-  return 'OrderSearchParams(orderInfoId: $orderInfoId, thirdOrderNoId: $thirdOrderNoId, packageOrderActivityId: $packageOrderActivityId, mainOrderInfoId: $mainOrderInfoId, ticketNo: $ticketNo, createBeginTime: $createBeginTime, createEndTime: $createEndTime, pageNum: $pageNum, pageSize: $pageSize)';
+  return 'OrderSearchParams(orderInfoId: $orderInfoId, thirdOrderNoId: $thirdOrderNoId, thirdOrderNo: $thirdOrderNo, packageOrderActivityId: $packageOrderActivityId, mainOrderInfoId: $mainOrderInfoId, ticketNo: $ticketNo, createBeginTime: $createBeginTime, createEndTime: $createEndTime, pageNum: $pageNum, pageSize: $pageSize)';
 }
 
 
@@ -54,7 +54,7 @@ abstract mixin class $OrderSearchParamsCopyWith<$Res>  {
   factory $OrderSearchParamsCopyWith(OrderSearchParams value, $Res Function(OrderSearchParams) _then) = _$OrderSearchParamsCopyWithImpl;
 @useResult
 $Res call({
- String? orderInfoId, String? thirdOrderNoId, String? packageOrderActivityId, String? mainOrderInfoId, String? ticketNo, String? createBeginTime, String? createEndTime, int pageNum, int pageSize
+ String? orderInfoId, String? thirdOrderNoId, String? thirdOrderNo, String? packageOrderActivityId, String? mainOrderInfoId, String? ticketNo, String? createBeginTime, String? createEndTime, int pageNum, int pageSize
 });
 
 
@@ -71,10 +71,11 @@ class _$OrderSearchParamsCopyWithImpl<$Res>
 
 /// Create a copy of OrderSearchParams
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? orderInfoId = freezed,Object? thirdOrderNoId = freezed,Object? packageOrderActivityId = freezed,Object? mainOrderInfoId = freezed,Object? ticketNo = freezed,Object? createBeginTime = freezed,Object? createEndTime = freezed,Object? pageNum = null,Object? pageSize = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? orderInfoId = freezed,Object? thirdOrderNoId = freezed,Object? thirdOrderNo = freezed,Object? packageOrderActivityId = freezed,Object? mainOrderInfoId = freezed,Object? ticketNo = freezed,Object? createBeginTime = freezed,Object? createEndTime = freezed,Object? pageNum = null,Object? pageSize = null,}) {
   return _then(_self.copyWith(
 orderInfoId: freezed == orderInfoId ? _self.orderInfoId : orderInfoId // ignore: cast_nullable_to_non_nullable
 as String?,thirdOrderNoId: freezed == thirdOrderNoId ? _self.thirdOrderNoId : thirdOrderNoId // ignore: cast_nullable_to_non_nullable
+as String?,thirdOrderNo: freezed == thirdOrderNo ? _self.thirdOrderNo : thirdOrderNo // ignore: cast_nullable_to_non_nullable
 as String?,packageOrderActivityId: freezed == packageOrderActivityId ? _self.packageOrderActivityId : packageOrderActivityId // ignore: cast_nullable_to_non_nullable
 as String?,mainOrderInfoId: freezed == mainOrderInfoId ? _self.mainOrderInfoId : mainOrderInfoId // ignore: cast_nullable_to_non_nullable
 as String?,ticketNo: freezed == ticketNo ? _self.ticketNo : ticketNo // ignore: cast_nullable_to_non_nullable
@@ -167,10 +168,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? orderInfoId,  String? thirdOrderNoId,  String? packageOrderActivityId,  String? mainOrderInfoId,  String? ticketNo,  String? createBeginTime,  String? createEndTime,  int pageNum,  int pageSize)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? orderInfoId,  String? thirdOrderNoId,  String? thirdOrderNo,  String? packageOrderActivityId,  String? mainOrderInfoId,  String? ticketNo,  String? createBeginTime,  String? createEndTime,  int pageNum,  int pageSize)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _OrderSearchParams() when $default != null:
-return $default(_that.orderInfoId,_that.thirdOrderNoId,_that.packageOrderActivityId,_that.mainOrderInfoId,_that.ticketNo,_that.createBeginTime,_that.createEndTime,_that.pageNum,_that.pageSize);case _:
+return $default(_that.orderInfoId,_that.thirdOrderNoId,_that.thirdOrderNo,_that.packageOrderActivityId,_that.mainOrderInfoId,_that.ticketNo,_that.createBeginTime,_that.createEndTime,_that.pageNum,_that.pageSize);case _:
   return orElse();
 
 }
@@ -188,10 +189,10 @@ return $default(_that.orderInfoId,_that.thirdOrderNoId,_that.packageOrderActivit
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? orderInfoId,  String? thirdOrderNoId,  String? packageOrderActivityId,  String? mainOrderInfoId,  String? ticketNo,  String? createBeginTime,  String? createEndTime,  int pageNum,  int pageSize)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? orderInfoId,  String? thirdOrderNoId,  String? thirdOrderNo,  String? packageOrderActivityId,  String? mainOrderInfoId,  String? ticketNo,  String? createBeginTime,  String? createEndTime,  int pageNum,  int pageSize)  $default,) {final _that = this;
 switch (_that) {
 case _OrderSearchParams():
-return $default(_that.orderInfoId,_that.thirdOrderNoId,_that.packageOrderActivityId,_that.mainOrderInfoId,_that.ticketNo,_that.createBeginTime,_that.createEndTime,_that.pageNum,_that.pageSize);case _:
+return $default(_that.orderInfoId,_that.thirdOrderNoId,_that.thirdOrderNo,_that.packageOrderActivityId,_that.mainOrderInfoId,_that.ticketNo,_that.createBeginTime,_that.createEndTime,_that.pageNum,_that.pageSize);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -208,10 +209,10 @@ return $default(_that.orderInfoId,_that.thirdOrderNoId,_that.packageOrderActivit
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? orderInfoId,  String? thirdOrderNoId,  String? packageOrderActivityId,  String? mainOrderInfoId,  String? ticketNo,  String? createBeginTime,  String? createEndTime,  int pageNum,  int pageSize)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? orderInfoId,  String? thirdOrderNoId,  String? thirdOrderNo,  String? packageOrderActivityId,  String? mainOrderInfoId,  String? ticketNo,  String? createBeginTime,  String? createEndTime,  int pageNum,  int pageSize)?  $default,) {final _that = this;
 switch (_that) {
 case _OrderSearchParams() when $default != null:
-return $default(_that.orderInfoId,_that.thirdOrderNoId,_that.packageOrderActivityId,_that.mainOrderInfoId,_that.ticketNo,_that.createBeginTime,_that.createEndTime,_that.pageNum,_that.pageSize);case _:
+return $default(_that.orderInfoId,_that.thirdOrderNoId,_that.thirdOrderNo,_that.packageOrderActivityId,_that.mainOrderInfoId,_that.ticketNo,_that.createBeginTime,_that.createEndTime,_that.pageNum,_that.pageSize);case _:
   return null;
 
 }
@@ -223,11 +224,12 @@ return $default(_that.orderInfoId,_that.thirdOrderNoId,_that.packageOrderActivit
 @JsonSerializable()
 
 class _OrderSearchParams extends OrderSearchParams with DiagnosticableTreeMixin {
-  const _OrderSearchParams({this.orderInfoId, this.thirdOrderNoId, this.packageOrderActivityId, this.mainOrderInfoId, this.ticketNo, this.createBeginTime, this.createEndTime, required this.pageNum, required this.pageSize}): super._();
+  const _OrderSearchParams({this.orderInfoId, this.thirdOrderNoId, this.thirdOrderNo, this.packageOrderActivityId, this.mainOrderInfoId, this.ticketNo, this.createBeginTime, this.createEndTime, required this.pageNum, required this.pageSize}): super._();
   factory _OrderSearchParams.fromJson(Map<String, dynamic> json) => _$OrderSearchParamsFromJson(json);
 
 @override final  String? orderInfoId;
 @override final  String? thirdOrderNoId;
+@override final  String? thirdOrderNo;
 @override final  String? packageOrderActivityId;
 @override final  String? mainOrderInfoId;
 @override final  String? ticketNo;
@@ -250,21 +252,21 @@ Map<String, dynamic> toJson() {
 void debugFillProperties(DiagnosticPropertiesBuilder properties) {
   properties
     ..add(DiagnosticsProperty('type', 'OrderSearchParams'))
-    ..add(DiagnosticsProperty('orderInfoId', orderInfoId))..add(DiagnosticsProperty('thirdOrderNoId', thirdOrderNoId))..add(DiagnosticsProperty('packageOrderActivityId', packageOrderActivityId))..add(DiagnosticsProperty('mainOrderInfoId', mainOrderInfoId))..add(DiagnosticsProperty('ticketNo', ticketNo))..add(DiagnosticsProperty('createBeginTime', createBeginTime))..add(DiagnosticsProperty('createEndTime', createEndTime))..add(DiagnosticsProperty('pageNum', pageNum))..add(DiagnosticsProperty('pageSize', pageSize));
+    ..add(DiagnosticsProperty('orderInfoId', orderInfoId))..add(DiagnosticsProperty('thirdOrderNoId', thirdOrderNoId))..add(DiagnosticsProperty('thirdOrderNo', thirdOrderNo))..add(DiagnosticsProperty('packageOrderActivityId', packageOrderActivityId))..add(DiagnosticsProperty('mainOrderInfoId', mainOrderInfoId))..add(DiagnosticsProperty('ticketNo', ticketNo))..add(DiagnosticsProperty('createBeginTime', createBeginTime))..add(DiagnosticsProperty('createEndTime', createEndTime))..add(DiagnosticsProperty('pageNum', pageNum))..add(DiagnosticsProperty('pageSize', pageSize));
 }
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OrderSearchParams&&(identical(other.orderInfoId, orderInfoId) || other.orderInfoId == orderInfoId)&&(identical(other.thirdOrderNoId, thirdOrderNoId) || other.thirdOrderNoId == thirdOrderNoId)&&(identical(other.packageOrderActivityId, packageOrderActivityId) || other.packageOrderActivityId == packageOrderActivityId)&&(identical(other.mainOrderInfoId, mainOrderInfoId) || other.mainOrderInfoId == mainOrderInfoId)&&(identical(other.ticketNo, ticketNo) || other.ticketNo == ticketNo)&&(identical(other.createBeginTime, createBeginTime) || other.createBeginTime == createBeginTime)&&(identical(other.createEndTime, createEndTime) || other.createEndTime == createEndTime)&&(identical(other.pageNum, pageNum) || other.pageNum == pageNum)&&(identical(other.pageSize, pageSize) || other.pageSize == pageSize));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OrderSearchParams&&(identical(other.orderInfoId, orderInfoId) || other.orderInfoId == orderInfoId)&&(identical(other.thirdOrderNoId, thirdOrderNoId) || other.thirdOrderNoId == thirdOrderNoId)&&(identical(other.thirdOrderNo, thirdOrderNo) || other.thirdOrderNo == thirdOrderNo)&&(identical(other.packageOrderActivityId, packageOrderActivityId) || other.packageOrderActivityId == packageOrderActivityId)&&(identical(other.mainOrderInfoId, mainOrderInfoId) || other.mainOrderInfoId == mainOrderInfoId)&&(identical(other.ticketNo, ticketNo) || other.ticketNo == ticketNo)&&(identical(other.createBeginTime, createBeginTime) || other.createBeginTime == createBeginTime)&&(identical(other.createEndTime, createEndTime) || other.createEndTime == createEndTime)&&(identical(other.pageNum, pageNum) || other.pageNum == pageNum)&&(identical(other.pageSize, pageSize) || other.pageSize == pageSize));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,orderInfoId,thirdOrderNoId,packageOrderActivityId,mainOrderInfoId,ticketNo,createBeginTime,createEndTime,pageNum,pageSize);
+int get hashCode => Object.hash(runtimeType,orderInfoId,thirdOrderNoId,thirdOrderNo,packageOrderActivityId,mainOrderInfoId,ticketNo,createBeginTime,createEndTime,pageNum,pageSize);
 
 @override
 String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
-  return 'OrderSearchParams(orderInfoId: $orderInfoId, thirdOrderNoId: $thirdOrderNoId, packageOrderActivityId: $packageOrderActivityId, mainOrderInfoId: $mainOrderInfoId, ticketNo: $ticketNo, createBeginTime: $createBeginTime, createEndTime: $createEndTime, pageNum: $pageNum, pageSize: $pageSize)';
+  return 'OrderSearchParams(orderInfoId: $orderInfoId, thirdOrderNoId: $thirdOrderNoId, thirdOrderNo: $thirdOrderNo, packageOrderActivityId: $packageOrderActivityId, mainOrderInfoId: $mainOrderInfoId, ticketNo: $ticketNo, createBeginTime: $createBeginTime, createEndTime: $createEndTime, pageNum: $pageNum, pageSize: $pageSize)';
 }
 
 
@@ -275,7 +277,7 @@ abstract mixin class _$OrderSearchParamsCopyWith<$Res> implements $OrderSearchPa
   factory _$OrderSearchParamsCopyWith(_OrderSearchParams value, $Res Function(_OrderSearchParams) _then) = __$OrderSearchParamsCopyWithImpl;
 @override @useResult
 $Res call({
- String? orderInfoId, String? thirdOrderNoId, String? packageOrderActivityId, String? mainOrderInfoId, String? ticketNo, String? createBeginTime, String? createEndTime, int pageNum, int pageSize
+ String? orderInfoId, String? thirdOrderNoId, String? thirdOrderNo, String? packageOrderActivityId, String? mainOrderInfoId, String? ticketNo, String? createBeginTime, String? createEndTime, int pageNum, int pageSize
 });
 
 
@@ -292,10 +294,11 @@ class __$OrderSearchParamsCopyWithImpl<$Res>
 
 /// Create a copy of OrderSearchParams
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? orderInfoId = freezed,Object? thirdOrderNoId = freezed,Object? packageOrderActivityId = freezed,Object? mainOrderInfoId = freezed,Object? ticketNo = freezed,Object? createBeginTime = freezed,Object? createEndTime = freezed,Object? pageNum = null,Object? pageSize = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? orderInfoId = freezed,Object? thirdOrderNoId = freezed,Object? thirdOrderNo = freezed,Object? packageOrderActivityId = freezed,Object? mainOrderInfoId = freezed,Object? ticketNo = freezed,Object? createBeginTime = freezed,Object? createEndTime = freezed,Object? pageNum = null,Object? pageSize = null,}) {
   return _then(_OrderSearchParams(
 orderInfoId: freezed == orderInfoId ? _self.orderInfoId : orderInfoId // ignore: cast_nullable_to_non_nullable
 as String?,thirdOrderNoId: freezed == thirdOrderNoId ? _self.thirdOrderNoId : thirdOrderNoId // ignore: cast_nullable_to_non_nullable
+as String?,thirdOrderNo: freezed == thirdOrderNo ? _self.thirdOrderNo : thirdOrderNo // ignore: cast_nullable_to_non_nullable
 as String?,packageOrderActivityId: freezed == packageOrderActivityId ? _self.packageOrderActivityId : packageOrderActivityId // ignore: cast_nullable_to_non_nullable
 as String?,mainOrderInfoId: freezed == mainOrderInfoId ? _self.mainOrderInfoId : mainOrderInfoId // ignore: cast_nullable_to_non_nullable
 as String?,ticketNo: freezed == ticketNo ? _self.ticketNo : ticketNo // ignore: cast_nullable_to_non_nullable

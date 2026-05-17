@@ -12,6 +12,7 @@ abstract class OrderSearchParams with _$OrderSearchParams {
   const factory OrderSearchParams({
     String? orderInfoId,
     String? thirdOrderNoId,
+    String? thirdOrderNo,
     String? packageOrderActivityId,
     String? mainOrderInfoId,
     String? ticketNo,

@@ -10,6 +10,7 @@ _OrderSearchParams _$OrderSearchParamsFromJson(Map<String, dynamic> json) =>
     _OrderSearchParams(
       orderInfoId: json['orderInfoId'] as String?,
       thirdOrderNoId: json['thirdOrderNoId'] as String?,
+      thirdOrderNo: json['thirdOrderNo'] as String?,
       packageOrderActivityId: json['packageOrderActivityId'] as String?,
       mainOrderInfoId: json['mainOrderInfoId'] as String?,
       ticketNo: json['ticketNo'] as String?,
@@ -23,6 +24,7 @@ Map<String, dynamic> _$OrderSearchParamsToJson(_OrderSearchParams instance) =>
     <String, dynamic>{
       'orderInfoId': instance.orderInfoId,
       'thirdOrderNoId': instance.thirdOrderNoId,
+      'thirdOrderNo': instance.thirdOrderNo,
       'packageOrderActivityId': instance.packageOrderActivityId,
       'mainOrderInfoId': instance.mainOrderInfoId,
       'ticketNo': instance.ticketNo,

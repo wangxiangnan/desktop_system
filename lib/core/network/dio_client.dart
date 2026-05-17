@@ -4,7 +4,6 @@ import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../config/app_config.dart';
 import 'package:desktop_system/routing/app_router.dart';
@@ -271,24 +270,13 @@ class _ErrorInterceptor extends Interceptor {
       }
     }
 
-    final overlay = AppRouter.navigatorKey.currentState?.overlay;
-    if (overlay != null) {
-      //   问题：TDMessage.showMessage(context: context, ...) 内部通过 Overlay.of(context) 查找 Overlay。但 AppRouter.navigatorKey.currentContext 获取的是 Navigator 组件自身的 context，Navigator 的
-      // Overlay 是它的子孙节点而非祖先节点，所以 Overlay.of() 向上查找找不到 Overlay，导致无法显示消息。                                                                                              
-      // 修复：改为通过 navigatorKey.currentState?.overlay 直接获取 Navigator 内部维护的 OverlayState，手动创建 OverlayEntry 插入 TDMessage 组件，避开了 Overlay.of(context) 查找失败的问题。
-      late OverlayEntry overlayEntry;
-      overlayEntry = OverlayEntry(
-        builder: (_) => TDMessage(
-          content: msg,
-          duration: 5000,
-          icon: true,
-          theme: MessageTheme.error,
-          onDurationEnd: () {
-            overlayEntry.remove();
-          },
+    if (context != null && context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(msg),
+          backgroundColor: Colors.red,
         ),
       );
-      overlay.insert(overlayEntry);
     }
 
     handler.next(err);
