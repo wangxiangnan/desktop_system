@@ -26,12 +26,12 @@ class TicketBloc extends Bloc<TicketEvent, TicketState> {
         pageNum: event.pageNum,
         pageSize: event.pageSize,
       );
-      print('Loaded ${result.rows.length} tickets (Page ${result.pageNum}/${result.totalPages})');
+      print('Loaded ${result.rows.length} tickets (Page ${result.pageNum}/${result.totalPages.ceil()})');
       emit(
         TicketLoaded(
           tickets: result.rows,
           currentPage: result.pageNum,
-          totalPages: result.totalPages,
+          totalPages: result.totalPages.ceil(),
           total: result.total,
         ),
       );
@@ -56,7 +56,7 @@ class TicketBloc extends Bloc<TicketEvent, TicketState> {
         TicketLoaded(
           tickets: result.rows,
           currentPage: result.pageNum,
-          totalPages: result.totalPages,
+          totalPages: result.totalPages.ceil(),
           total: result.total,
         ),
       );
@@ -81,7 +81,7 @@ class TicketBloc extends Bloc<TicketEvent, TicketState> {
           TicketLoaded(
             tickets: result.rows,
             currentPage: result.pageNum,
-            totalPages: result.totalPages,
+            totalPages: result.totalPages.ceil(),
             total: result.total,
           ),
         );

@@ -12,7 +12,7 @@ class Paginated<T> {
     required this.pageSize,
   });
 
-  int get totalPages => (total / pageSize).ceil();
+  double get totalPages => total / pageSize;
   bool get hasNextPage => pageNum < totalPages;
   bool get hasPreviousPage => pageNum > 1;
 }

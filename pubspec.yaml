@@ -44,8 +44,9 @@ dependencies:
   flutter_dotenv: ^6.0.0
   dio: ^5.4.0
   crypto: ^3.0.7
-  data_table_2: ^2.7.2
   json_annotation: ^4.9.0
+  syncfusion_flutter_core: ^33.2.6
+  syncfusion_flutter_datagrid: ^33.2.6
 
 dev_dependencies:
   flutter_test:

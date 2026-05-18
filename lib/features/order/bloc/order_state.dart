@@ -35,7 +35,7 @@ abstract class OrderState with _$OrderState {
     @Default(OrderSearchParams(pageSize: 30, pageNum: 1)) OrderSearchParams searchParams,
     @Default([]) List<Order> orders,
     @Default(1) int pageNum,
-    @Default(10) int pageSize,
+    @Default(30) int pageSize,
     @Default(0) int total,
     String? errorMessage,
   }) = _OrderState;

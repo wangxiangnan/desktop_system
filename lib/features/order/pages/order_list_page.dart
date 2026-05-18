@@ -48,6 +48,8 @@ class _OrderListViewState extends State<_OrderListView> {
     final ticketNo = _controller('ticketNo').text;
     final createBeginTime = _controller('createBeginTime').text;
     final createEndTime = _controller('createEndTime').text;
+    final pageSize = _controller('pageSize').text;
+    final pageNum = _controller('pageNum').text;
     return OrderSearchParams(
       orderInfoId: orderInfoId.isNotEmpty ? orderInfoId : null,
       thirdOrderNoId: thirdOrderNoId.isNotEmpty ? thirdOrderNoId : null,
@@ -57,8 +59,8 @@ class _OrderListViewState extends State<_OrderListView> {
       ticketNo: ticketNo.isNotEmpty ? ticketNo : null,
       createBeginTime: createBeginTime.isNotEmpty ? createBeginTime : null,
       createEndTime: createEndTime.isNotEmpty ? createEndTime : null,
-      pageSize: 30,
-      pageNum: 1
+      pageSize: pageSize.isNotEmpty ? int.parse(pageSize) : 30,
+      pageNum: pageNum.isNotEmpty ? int.parse(pageNum) : 1,
     );
   }
 
@@ -166,6 +168,9 @@ class _OrderListViewState extends State<_OrderListView> {
           total: state.total,
           pageSize: state.pageSize,
           pageNum: state.pageNum,
+          onUpdateParams: _onUpdateParams,
+          controller: _controller,
+          onSearch: _onSearch,
         );
       },
     );

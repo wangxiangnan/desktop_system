@@ -36,6 +36,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
         orders: result.rows,
         total: result.total,
         pageNum: result.pageNum,
+        pageSize: result.pageSize,
       ));
     } on AppError catch (e) {
       emit(state.copyWith(
@@ -58,6 +59,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
         orders: result.rows,
         total: result.total,
         pageNum: result.pageNum,
+        pageSize: result.pageSize,
       ));
     } on AppError catch (e) {
       emit(state.copyWith(

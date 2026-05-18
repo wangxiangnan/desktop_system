@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:data_table_2/data_table_2.dart';
+
+import 'package:syncfusion_flutter_core/theme.dart';
+import 'package:syncfusion_flutter_datagrid/datagrid.dart';
+
 import 'package:desktop_system/domain/entities/order_entity.dart';
+import 'package:desktop_system/core/constants/app_colors.dart';
 
-
-class OrderTable extends StatelessWidget {
+class OrderTable extends StatefulWidget {
   final List<Order> orders;
   final int pageNum;
   final int pageSize;
   final int total;
+  final VoidCallback onUpdateParams;
+  final TextEditingController Function(String field) controller;
+  final VoidCallback onSearch;
 
   const OrderTable({
     super.key,
@@ -15,99 +21,157 @@ class OrderTable extends StatelessWidget {
     required this.pageNum,
     required this.pageSize,
     required this.total,
+    required this.onUpdateParams,
+    required this.controller,
+    required this.onSearch,
   });
 
   @override
-  Widget build(BuildContext context) {
-    return PaginatedDataTable2(
-      columns: const [
-        DataColumn2(label: Text('订单ID'), minWidth: 120),
-        DataColumn2(label: Text('渠道类型'), minWidth: 120),
-        DataColumn2(label: Text('金额'), minWidth: 120),
-        DataColumn2(label: Text('数量'), minWidth: 120),
-        DataColumn2(label: Text('核销数量'), minWidth: 120),
-        DataColumn2(label: Text('支付方式'), minWidth: 120),
-        DataColumn2(label: Text('支付状态'), minWidth: 120),
-        DataColumn2(label: Text('退款状态'), minWidth: 120),
-        DataColumn2(label: Text('出票类型'), minWidth: 120),
-        DataColumn2(label: Text('出票状态'), minWidth: 120),
-        DataColumn2(label: Text('发票状态'), minWidth: 120),
-        DataColumn2(label: Text('客户名称'), minWidth: 120),
-        DataColumn2(label: Text('客户电话'), minWidth: 120),
-        DataColumn2(label: Text('邀请函code'), minWidth: 120),
-        DataColumn2(label: Text('主办方'), minWidth: 120),
-        DataColumn2(label: Text('套票活动ID'), minWidth: 120),
-        DataColumn2(label: Text('售票点'), minWidth: 120),
-        DataColumn2(label: Text('创建时间'), minWidth: 120),
-        DataColumn2(label: Text('支付时间'), minWidth: 120),
-        DataColumn2(label: Text('演出ID'), minWidth: 120),
-        DataColumn2(label: Text('演出名称'), minWidth: 180),
-        DataColumn2(label: Text('场次名称'), minWidth: 220),
-        DataColumn2(label: Text('优惠策略'), minWidth: 120),
-        DataColumn2(label: Text('出票控制'), minWidth: 120),
-        DataColumn2(label: Text('日期'), minWidth: 180),
-        DataColumn2(label: Text('地点'), minWidth: 120),
-        DataColumn2(label: Text('票价'), minWidth: 120),
-      ],
-      source: OrderDataSource(orders, total),
-      rowsPerPage: pageSize,
-      onPageChanged: (page) {
-        // context.read<OrderBloc>().add(OrderPageChanged(page + 1));
-      },
-    );
-    
-  }
+  State<StatefulWidget> createState() => _OrderTableState();
 }
 
-class OrderDataSource extends DataTableSource {
-  final List<Order> orders;
-  final int total;
+class _OrderTableState extends State<OrderTable> {
 
-  OrderDataSource(this.orders, this.total);
+  late OrderDataSource _orderDataSource;
+  static const double _dataPagerHeight = 60;
 
   @override
-  DataRow? getRow(int index) {
-    if (index >= orders.length) return null;
-    final order = orders[index];
-    return DataRow(
-      cells: [
-        DataCell(Text(order.id)),
-        DataCell(Text(order.channelType)),
-        DataCell(Text(order.amount.toStringAsFixed(2))),
-        DataCell(Text(order.num.toString())),
-        DataCell(Text(order.checkUpNum.toString())),
-        DataCell(Text(order.paymentType)),
-        DataCell(Text(order.paymentStatus)),
-        DataCell(Text(order.refundStatus)),
-        DataCell(Text(order.drawOutType)),
-        DataCell(Text(order.drawOutStatus)),
-        DataCell(Text(order.invoiceStatus)),
-        DataCell(Text(order.customerName)),
-        DataCell(Text(order.customerPhone)),
-        DataCell(Text(order.mainOrderInfoId)),
-        DataCell(Text(order.organizerName)),
-        DataCell(Text(order.packageOrderActivityId)),
-        DataCell(Text(order.ticketOutletName)),
-        DataCell(Text(order.createTime)),
-        DataCell(Text(order.paymentTime)),
-        DataCell(Text(order.performanceId)),
-        DataCell(Text(order.performanceName)),
-        DataCell(Text(order.showName)),
-        DataCell(Text(order.discountPolicyName)),
-        DataCell(Text(order.drawOutControl ? '是' : '否')),
-        DataCell(Text(order.date.toString().substring(0, 10))),
-        DataCell(Text(order.location)),
-        DataCell(Text(order.price.toStringAsFixed(2))),
-      ],
+  void initState() {
+    super.initState();
+    _orderDataSource = OrderDataSource(widget.orders);
+  }
+
+  Widget _buildDataGrid() {
+    return SfDataGrid(
+      source: _orderDataSource,
+      columnWidthMode: ColumnWidthMode.auto,
+      defaultColumnWidth: 120,
+      headerRowHeight: 40,
+      rowsPerPage: widget.pageSize,
+      columns: [
+        GridColumn(label: Center(child: Text('订单ID')), columnName: 'id'),
+        GridColumn(label: Center(child: Text('渠道类型')), columnName: 'channelType'),
+        GridColumn(label: Center(child: Text('金额')), columnName: 'amount'),
+        GridColumn(label: Center(child: Text('数量')), columnName: 'num'),
+        GridColumn(label: Center(child: Text('核销数量')), columnName: 'checkUpNum'),
+        GridColumn(label: Center(child: Text('支付方式')), columnName: 'paymentType'),
+        GridColumn(label: Center(child: Text('支付状态')), columnName: 'paymentStatus'),
+        GridColumn(label: Center(child: Text('退款状态')), columnName: 'refundStatus'),
+        GridColumn(label: Center(child: Text('出票类型')), columnName: 'drawOutType'),
+        GridColumn(label: Center(child: Text('出票状态')), columnName: 'drawOutStatus'),
+        GridColumn(label: Center(child: Text('发票状态')), columnName: 'invoiceStatus'),
+        GridColumn(label: Center(child: Text('客户名称')), columnName: 'customerName'),
+        GridColumn(label: Center(child: Text('客户电话')), columnName: 'customerPhone'),
+        GridColumn(label: Center(child: Text('邀请函code')), columnName: 'mainOrderInfoId'),
+        GridColumn(label: Center(child: Text('主办方')), columnName: 'organizerName'),
+        GridColumn(label: Center(child: Text('套票活动ID')), columnName: 'packageOrderActivityId'),
+        GridColumn(label: Center(child: Text('售票点')), columnName: 'ticketOutletName'),
+        GridColumn(label: Center(child: Text('创建时间')), columnName: 'createTime'),
+        GridColumn(label: Center(child: Text('支付时间')), columnName: 'paymentTime'),
+        GridColumn(label: Center(child: Text('演出ID')), columnName: 'performanceId'),
+        GridColumn(label: Center(child: Text('演出名称')), columnName: 'performanceName'),
+        GridColumn(label: Center(child: Text('场次名称')), columnName: 'showName'),
+        GridColumn(label: Center(child: Text('优惠策略')), columnName: 'discountPolicyName'),
+        GridColumn(label: Center(child: Text('出票控制')), columnName: 'drawOutControl'),
+      ]
+    );
+  }
+
+  Widget _buildDataPager() {
+    return SfDataPagerTheme(
+      data: SfDataPagerThemeData(selectedItemColor: AppColors.primary),
+      child: SfDataPager(
+        delegate: _orderDataSource,
+        availableRowsPerPage: const <int>[30, 50, 100],
+        pageCount: ((widget.total / widget.pageSize).ceil()).toDouble(),
+        onPageNavigationEnd: (pageIndex) {
+          widget.controller('pageIndex').text = '$pageIndex';
+          widget.onUpdateParams();
+        },
+        onRowsPerPageChanged: (int? rowsPerPage) {
+          widget.controller('pageSize').text = '$rowsPerPage';
+          widget.onUpdateParams();
+        },
+      ),
+    );
+  }
+
+  Widget _buildLayoutBuilder() {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Column(
+          children: [
+            SizedBox(
+              width: constraints.maxWidth,
+              height: widget.total > 0 ? constraints.maxHeight - _dataPagerHeight : constraints.maxHeight,
+              child: _buildDataGrid(),
+            ),
+            if (widget.total > 0)
+              SizedBox(
+                width: constraints.maxWidth,
+                height: _dataPagerHeight,
+                child: _buildDataPager(),
+              )
+          ],
+        );
+      },
     );
   }
 
   @override
-  bool get isRowCountApproximate => false;
+  Widget build(BuildContext context) {
+    return _buildLayoutBuilder();
+  }
+}
+class OrderDataSource extends DataGridSource {
+  OrderDataSource (List<Order> orders) {
+    _orders = orders
+      .map<DataGridRow>((e) =>
+        DataGridRow(
+          cells: [
+            DataGridCell(columnName: 'id', value: e.id),
+            DataGridCell(columnName: 'channelType', value: e.channelType),
+            DataGridCell(columnName: 'amount', value: e.amount.toStringAsFixed(2)),
+            DataGridCell(columnName: 'num', value: e.num.toString()),
+            DataGridCell(columnName: 'checkUpNum', value: e.checkUpNum.toString()),
+            DataGridCell(columnName: 'paymentType', value: e.paymentType),
+            DataGridCell(columnName: 'paymentStatus', value: e.paymentStatus),
+            DataGridCell(columnName: 'refundStatus', value: e.refundStatus),
+            DataGridCell(columnName: 'drawOutType', value: e.drawOutType),
+            DataGridCell(columnName: 'drawOutStatus', value: e.drawOutStatus),
+            DataGridCell(columnName: 'invoiceStatus', value: e.invoiceStatus),
+            DataGridCell(columnName: 'customerName', value: e.customerName),
+            DataGridCell(columnName: 'customerPhone', value: e.customerPhone),
+            DataGridCell(columnName: 'mainOrderInfoId', value: e.mainOrderInfoId),
+            DataGridCell(columnName: 'organizerName', value: e.organizerName),
+            DataGridCell(columnName: 'packageOrderActivityId', value: e.packageOrderActivityId),
+            DataGridCell(columnName: 'ticketOutletName', value: e.ticketOutletName),
+            DataGridCell(columnName: 'createTime', value: e.createTime),
+            DataGridCell(columnName: 'paymentTime', value: e.paymentTime),
+            DataGridCell(columnName: 'performanceId', value: e.performanceId),
+            DataGridCell(columnName: 'performanceName', value: e.performanceName),
+            DataGridCell(columnName: 'showName', value: e.showName),
+            DataGridCell(columnName: 'discountPolicyName', value: e.discountPolicyName),
+            DataGridCell(columnName: 'drawOutControl', value: e.drawOutControl ? '是' : '否'),
+        ]))
+      .toList();
+  }
+
+  List<DataGridRow> _orders = [];
 
   @override
-  int get rowCount => total;
+  List<DataGridRow> get rows => _orders;
 
   @override
-  int get selectedRowCount => 0;
+  DataGridRowAdapter? buildRow(DataGridRow row) {
+    return DataGridRowAdapter(
+      cells: row.getCells().map((dataGridCell) {
+        return Container(
+          alignment: Alignment.center,
+          padding: EdgeInsets.all(6.0),
+          child: Text(dataGridCell.value?.toString() ?? ''),
+        );
+      }).toList(),
+    );
+  }
 }
