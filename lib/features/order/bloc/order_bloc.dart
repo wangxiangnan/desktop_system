@@ -20,23 +20,41 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     OrderSearchParamsChanged event,
     Emitter<OrderState> emit,
   ) {
-    emit(state.copyWith(searchParams: event.searchParams));
+    emit(state.copyWith(
+      searchParams: state.searchParams.copyWith(
+        orderInfoId: event.searchParams.orderInfoId,
+        thirdOrderNoId: event.searchParams.thirdOrderNoId,
+        thirdOrderNo: event.searchParams.thirdOrderNo,
+        packageOrderActivityId: event.searchParams.packageOrderActivityId,
+        mainOrderInfoId: event.searchParams.mainOrderInfoId,
+        ticketNo: event.searchParams.ticketNo,
+        createBeginTime: event.searchParams.createBeginTime,
+        createEndTime: event.searchParams.createEndTime,
+      ),
+    ));
   }
 
   Future<void> _onSearchSubmitted(
     OrderSearchSubmitted event,
     Emitter<OrderState> emit,
   ) async {
-    emit(state.copyWith(status: OrderListStatus.loading, pageNum: 1));
+    final params = state.searchParams.copyWith(pageNum: 1);
+    emit(state.copyWith(
+      status: OrderListStatus.loading,
+      searchParams: params,
+    ));
 
     try {
-      final result = await _orderUsecase.getOrders(state.searchParams.toJson());
+      final result = await _orderUsecase.getOrders(params.toJson());
       emit(state.copyWith(
         status: OrderListStatus.success,
         orders: result.rows,
         total: result.total,
-        pageNum: result.pageNum,
-        pageSize: result.pageSize,
+        totalPages: result.totalPages,
+        searchParams: params.copyWith(
+          pageNum: result.pageNum,
+          pageSize: result.pageSize,
+        ),
       ));
     } on AppError catch (e) {
       emit(state.copyWith(
@@ -50,16 +68,26 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     OrderPageChanged event,
     Emitter<OrderState> emit,
   ) async {
-    emit(state.copyWith(status: OrderListStatus.loading));
+    final params = state.searchParams.copyWith(
+      pageNum: event.pageNum,
+      pageSize: event.pageSize,
+    );
+    emit(state.copyWith(
+      status: OrderListStatus.loading,
+      searchParams: params,
+    ));
 
     try {
-      final result = await _orderUsecase.getOrders(state.searchParams.toJson());
+      final result = await _orderUsecase.getOrders(params.toJson());
       emit(state.copyWith(
         status: OrderListStatus.success,
         orders: result.rows,
         total: result.total,
-        pageNum: result.pageNum,
-        pageSize: result.pageSize,
+        totalPages: result.totalPages,
+        searchParams: params.copyWith(
+          pageNum: result.pageNum,
+          pageSize: result.pageSize,
+        ),
       ));
     } on AppError catch (e) {
       emit(state.copyWith(

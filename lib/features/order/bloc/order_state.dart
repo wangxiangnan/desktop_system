@@ -18,8 +18,8 @@ abstract class OrderSearchParams with _$OrderSearchParams {
     String? ticketNo,
     String? createBeginTime,
     String? createEndTime,
-    required int pageNum,
-    required int pageSize,
+    @Default(1) int? pageNum,
+    @Default(30) int? pageSize,
   }) = _OrderSearchParams;
 
   const OrderSearchParams._();
@@ -32,11 +32,10 @@ abstract class OrderSearchParams with _$OrderSearchParams {
 abstract class OrderState with _$OrderState {
   const factory OrderState({
     @Default(OrderListStatus.initial) OrderListStatus status,
-    @Default(OrderSearchParams(pageSize: 30, pageNum: 1)) OrderSearchParams searchParams,
+    @Default(OrderSearchParams()) OrderSearchParams searchParams,
     @Default([]) List<Order> orders,
-    @Default(1) int pageNum,
-    @Default(30) int pageSize,
     @Default(0) int total,
+    @Default(0) double totalPages,
     String? errorMessage,
   }) = _OrderState;
 }

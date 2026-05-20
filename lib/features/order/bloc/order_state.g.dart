@@ -16,8 +16,8 @@ _OrderSearchParams _$OrderSearchParamsFromJson(Map<String, dynamic> json) =>
       ticketNo: json['ticketNo'] as String?,
       createBeginTime: json['createBeginTime'] as String?,
       createEndTime: json['createEndTime'] as String?,
-      pageNum: (json['pageNum'] as num).toInt(),
-      pageSize: (json['pageSize'] as num).toInt(),
+      pageNum: (json['pageNum'] as num?)?.toInt() ?? 1,
+      pageSize: (json['pageSize'] as num?)?.toInt() ?? 30,
     );
 
 Map<String, dynamic> _$OrderSearchParamsToJson(_OrderSearchParams instance) =>

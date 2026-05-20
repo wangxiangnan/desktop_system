@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$OrderSearchParams implements DiagnosticableTreeMixin {
 
- String? get orderInfoId; String? get thirdOrderNoId; String? get thirdOrderNo; String? get packageOrderActivityId; String? get mainOrderInfoId; String? get ticketNo; String? get createBeginTime; String? get createEndTime; int get pageNum; int get pageSize;
+ String? get orderInfoId; String? get thirdOrderNoId; String? get thirdOrderNo; String? get packageOrderActivityId; String? get mainOrderInfoId; String? get ticketNo; String? get createBeginTime; String? get createEndTime; int? get pageNum; int? get pageSize;
 /// Create a copy of OrderSearchParams
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -54,7 +54,7 @@ abstract mixin class $OrderSearchParamsCopyWith<$Res>  {
   factory $OrderSearchParamsCopyWith(OrderSearchParams value, $Res Function(OrderSearchParams) _then) = _$OrderSearchParamsCopyWithImpl;
 @useResult
 $Res call({
- String? orderInfoId, String? thirdOrderNoId, String? thirdOrderNo, String? packageOrderActivityId, String? mainOrderInfoId, String? ticketNo, String? createBeginTime, String? createEndTime, int pageNum, int pageSize
+ String? orderInfoId, String? thirdOrderNoId, String? thirdOrderNo, String? packageOrderActivityId, String? mainOrderInfoId, String? ticketNo, String? createBeginTime, String? createEndTime, int? pageNum, int? pageSize
 });
 
 
@@ -71,7 +71,7 @@ class _$OrderSearchParamsCopyWithImpl<$Res>
 
 /// Create a copy of OrderSearchParams
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? orderInfoId = freezed,Object? thirdOrderNoId = freezed,Object? thirdOrderNo = freezed,Object? packageOrderActivityId = freezed,Object? mainOrderInfoId = freezed,Object? ticketNo = freezed,Object? createBeginTime = freezed,Object? createEndTime = freezed,Object? pageNum = null,Object? pageSize = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? orderInfoId = freezed,Object? thirdOrderNoId = freezed,Object? thirdOrderNo = freezed,Object? packageOrderActivityId = freezed,Object? mainOrderInfoId = freezed,Object? ticketNo = freezed,Object? createBeginTime = freezed,Object? createEndTime = freezed,Object? pageNum = freezed,Object? pageSize = freezed,}) {
   return _then(_self.copyWith(
 orderInfoId: freezed == orderInfoId ? _self.orderInfoId : orderInfoId // ignore: cast_nullable_to_non_nullable
 as String?,thirdOrderNoId: freezed == thirdOrderNoId ? _self.thirdOrderNoId : thirdOrderNoId // ignore: cast_nullable_to_non_nullable
@@ -81,9 +81,9 @@ as String?,mainOrderInfoId: freezed == mainOrderInfoId ? _self.mainOrderInfoId :
 as String?,ticketNo: freezed == ticketNo ? _self.ticketNo : ticketNo // ignore: cast_nullable_to_non_nullable
 as String?,createBeginTime: freezed == createBeginTime ? _self.createBeginTime : createBeginTime // ignore: cast_nullable_to_non_nullable
 as String?,createEndTime: freezed == createEndTime ? _self.createEndTime : createEndTime // ignore: cast_nullable_to_non_nullable
-as String?,pageNum: null == pageNum ? _self.pageNum : pageNum // ignore: cast_nullable_to_non_nullable
-as int,pageSize: null == pageSize ? _self.pageSize : pageSize // ignore: cast_nullable_to_non_nullable
-as int,
+as String?,pageNum: freezed == pageNum ? _self.pageNum : pageNum // ignore: cast_nullable_to_non_nullable
+as int?,pageSize: freezed == pageSize ? _self.pageSize : pageSize // ignore: cast_nullable_to_non_nullable
+as int?,
   ));
 }
 
@@ -168,7 +168,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? orderInfoId,  String? thirdOrderNoId,  String? thirdOrderNo,  String? packageOrderActivityId,  String? mainOrderInfoId,  String? ticketNo,  String? createBeginTime,  String? createEndTime,  int pageNum,  int pageSize)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? orderInfoId,  String? thirdOrderNoId,  String? thirdOrderNo,  String? packageOrderActivityId,  String? mainOrderInfoId,  String? ticketNo,  String? createBeginTime,  String? createEndTime,  int? pageNum,  int? pageSize)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _OrderSearchParams() when $default != null:
 return $default(_that.orderInfoId,_that.thirdOrderNoId,_that.thirdOrderNo,_that.packageOrderActivityId,_that.mainOrderInfoId,_that.ticketNo,_that.createBeginTime,_that.createEndTime,_that.pageNum,_that.pageSize);case _:
@@ -189,7 +189,7 @@ return $default(_that.orderInfoId,_that.thirdOrderNoId,_that.thirdOrderNo,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? orderInfoId,  String? thirdOrderNoId,  String? thirdOrderNo,  String? packageOrderActivityId,  String? mainOrderInfoId,  String? ticketNo,  String? createBeginTime,  String? createEndTime,  int pageNum,  int pageSize)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? orderInfoId,  String? thirdOrderNoId,  String? thirdOrderNo,  String? packageOrderActivityId,  String? mainOrderInfoId,  String? ticketNo,  String? createBeginTime,  String? createEndTime,  int? pageNum,  int? pageSize)  $default,) {final _that = this;
 switch (_that) {
 case _OrderSearchParams():
 return $default(_that.orderInfoId,_that.thirdOrderNoId,_that.thirdOrderNo,_that.packageOrderActivityId,_that.mainOrderInfoId,_that.ticketNo,_that.createBeginTime,_that.createEndTime,_that.pageNum,_that.pageSize);case _:
@@ -209,7 +209,7 @@ return $default(_that.orderInfoId,_that.thirdOrderNoId,_that.thirdOrderNo,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? orderInfoId,  String? thirdOrderNoId,  String? thirdOrderNo,  String? packageOrderActivityId,  String? mainOrderInfoId,  String? ticketNo,  String? createBeginTime,  String? createEndTime,  int pageNum,  int pageSize)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? orderInfoId,  String? thirdOrderNoId,  String? thirdOrderNo,  String? packageOrderActivityId,  String? mainOrderInfoId,  String? ticketNo,  String? createBeginTime,  String? createEndTime,  int? pageNum,  int? pageSize)?  $default,) {final _that = this;
 switch (_that) {
 case _OrderSearchParams() when $default != null:
 return $default(_that.orderInfoId,_that.thirdOrderNoId,_that.thirdOrderNo,_that.packageOrderActivityId,_that.mainOrderInfoId,_that.ticketNo,_that.createBeginTime,_that.createEndTime,_that.pageNum,_that.pageSize);case _:
@@ -224,7 +224,7 @@ return $default(_that.orderInfoId,_that.thirdOrderNoId,_that.thirdOrderNo,_that.
 @JsonSerializable()
 
 class _OrderSearchParams extends OrderSearchParams with DiagnosticableTreeMixin {
-  const _OrderSearchParams({this.orderInfoId, this.thirdOrderNoId, this.thirdOrderNo, this.packageOrderActivityId, this.mainOrderInfoId, this.ticketNo, this.createBeginTime, this.createEndTime, required this.pageNum, required this.pageSize}): super._();
+  const _OrderSearchParams({this.orderInfoId, this.thirdOrderNoId, this.thirdOrderNo, this.packageOrderActivityId, this.mainOrderInfoId, this.ticketNo, this.createBeginTime, this.createEndTime, this.pageNum = 1, this.pageSize = 30}): super._();
   factory _OrderSearchParams.fromJson(Map<String, dynamic> json) => _$OrderSearchParamsFromJson(json);
 
 @override final  String? orderInfoId;
@@ -235,8 +235,8 @@ class _OrderSearchParams extends OrderSearchParams with DiagnosticableTreeMixin 
 @override final  String? ticketNo;
 @override final  String? createBeginTime;
 @override final  String? createEndTime;
-@override final  int pageNum;
-@override final  int pageSize;
+@override@JsonKey() final  int? pageNum;
+@override@JsonKey() final  int? pageSize;
 
 /// Create a copy of OrderSearchParams
 /// with the given fields replaced by the non-null parameter values.
@@ -277,7 +277,7 @@ abstract mixin class _$OrderSearchParamsCopyWith<$Res> implements $OrderSearchPa
   factory _$OrderSearchParamsCopyWith(_OrderSearchParams value, $Res Function(_OrderSearchParams) _then) = __$OrderSearchParamsCopyWithImpl;
 @override @useResult
 $Res call({
- String? orderInfoId, String? thirdOrderNoId, String? thirdOrderNo, String? packageOrderActivityId, String? mainOrderInfoId, String? ticketNo, String? createBeginTime, String? createEndTime, int pageNum, int pageSize
+ String? orderInfoId, String? thirdOrderNoId, String? thirdOrderNo, String? packageOrderActivityId, String? mainOrderInfoId, String? ticketNo, String? createBeginTime, String? createEndTime, int? pageNum, int? pageSize
 });
 
 
@@ -294,7 +294,7 @@ class __$OrderSearchParamsCopyWithImpl<$Res>
 
 /// Create a copy of OrderSearchParams
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? orderInfoId = freezed,Object? thirdOrderNoId = freezed,Object? thirdOrderNo = freezed,Object? packageOrderActivityId = freezed,Object? mainOrderInfoId = freezed,Object? ticketNo = freezed,Object? createBeginTime = freezed,Object? createEndTime = freezed,Object? pageNum = null,Object? pageSize = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? orderInfoId = freezed,Object? thirdOrderNoId = freezed,Object? thirdOrderNo = freezed,Object? packageOrderActivityId = freezed,Object? mainOrderInfoId = freezed,Object? ticketNo = freezed,Object? createBeginTime = freezed,Object? createEndTime = freezed,Object? pageNum = freezed,Object? pageSize = freezed,}) {
   return _then(_OrderSearchParams(
 orderInfoId: freezed == orderInfoId ? _self.orderInfoId : orderInfoId // ignore: cast_nullable_to_non_nullable
 as String?,thirdOrderNoId: freezed == thirdOrderNoId ? _self.thirdOrderNoId : thirdOrderNoId // ignore: cast_nullable_to_non_nullable
@@ -304,9 +304,9 @@ as String?,mainOrderInfoId: freezed == mainOrderInfoId ? _self.mainOrderInfoId :
 as String?,ticketNo: freezed == ticketNo ? _self.ticketNo : ticketNo // ignore: cast_nullable_to_non_nullable
 as String?,createBeginTime: freezed == createBeginTime ? _self.createBeginTime : createBeginTime // ignore: cast_nullable_to_non_nullable
 as String?,createEndTime: freezed == createEndTime ? _self.createEndTime : createEndTime // ignore: cast_nullable_to_non_nullable
-as String?,pageNum: null == pageNum ? _self.pageNum : pageNum // ignore: cast_nullable_to_non_nullable
-as int,pageSize: null == pageSize ? _self.pageSize : pageSize // ignore: cast_nullable_to_non_nullable
-as int,
+as String?,pageNum: freezed == pageNum ? _self.pageNum : pageNum // ignore: cast_nullable_to_non_nullable
+as int?,pageSize: freezed == pageSize ? _self.pageSize : pageSize // ignore: cast_nullable_to_non_nullable
+as int?,
   ));
 }
 
@@ -316,7 +316,7 @@ as int,
 /// @nodoc
 mixin _$OrderState implements DiagnosticableTreeMixin {
 
- OrderListStatus get status; OrderSearchParams get searchParams; List<Order> get orders; int get pageNum; int get pageSize; int get total; String? get errorMessage;
+ OrderListStatus get status; OrderSearchParams get searchParams; List<Order> get orders; int get total; double get totalPages; String? get errorMessage;
 /// Create a copy of OrderState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -328,21 +328,21 @@ $OrderStateCopyWith<OrderState> get copyWith => _$OrderStateCopyWithImpl<OrderSt
 void debugFillProperties(DiagnosticPropertiesBuilder properties) {
   properties
     ..add(DiagnosticsProperty('type', 'OrderState'))
-    ..add(DiagnosticsProperty('status', status))..add(DiagnosticsProperty('searchParams', searchParams))..add(DiagnosticsProperty('orders', orders))..add(DiagnosticsProperty('pageNum', pageNum))..add(DiagnosticsProperty('pageSize', pageSize))..add(DiagnosticsProperty('total', total))..add(DiagnosticsProperty('errorMessage', errorMessage));
+    ..add(DiagnosticsProperty('status', status))..add(DiagnosticsProperty('searchParams', searchParams))..add(DiagnosticsProperty('orders', orders))..add(DiagnosticsProperty('total', total))..add(DiagnosticsProperty('totalPages', totalPages))..add(DiagnosticsProperty('errorMessage', errorMessage));
 }
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is OrderState&&(identical(other.status, status) || other.status == status)&&(identical(other.searchParams, searchParams) || other.searchParams == searchParams)&&const DeepCollectionEquality().equals(other.orders, orders)&&(identical(other.pageNum, pageNum) || other.pageNum == pageNum)&&(identical(other.pageSize, pageSize) || other.pageSize == pageSize)&&(identical(other.total, total) || other.total == total)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is OrderState&&(identical(other.status, status) || other.status == status)&&(identical(other.searchParams, searchParams) || other.searchParams == searchParams)&&const DeepCollectionEquality().equals(other.orders, orders)&&(identical(other.total, total) || other.total == total)&&(identical(other.totalPages, totalPages) || other.totalPages == totalPages)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,searchParams,const DeepCollectionEquality().hash(orders),pageNum,pageSize,total,errorMessage);
+int get hashCode => Object.hash(runtimeType,status,searchParams,const DeepCollectionEquality().hash(orders),total,totalPages,errorMessage);
 
 @override
 String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
-  return 'OrderState(status: $status, searchParams: $searchParams, orders: $orders, pageNum: $pageNum, pageSize: $pageSize, total: $total, errorMessage: $errorMessage)';
+  return 'OrderState(status: $status, searchParams: $searchParams, orders: $orders, total: $total, totalPages: $totalPages, errorMessage: $errorMessage)';
 }
 
 
@@ -353,7 +353,7 @@ abstract mixin class $OrderStateCopyWith<$Res>  {
   factory $OrderStateCopyWith(OrderState value, $Res Function(OrderState) _then) = _$OrderStateCopyWithImpl;
 @useResult
 $Res call({
- OrderListStatus status, OrderSearchParams searchParams, List<Order> orders, int pageNum, int pageSize, int total, String? errorMessage
+ OrderListStatus status, OrderSearchParams searchParams, List<Order> orders, int total, double totalPages, String? errorMessage
 });
 
 
@@ -370,15 +370,14 @@ class _$OrderStateCopyWithImpl<$Res>
 
 /// Create a copy of OrderState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? searchParams = null,Object? orders = null,Object? pageNum = null,Object? pageSize = null,Object? total = null,Object? errorMessage = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? searchParams = null,Object? orders = null,Object? total = null,Object? totalPages = null,Object? errorMessage = freezed,}) {
   return _then(_self.copyWith(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as OrderListStatus,searchParams: null == searchParams ? _self.searchParams : searchParams // ignore: cast_nullable_to_non_nullable
 as OrderSearchParams,orders: null == orders ? _self.orders : orders // ignore: cast_nullable_to_non_nullable
-as List<Order>,pageNum: null == pageNum ? _self.pageNum : pageNum // ignore: cast_nullable_to_non_nullable
-as int,pageSize: null == pageSize ? _self.pageSize : pageSize // ignore: cast_nullable_to_non_nullable
-as int,total: null == total ? _self.total : total // ignore: cast_nullable_to_non_nullable
-as int,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as List<Order>,total: null == total ? _self.total : total // ignore: cast_nullable_to_non_nullable
+as int,totalPages: null == totalPages ? _self.totalPages : totalPages // ignore: cast_nullable_to_non_nullable
+as double,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
@@ -473,10 +472,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( OrderListStatus status,  OrderSearchParams searchParams,  List<Order> orders,  int pageNum,  int pageSize,  int total,  String? errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( OrderListStatus status,  OrderSearchParams searchParams,  List<Order> orders,  int total,  double totalPages,  String? errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _OrderState() when $default != null:
-return $default(_that.status,_that.searchParams,_that.orders,_that.pageNum,_that.pageSize,_that.total,_that.errorMessage);case _:
+return $default(_that.status,_that.searchParams,_that.orders,_that.total,_that.totalPages,_that.errorMessage);case _:
   return orElse();
 
 }
@@ -494,10 +493,10 @@ return $default(_that.status,_that.searchParams,_that.orders,_that.pageNum,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( OrderListStatus status,  OrderSearchParams searchParams,  List<Order> orders,  int pageNum,  int pageSize,  int total,  String? errorMessage)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( OrderListStatus status,  OrderSearchParams searchParams,  List<Order> orders,  int total,  double totalPages,  String? errorMessage)  $default,) {final _that = this;
 switch (_that) {
 case _OrderState():
-return $default(_that.status,_that.searchParams,_that.orders,_that.pageNum,_that.pageSize,_that.total,_that.errorMessage);case _:
+return $default(_that.status,_that.searchParams,_that.orders,_that.total,_that.totalPages,_that.errorMessage);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -514,10 +513,10 @@ return $default(_that.status,_that.searchParams,_that.orders,_that.pageNum,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( OrderListStatus status,  OrderSearchParams searchParams,  List<Order> orders,  int pageNum,  int pageSize,  int total,  String? errorMessage)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( OrderListStatus status,  OrderSearchParams searchParams,  List<Order> orders,  int total,  double totalPages,  String? errorMessage)?  $default,) {final _that = this;
 switch (_that) {
 case _OrderState() when $default != null:
-return $default(_that.status,_that.searchParams,_that.orders,_that.pageNum,_that.pageSize,_that.total,_that.errorMessage);case _:
+return $default(_that.status,_that.searchParams,_that.orders,_that.total,_that.totalPages,_that.errorMessage);case _:
   return null;
 
 }
@@ -529,7 +528,7 @@ return $default(_that.status,_that.searchParams,_that.orders,_that.pageNum,_that
 
 
 class _OrderState with DiagnosticableTreeMixin implements OrderState {
-  const _OrderState({this.status = OrderListStatus.initial, this.searchParams = const OrderSearchParams(pageSize: 30, pageNum: 1), final  List<Order> orders = const [], this.pageNum = 1, this.pageSize = 10, this.total = 0, this.errorMessage}): _orders = orders;
+  const _OrderState({this.status = OrderListStatus.initial, this.searchParams = const OrderSearchParams(), final  List<Order> orders = const [], this.total = 0, this.totalPages = 0, this.errorMessage}): _orders = orders;
   
 
 @override@JsonKey() final  OrderListStatus status;
@@ -541,9 +540,8 @@ class _OrderState with DiagnosticableTreeMixin implements OrderState {
   return EqualUnmodifiableListView(_orders);
 }
 
-@override@JsonKey() final  int pageNum;
-@override@JsonKey() final  int pageSize;
 @override@JsonKey() final  int total;
+@override@JsonKey() final  double totalPages;
 @override final  String? errorMessage;
 
 /// Create a copy of OrderState
@@ -557,21 +555,21 @@ _$OrderStateCopyWith<_OrderState> get copyWith => __$OrderStateCopyWithImpl<_Ord
 void debugFillProperties(DiagnosticPropertiesBuilder properties) {
   properties
     ..add(DiagnosticsProperty('type', 'OrderState'))
-    ..add(DiagnosticsProperty('status', status))..add(DiagnosticsProperty('searchParams', searchParams))..add(DiagnosticsProperty('orders', orders))..add(DiagnosticsProperty('pageNum', pageNum))..add(DiagnosticsProperty('pageSize', pageSize))..add(DiagnosticsProperty('total', total))..add(DiagnosticsProperty('errorMessage', errorMessage));
+    ..add(DiagnosticsProperty('status', status))..add(DiagnosticsProperty('searchParams', searchParams))..add(DiagnosticsProperty('orders', orders))..add(DiagnosticsProperty('total', total))..add(DiagnosticsProperty('totalPages', totalPages))..add(DiagnosticsProperty('errorMessage', errorMessage));
 }
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OrderState&&(identical(other.status, status) || other.status == status)&&(identical(other.searchParams, searchParams) || other.searchParams == searchParams)&&const DeepCollectionEquality().equals(other._orders, _orders)&&(identical(other.pageNum, pageNum) || other.pageNum == pageNum)&&(identical(other.pageSize, pageSize) || other.pageSize == pageSize)&&(identical(other.total, total) || other.total == total)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OrderState&&(identical(other.status, status) || other.status == status)&&(identical(other.searchParams, searchParams) || other.searchParams == searchParams)&&const DeepCollectionEquality().equals(other._orders, _orders)&&(identical(other.total, total) || other.total == total)&&(identical(other.totalPages, totalPages) || other.totalPages == totalPages)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,searchParams,const DeepCollectionEquality().hash(_orders),pageNum,pageSize,total,errorMessage);
+int get hashCode => Object.hash(runtimeType,status,searchParams,const DeepCollectionEquality().hash(_orders),total,totalPages,errorMessage);
 
 @override
 String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
-  return 'OrderState(status: $status, searchParams: $searchParams, orders: $orders, pageNum: $pageNum, pageSize: $pageSize, total: $total, errorMessage: $errorMessage)';
+  return 'OrderState(status: $status, searchParams: $searchParams, orders: $orders, total: $total, totalPages: $totalPages, errorMessage: $errorMessage)';
 }
 
 
@@ -582,7 +580,7 @@ abstract mixin class _$OrderStateCopyWith<$Res> implements $OrderStateCopyWith<$
   factory _$OrderStateCopyWith(_OrderState value, $Res Function(_OrderState) _then) = __$OrderStateCopyWithImpl;
 @override @useResult
 $Res call({
- OrderListStatus status, OrderSearchParams searchParams, List<Order> orders, int pageNum, int pageSize, int total, String? errorMessage
+ OrderListStatus status, OrderSearchParams searchParams, List<Order> orders, int total, double totalPages, String? errorMessage
 });
 
 
@@ -599,15 +597,14 @@ class __$OrderStateCopyWithImpl<$Res>
 
 /// Create a copy of OrderState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? searchParams = null,Object? orders = null,Object? pageNum = null,Object? pageSize = null,Object? total = null,Object? errorMessage = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? searchParams = null,Object? orders = null,Object? total = null,Object? totalPages = null,Object? errorMessage = freezed,}) {
   return _then(_OrderState(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as OrderListStatus,searchParams: null == searchParams ? _self.searchParams : searchParams // ignore: cast_nullable_to_non_nullable
 as OrderSearchParams,orders: null == orders ? _self._orders : orders // ignore: cast_nullable_to_non_nullable
-as List<Order>,pageNum: null == pageNum ? _self.pageNum : pageNum // ignore: cast_nullable_to_non_nullable
-as int,pageSize: null == pageSize ? _self.pageSize : pageSize // ignore: cast_nullable_to_non_nullable
-as int,total: null == total ? _self.total : total // ignore: cast_nullable_to_non_nullable
-as int,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as List<Order>,total: null == total ? _self.total : total // ignore: cast_nullable_to_non_nullable
+as int,totalPages: null == totalPages ? _self.totalPages : totalPages // ignore: cast_nullable_to_non_nullable
+as double,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }

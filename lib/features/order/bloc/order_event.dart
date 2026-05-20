@@ -23,11 +23,12 @@ class OrderSearchSubmitted extends OrderEvent {
 
 class OrderPageChanged extends OrderEvent {
   final int pageNum;
+  final int pageSize;
 
-  const OrderPageChanged(this.pageNum);
+  const OrderPageChanged(this.pageNum, this.pageSize);
 
   @override
-  List<Object?> get props => [pageNum];
+  List<Object?> get props => [pageNum, pageSize];
 }
 
 class OrderReset extends OrderEvent {

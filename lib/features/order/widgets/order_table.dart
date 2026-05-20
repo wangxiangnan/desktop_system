@@ -11,9 +11,8 @@ class OrderTable extends StatefulWidget {
   final int pageNum;
   final int pageSize;
   final int total;
-  final VoidCallback onUpdateParams;
-  final TextEditingController Function(String field) controller;
-  final VoidCallback onSearch;
+  final double totalPages;
+  final void Function(int pageNum, int pageSize) onPageChanged;
 
   const OrderTable({
     super.key,
@@ -21,9 +20,8 @@ class OrderTable extends StatefulWidget {
     required this.pageNum,
     required this.pageSize,
     required this.total,
-    required this.onUpdateParams,
-    required this.controller,
-    required this.onSearch,
+    required this.totalPages,
+    required this.onPageChanged,
   });
 
   @override
@@ -39,6 +37,12 @@ class _OrderTableState extends State<OrderTable> {
   void initState() {
     super.initState();
     _orderDataSource = OrderDataSource(widget.orders);
+  }
+
+  @override
+  void didUpdateWidget(OrderTable oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _orderDataSource.updateOrders(widget.orders);
   }
 
   Widget _buildDataGrid() {
@@ -81,16 +85,20 @@ class _OrderTableState extends State<OrderTable> {
     return SfDataPagerTheme(
       data: SfDataPagerThemeData(selectedItemColor: AppColors.primary),
       child: SfDataPager(
+        initialPageIndex: widget.pageNum - 1,
         delegate: _orderDataSource,
         availableRowsPerPage: const <int>[30, 50, 100],
-        pageCount: ((widget.total / widget.pageSize).ceil()).toDouble(),
+        pageCount: widget.totalPages,
         onPageNavigationEnd: (pageIndex) {
-          widget.controller('pageIndex').text = '$pageIndex';
-          widget.onUpdateParams();
+          final targetPageNum = pageIndex + 1;
+          if (targetPageNum != widget.pageNum) {
+            widget.onPageChanged(targetPageNum, widget.pageSize);
+          }
         },
         onRowsPerPageChanged: (int? rowsPerPage) {
-          widget.controller('pageSize').text = '$rowsPerPage';
-          widget.onUpdateParams();
+          if (rowsPerPage != widget.pageSize) {
+            widget.onPageChanged(1, rowsPerPage!);
+          }
         },
       ),
     );
@@ -125,6 +133,12 @@ class _OrderTableState extends State<OrderTable> {
 }
 class OrderDataSource extends DataGridSource {
   OrderDataSource (List<Order> orders) {
+    updateOrders(orders);
+  }
+
+  List<DataGridRow> _orders = [];
+
+  void updateOrders(List<Order> orders) {
     _orders = orders
       .map<DataGridRow>((e) =>
         DataGridRow(
@@ -155,9 +169,8 @@ class OrderDataSource extends DataGridSource {
             DataGridCell(columnName: 'drawOutControl', value: e.drawOutControl ? '是' : '否'),
         ]))
       .toList();
+    notifyListeners();
   }
-
-  List<DataGridRow> _orders = [];
 
   @override
   List<DataGridRow> get rows => _orders;

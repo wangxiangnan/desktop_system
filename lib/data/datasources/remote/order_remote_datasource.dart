@@ -25,7 +25,7 @@ class OrderRemoteDataSource {
     return Paginated<OrderModel>(
       rows: orders,
       total: data?['total'] ?? 0,
-      pageNum: data?['pageNum'] ?? params['pageNum'],
+      pageNum: data?['currentPage'] ?? params['pageNum'],
       pageSize: data?['pageSize'] ?? params['pageSize'],
     );
   }

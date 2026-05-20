@@ -48,8 +48,6 @@ class _OrderListViewState extends State<_OrderListView> {
     final ticketNo = _controller('ticketNo').text;
     final createBeginTime = _controller('createBeginTime').text;
     final createEndTime = _controller('createEndTime').text;
-    final pageSize = _controller('pageSize').text;
-    final pageNum = _controller('pageNum').text;
     return OrderSearchParams(
       orderInfoId: orderInfoId.isNotEmpty ? orderInfoId : null,
       thirdOrderNoId: thirdOrderNoId.isNotEmpty ? thirdOrderNoId : null,
@@ -59,8 +57,6 @@ class _OrderListViewState extends State<_OrderListView> {
       ticketNo: ticketNo.isNotEmpty ? ticketNo : null,
       createBeginTime: createBeginTime.isNotEmpty ? createBeginTime : null,
       createEndTime: createEndTime.isNotEmpty ? createEndTime : null,
-      pageSize: pageSize.isNotEmpty ? int.parse(pageSize) : 30,
-      pageNum: pageNum.isNotEmpty ? int.parse(pageNum) : 1,
     );
   }
 
@@ -143,34 +139,35 @@ class _OrderListViewState extends State<_OrderListView> {
   Widget _buildTable() {
     return BlocBuilder<OrderBloc, OrderState>(
       builder: (context, state) {
-        if (state.status == OrderListStatus.loading) {
-          return const Center(child: CircularProgressIndicator());
-        }
-
-        if (state.status == OrderListStatus.failure) {
-          return Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  state.errorMessage ?? '加载失败',
-                  style: const TextStyle(color: Colors.red),
-                ),
-                const SizedBox(height: 8),
-                ElevatedButton(onPressed: _onSearch, child: const Text('重试')),
-              ],
+        return Stack(
+          children: [
+            OrderTable(
+              orders: state.orders,
+              total: state.total,
+              pageSize: state.searchParams.pageSize ?? 30,
+              pageNum: state.searchParams.pageNum ?? 1,
+              totalPages: state.totalPages,
+              onPageChanged: (pageNum, pageSize) {
+                context.read<OrderBloc>().add(OrderPageChanged(pageNum, pageSize));
+              },
             ),
-          );
-        }
-
-        return OrderTable(
-          orders: state.orders,
-          total: state.total,
-          pageSize: state.pageSize,
-          pageNum: state.pageNum,
-          onUpdateParams: _onUpdateParams,
-          controller: _controller,
-          onSearch: _onSearch,
+            if (state.status == OrderListStatus.loading)
+              const Center(child: CircularProgressIndicator()),
+            if (state.status == OrderListStatus.failure)
+              Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      state.errorMessage ?? '加载失败',
+                      style: const TextStyle(color: Colors.red),
+                    ),
+                    const SizedBox(height: 8),
+                    ElevatedButton(onPressed: _onSearch, child: const Text('重试')),
+                  ],
+                ),
+              ),
+          ],
         );
       },
     );
