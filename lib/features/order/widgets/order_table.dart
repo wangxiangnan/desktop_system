@@ -169,7 +169,7 @@ class OrderDataSource extends DataGridSource {
             DataGridCell(columnName: 'drawOutControl', value: e.drawOutControl ? '是' : '否'),
         ]))
       .toList();
-    notifyListeners();
+    // notifyListeners();
   }
 
   @override
