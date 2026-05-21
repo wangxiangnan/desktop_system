@@ -13,6 +13,7 @@ class OrderTable extends StatefulWidget {
   final int total;
   final double totalPages;
   final void Function(int pageNum, int pageSize) onPageChanged;
+  final Map<String, String> paymentTypeDict;
 
   const OrderTable({
     super.key,
@@ -22,6 +23,7 @@ class OrderTable extends StatefulWidget {
     required this.total,
     required this.totalPages,
     required this.onPageChanged,
+    this.paymentTypeDict = const {},
   });
 
   @override
@@ -36,13 +38,13 @@ class _OrderTableState extends State<OrderTable> {
   @override
   void initState() {
     super.initState();
-    _orderDataSource = OrderDataSource(widget.orders);
+    _orderDataSource = OrderDataSource(widget.orders, widget.paymentTypeDict);
   }
 
   @override
   void didUpdateWidget(OrderTable oldWidget) {
     super.didUpdateWidget(oldWidget);
-    _orderDataSource.updateOrders(widget.orders);
+    _orderDataSource.updateOrders(widget.orders, widget.paymentTypeDict);
   }
 
   Widget _buildDataGrid() {
@@ -54,28 +56,28 @@ class _OrderTableState extends State<OrderTable> {
       rowsPerPage: widget.pageSize,
       columns: [
         GridColumn(label: Center(child: Text('订单ID')), columnName: 'id'),
-        GridColumn(label: Center(child: Text('渠道类型')), columnName: 'channelType'),
-        GridColumn(label: Center(child: Text('金额')), columnName: 'amount'),
-        GridColumn(label: Center(child: Text('数量')), columnName: 'num'),
-        GridColumn(label: Center(child: Text('核销数量')), columnName: 'checkUpNum'),
+        GridColumn(label: Center(child: Text('项目ID')), columnName: 'performanceId'),
+        GridColumn(label: Center(child: Text('项目名称')), columnName: 'performanceName'),
+        GridColumn(label: Center(child: Text('场次名称')), columnName: 'showName'),
+        GridColumn(label: Center(child: Text('订单来源')), columnName: 'channelType'),
+        GridColumn(label: Center(child: Text('订单金额')), columnName: 'amount'),
         GridColumn(label: Center(child: Text('支付方式')), columnName: 'paymentType'),
         GridColumn(label: Center(child: Text('支付状态')), columnName: 'paymentStatus'),
+        GridColumn(label: Center(child: Text('销售政策')), columnName: 'discountPolicyName'),
         GridColumn(label: Center(child: Text('退款状态')), columnName: 'refundStatus'),
-        GridColumn(label: Center(child: Text('出票类型')), columnName: 'drawOutType'),
+        GridColumn(label: Center(child: Text('购票数量')), columnName: 'num'),
+        GridColumn(label: Center(child: Text('出票方式')), columnName: 'drawOutType'),
         GridColumn(label: Center(child: Text('出票状态')), columnName: 'drawOutStatus'),
-        GridColumn(label: Center(child: Text('发票状态')), columnName: 'invoiceStatus'),
-        GridColumn(label: Center(child: Text('客户名称')), columnName: 'customerName'),
-        GridColumn(label: Center(child: Text('客户电话')), columnName: 'customerPhone'),
-        GridColumn(label: Center(child: Text('邀请函code')), columnName: 'mainOrderInfoId'),
-        GridColumn(label: Center(child: Text('主办方')), columnName: 'organizerName'),
+        GridColumn(label: Center(child: Text('检票数')), columnName: 'checkUpNum'),
+        GridColumn(label: Center(child: Text('开发票')), columnName: 'invoiceStatus'),
+        GridColumn(label: Center(child: Text('购票人姓名')), columnName: 'customerName'),
+        GridColumn(label: Center(child: Text('购票人手机号')), columnName: 'customerPhone'),
+        GridColumn(label: Center(child: Text('邀请函code/套票关联ID')), columnName: 'mainOrderInfoId'),
         GridColumn(label: Center(child: Text('套票活动ID')), columnName: 'packageOrderActivityId'),
-        GridColumn(label: Center(child: Text('售票点')), columnName: 'ticketOutletName'),
-        GridColumn(label: Center(child: Text('创建时间')), columnName: 'createTime'),
-        GridColumn(label: Center(child: Text('支付时间')), columnName: 'paymentTime'),
-        GridColumn(label: Center(child: Text('演出ID')), columnName: 'performanceId'),
-        GridColumn(label: Center(child: Text('演出名称')), columnName: 'performanceName'),
-        GridColumn(label: Center(child: Text('场次名称')), columnName: 'showName'),
-        GridColumn(label: Center(child: Text('优惠策略')), columnName: 'discountPolicyName'),
+        GridColumn(label: Center(child: Text('售票网点机构')), columnName: 'ticketOutletName'),
+        GridColumn(label: Center(child: Text('主办方')), columnName: 'organizerName'),
+        GridColumn(label: Center(child: Text('订单创建时间')), columnName: 'createTime'),
+        GridColumn(label: Center(child: Text('支付完成时间')), columnName: 'paymentTime'),
         GridColumn(label: Center(child: Text('出票控制')), columnName: 'drawOutControl'),
       ]
     );
@@ -132,40 +134,40 @@ class _OrderTableState extends State<OrderTable> {
   }
 }
 class OrderDataSource extends DataGridSource {
-  OrderDataSource (List<Order> orders) {
-    updateOrders(orders);
+  OrderDataSource (List<Order> orders, [Map<String, String> paymentTypeDict = const {}]) {
+    updateOrders(orders, paymentTypeDict);
   }
 
   List<DataGridRow> _orders = [];
 
-  void updateOrders(List<Order> orders) {
+  void updateOrders(List<Order> orders, [Map<String, String> paymentTypeDict = const {}]) {
     _orders = orders
       .map<DataGridRow>((e) =>
         DataGridRow(
           cells: [
             DataGridCell(columnName: 'id', value: e.id),
+            DataGridCell(columnName: 'performanceId', value: e.performanceId),
+            DataGridCell(columnName: 'performanceName', value: e.performanceName),
+            DataGridCell(columnName: 'showName', value: e.showName),
             DataGridCell(columnName: 'channelType', value: e.channelType),
             DataGridCell(columnName: 'amount', value: e.amount.toStringAsFixed(2)),
-            DataGridCell(columnName: 'num', value: e.num.toString()),
-            DataGridCell(columnName: 'checkUpNum', value: e.checkUpNum.toString()),
-            DataGridCell(columnName: 'paymentType', value: e.paymentType),
+            DataGridCell(columnName: 'paymentType', value: paymentTypeDict[e.paymentType] ?? e.paymentType),
             DataGridCell(columnName: 'paymentStatus', value: e.paymentStatus),
+            DataGridCell(columnName: 'discountPolicyName', value: e.discountPolicyName),
             DataGridCell(columnName: 'refundStatus', value: e.refundStatus),
+            DataGridCell(columnName: 'num', value: e.num.toString()),
             DataGridCell(columnName: 'drawOutType', value: e.drawOutType),
             DataGridCell(columnName: 'drawOutStatus', value: e.drawOutStatus),
+            DataGridCell(columnName: 'checkUpNum', value: e.checkUpNum.toString()),
             DataGridCell(columnName: 'invoiceStatus', value: e.invoiceStatus),
             DataGridCell(columnName: 'customerName', value: e.customerName),
             DataGridCell(columnName: 'customerPhone', value: e.customerPhone),
             DataGridCell(columnName: 'mainOrderInfoId', value: e.mainOrderInfoId),
-            DataGridCell(columnName: 'organizerName', value: e.organizerName),
             DataGridCell(columnName: 'packageOrderActivityId', value: e.packageOrderActivityId),
             DataGridCell(columnName: 'ticketOutletName', value: e.ticketOutletName),
+            DataGridCell(columnName: 'organizerName', value: e.organizerName),
             DataGridCell(columnName: 'createTime', value: e.createTime),
             DataGridCell(columnName: 'paymentTime', value: e.paymentTime),
-            DataGridCell(columnName: 'performanceId', value: e.performanceId),
-            DataGridCell(columnName: 'performanceName', value: e.performanceName),
-            DataGridCell(columnName: 'showName', value: e.showName),
-            DataGridCell(columnName: 'discountPolicyName', value: e.discountPolicyName),
             DataGridCell(columnName: 'drawOutControl', value: e.drawOutControl ? '是' : '否'),
         ]))
       .toList();

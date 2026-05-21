@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:desktop_system/core/di/setup_dependencies.dart';
+import 'package:desktop_system/core/services/dict_mixin.dart';
+import 'package:desktop_system/core/services/dict_service.dart';
 import 'package:desktop_system/domain/usecases/order_usecase.dart';
 import '../bloc/order_bloc.dart';
 import '../bloc/order_event.dart';
@@ -26,10 +28,15 @@ class _OrderListView extends StatefulWidget {
   State<_OrderListView> createState() => _OrderListViewState();
 }
 
-class _OrderListViewState extends State<_OrderListView> {
+class _OrderListViewState extends State<_OrderListView> with DictMixin {
+  @override
+  DictService get dictService => getIt<DictService>();
   final _controllers = <String, TextEditingController>{};
   List<int>? _calendarValue;
   int _calendarKey = 0;
+
+  @override
+  List<String> get dictIds => ['ctms_payment_type'];
 
   TextEditingController _controller(String field) {
     return _controllers.putIfAbsent(field, () => TextEditingController());
@@ -147,6 +154,7 @@ class _OrderListViewState extends State<_OrderListView> {
               pageSize: state.searchParams.pageSize ?? 30,
               pageNum: state.searchParams.pageNum ?? 1,
               totalPages: state.totalPages,
+              paymentTypeDict: dicts['ctms_payment_type'] ?? {},
               onPageChanged: (pageNum, pageSize) {
                 context.read<OrderBloc>().add(OrderPageChanged(pageNum, pageSize));
               },

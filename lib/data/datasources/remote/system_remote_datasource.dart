@@ -10,7 +10,7 @@ class SystemRemoteDataSource {
   SystemRemoteDataSource(this._dioClient);
 
   /// Fetch dictionary data by type ID.
-  Future<List<DictData>> getDict(int dictId) async {
+  Future<List<DictData>> getDict(String dictId) async {
     final response = await _dioClient.get('$_systemBasePath/$dictId');
     final List<dynamic> data = response.data['data'] as List<dynamic>? ?? [];
     return data

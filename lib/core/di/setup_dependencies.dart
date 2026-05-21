@@ -10,6 +10,7 @@ import 'package:desktop_system/data/datasources/remote/svg_remote_datasource.dar
 import 'package:desktop_system/data/datasources/remote/auth_remote_datasource.dart';
 import 'package:desktop_system/data/datasources/remote/system_remote_datasource.dart';
 import 'package:desktop_system/data/datasources/remote/order_remote_datasource.dart';
+import 'package:desktop_system/core/services/dict_service.dart';
 import 'package:desktop_system/data/datasources/local/ticket_local_datasource.dart';
 import 'package:desktop_system/data/datasources/local/svg_local_datasource.dart';
 import 'package:desktop_system/data/datasources/local/storage_datasource.dart';
@@ -19,6 +20,8 @@ import 'package:desktop_system/domain/repositories/ticket_repository.dart';
 import 'package:desktop_system/domain/repositories/svg_repository.dart';
 import 'package:desktop_system/domain/repositories/auth_repository.dart';
 import 'package:desktop_system/domain/repositories/order_repository.dart';
+import 'package:desktop_system/domain/repositories/dict_repository.dart';
+import 'package:desktop_system/data/repositories/dict_repository_impl.dart';
 import 'package:desktop_system/data/repositories/ticket_repository_impl.dart';
 import 'package:desktop_system/data/repositories/svg_repository_impl.dart';
 import 'package:desktop_system/data/repositories/auth_repository_impl.dart';
@@ -64,6 +67,12 @@ Future<void> setupDependencies() async {
   );
   getIt.registerLazySingleton<SystemRemoteDataSource>(
     () => SystemRemoteDataSource(getIt<DioClient>()),
+  );
+  getIt.registerLazySingleton<DictRepository>(
+    () => DictRepositoryImpl(remoteDataSource: getIt<SystemRemoteDataSource>()),
+  );
+  getIt.registerLazySingleton<DictService>(
+    () => DictService(getIt<DictRepository>()),
   );
   getIt.registerLazySingleton<OrderRemoteDataSource>(
     () => OrderRemoteDataSource(getIt<DioClient>()),
