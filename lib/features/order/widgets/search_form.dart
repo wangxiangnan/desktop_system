@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class SearchForm extends StatelessWidget {
   final VoidCallback onSearch;
@@ -149,6 +150,10 @@ class SearchForm extends StatelessWidget {
                 child: const Text('重置'),
               ),
             ),
+            SizedBox(
+              width: 200,
+              child: SfDateRangePicker(),
+            )
           ],
         ),
       ),

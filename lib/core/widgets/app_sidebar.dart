@@ -142,16 +142,28 @@ class _AppSidebarState extends State<AppSidebar> {
         color: isSelected ? Colors.white.withValues(alpha: 0.2) : null,
         borderRadius: BorderRadius.circular(8),
       ),
-      child: ListTile(
-        leading: Icon(icon, color: Colors.white),
-        title: widget.isExpanded
-            ? Text(title, style: const TextStyle(color: Colors.white))
-            : null,
-        selected: isSelected,
-        onTap: () {
-          if (widget.currentPath != path) {
-            context.go(path);
-          }
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final showExpandedTile = constraints.maxWidth > 100;
+          return showExpandedTile
+              ? ListTile(
+                  leading: Icon(icon, color: Colors.white),
+                  title: Text(title, style: const TextStyle(color: Colors.white)),
+                  selected: isSelected,
+                  onTap: () {
+                    if (widget.currentPath != path) context.go(path);
+                  },
+                )
+              : InkWell(
+                  borderRadius: BorderRadius.circular(8),
+                  onTap: () {
+                    if (widget.currentPath != path) context.go(path);
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    child: Icon(icon, color: Colors.white),
+                  ),
+                );
         },
       ),
     );
