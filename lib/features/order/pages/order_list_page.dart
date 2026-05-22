@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:desktop_system/core/di/setup_dependencies.dart';
-import 'package:desktop_system/core/services/dict_mixin.dart';
-import 'package:desktop_system/core/services/dict_service.dart';
+import 'package:desktop_system/core/widgets/dict_builder.dart';
 import 'package:desktop_system/domain/usecases/order_usecase.dart';
 import '../bloc/order_bloc.dart';
 import '../bloc/order_event.dart';
@@ -28,15 +27,10 @@ class _OrderListView extends StatefulWidget {
   State<_OrderListView> createState() => _OrderListViewState();
 }
 
-class _OrderListViewState extends State<_OrderListView> with DictMixin {
-  @override
-  DictService get dictService => getIt<DictService>();
+class _OrderListViewState extends State<_OrderListView> {
   final _controllers = <String, TextEditingController>{};
   List<int>? _calendarValue;
   int _calendarKey = 0;
-
-  @override
-  List<String> get dictIds => ['ctms_payment_type'];
 
   TextEditingController _controller(String field) {
     return _controllers.putIfAbsent(field, () => TextEditingController());
@@ -120,30 +114,34 @@ class _OrderListViewState extends State<_OrderListView> with DictMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('订单列表')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            SearchForm(
-              key: ValueKey(_calendarKey),
-              onSearch: _onSearch,
-              onReset: _onReset,
-              onUpdateParams: _onUpdateParams,
-              controller: _controller,
-              calendarValue: _calendarValue,
-              onCalendarConfirm: _onCalendarConfirm,
+    return DictBuilder(
+      dictIds: ['ctms_channel_type', 'ctms_payment_type', 'payment_status', 'ctms_refund_status', 'ctms_print_type', 'ctms_draw_out_status', 'invoice_status'],
+      builder: (context, dicts, state) {
+        return Scaffold(
+          // appBar: AppBar(title: const Text('订单列表')),
+          body: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Column(
+              children: [
+                SearchForm(
+                  key: ValueKey(_calendarKey),
+                  onSearch: _onSearch,
+                  onReset: _onReset,
+                  onUpdateParams: _onUpdateParams,
+                  controller: _controller,
+                  calendarValue: _calendarValue,
+                  onCalendarConfirm: _onCalendarConfirm,
+                ),
+                Expanded(child: _buildTable(dicts)),
+              ],
             ),
-            const SizedBox(height: 16),
-            Expanded(child: _buildTable()),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 
-  Widget _buildTable() {
+  Widget _buildTable(Map<String, Map<String, String>> dicts) {
     return BlocBuilder<OrderBloc, OrderState>(
       builder: (context, state) {
         return Stack(
@@ -154,7 +152,7 @@ class _OrderListViewState extends State<_OrderListView> with DictMixin {
               pageSize: state.searchParams.pageSize ?? 30,
               pageNum: state.searchParams.pageNum ?? 1,
               totalPages: state.totalPages,
-              paymentTypeDict: dicts['ctms_payment_type'] ?? {},
+              dicts: dicts,
               onPageChanged: (pageNum, pageSize) {
                 context.read<OrderBloc>().add(OrderPageChanged(pageNum, pageSize));
               },

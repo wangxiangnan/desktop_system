@@ -49,7 +49,7 @@ class OrderModel {
     return OrderModel(
       id: json['id'] as String? ?? '',
       channelType: json['channelType'] as String? ?? '',
-      amount: (json['amount'] as double?)?.toDouble() ?? 0.0,
+      amount: json['amount'] as double? ?? 0,
       num: (json['num'] as int?)?.toInt() ?? 0,
       checkUpNum: (json['checkUpNum'] as int?) ?? 0,
       paymentType: json['paymentType'] as String? ?? '',
@@ -75,7 +75,7 @@ class OrderModel {
     return Order(
       id: id,
       channelType: channelType,
-      amount: amount,
+      amount: amount.toInt(), // Convert yuan to cents
       num: num,
       checkUpNum: checkUpNum,
       paymentType: paymentType,

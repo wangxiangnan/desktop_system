@@ -5,6 +5,7 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import 'package:desktop_system/domain/entities/order_entity.dart';
 import 'package:desktop_system/core/constants/app_colors.dart';
+import 'package:desktop_system/core/utils/money_calculator.dart';
 
 class OrderTable extends StatefulWidget {
   final List<Order> orders;
@@ -13,7 +14,7 @@ class OrderTable extends StatefulWidget {
   final int total;
   final double totalPages;
   final void Function(int pageNum, int pageSize) onPageChanged;
-  final Map<String, String> paymentTypeDict;
+  final Map<String, Map<String, String>> dicts;
 
   const OrderTable({
     super.key,
@@ -23,7 +24,7 @@ class OrderTable extends StatefulWidget {
     required this.total,
     required this.totalPages,
     required this.onPageChanged,
-    this.paymentTypeDict = const {},
+    this.dicts = const {},
   });
 
   @override
@@ -38,13 +39,13 @@ class _OrderTableState extends State<OrderTable> {
   @override
   void initState() {
     super.initState();
-    _orderDataSource = OrderDataSource(widget.orders, widget.paymentTypeDict);
+    _orderDataSource = OrderDataSource(widget.orders, widget.dicts);
   }
 
   @override
   void didUpdateWidget(OrderTable oldWidget) {
     super.didUpdateWidget(oldWidget);
-    _orderDataSource.updateOrders(widget.orders, widget.paymentTypeDict);
+    _orderDataSource.updateOrders(widget.orders, widget.dicts);
   }
 
   Widget _buildDataGrid() {
@@ -52,7 +53,7 @@ class _OrderTableState extends State<OrderTable> {
       source: _orderDataSource,
       columnWidthMode: ColumnWidthMode.auto,
       defaultColumnWidth: 120,
-      headerRowHeight: 40,
+      headerRowHeight: 50,
       rowsPerPage: widget.pageSize,
       columns: [
         GridColumn(label: Center(child: Text('订单ID')), columnName: 'id'),
@@ -133,14 +134,15 @@ class _OrderTableState extends State<OrderTable> {
     return _buildLayoutBuilder();
   }
 }
+
 class OrderDataSource extends DataGridSource {
-  OrderDataSource (List<Order> orders, [Map<String, String> paymentTypeDict = const {}]) {
-    updateOrders(orders, paymentTypeDict);
+  OrderDataSource (List<Order> orders, [Map<String, Map<String, String>> dicts = const {}]) {
+    updateOrders(orders, dicts);
   }
 
   List<DataGridRow> _orders = [];
 
-  void updateOrders(List<Order> orders, [Map<String, String> paymentTypeDict = const {}]) {
+  void updateOrders(List<Order> orders, [Map<String, Map<String, String>> dicts = const {}]) {
     _orders = orders
       .map<DataGridRow>((e) =>
         DataGridRow(
@@ -149,17 +151,17 @@ class OrderDataSource extends DataGridSource {
             DataGridCell(columnName: 'performanceId', value: e.performanceId),
             DataGridCell(columnName: 'performanceName', value: e.performanceName),
             DataGridCell(columnName: 'showName', value: e.showName),
-            DataGridCell(columnName: 'channelType', value: e.channelType),
-            DataGridCell(columnName: 'amount', value: e.amount.toStringAsFixed(2)),
-            DataGridCell(columnName: 'paymentType', value: paymentTypeDict[e.paymentType] ?? e.paymentType),
-            DataGridCell(columnName: 'paymentStatus', value: e.paymentStatus),
+            DataGridCell(columnName: 'channelType', value: _label(dicts, 'ctms_channel_type', e.channelType)),
+            DataGridCell(columnName: 'amount', value: MoneyCalculator.centsToYuan(e.amount)),
+            DataGridCell(columnName: 'paymentType', value: _label(dicts, 'ctms_payment_type', e.paymentType)),
+            DataGridCell(columnName: 'paymentStatus', value: _label(dicts, 'payment_status', e.paymentStatus)),
             DataGridCell(columnName: 'discountPolicyName', value: e.discountPolicyName),
-            DataGridCell(columnName: 'refundStatus', value: e.refundStatus),
+            DataGridCell(columnName: 'refundStatus', value: _label(dicts, 'ctms_refund_status', e.refundStatus)),
             DataGridCell(columnName: 'num', value: e.num.toString()),
-            DataGridCell(columnName: 'drawOutType', value: e.drawOutType),
-            DataGridCell(columnName: 'drawOutStatus', value: e.drawOutStatus),
+            DataGridCell(columnName: 'drawOutType', value: _label(dicts, 'ctms_print_type', e.drawOutType)),
+            DataGridCell(columnName: 'drawOutStatus', value: _label(dicts, 'ctms_draw_out_status', e.drawOutStatus)),
             DataGridCell(columnName: 'checkUpNum', value: e.checkUpNum.toString()),
-            DataGridCell(columnName: 'invoiceStatus', value: e.invoiceStatus),
+            DataGridCell(columnName: 'invoiceStatus', value: _label(dicts, 'invoice_status', e.invoiceStatus)),
             DataGridCell(columnName: 'customerName', value: e.customerName),
             DataGridCell(columnName: 'customerPhone', value: e.customerPhone),
             DataGridCell(columnName: 'mainOrderInfoId', value: e.mainOrderInfoId),
@@ -171,7 +173,10 @@ class OrderDataSource extends DataGridSource {
             DataGridCell(columnName: 'drawOutControl', value: e.drawOutControl ? '是' : '否'),
         ]))
       .toList();
-    // notifyListeners();
+  }
+
+  String _label(Map<String, Map<String, String>> dicts, String dictId, String value) {
+    return dicts[dictId]?[value] ?? value;
   }
 
   @override

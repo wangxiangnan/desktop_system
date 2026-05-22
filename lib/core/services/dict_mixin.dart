@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:desktop_system/core/services/dict_service.dart';
 
+@Deprecated('Use DictBuilder instead. Will be removed in a future version.')
 mixin DictMixin<T extends StatefulWidget> on State<T> {
   DictService get dictService;
 

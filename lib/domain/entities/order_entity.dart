@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 class Order extends Equatable {
   final String id;
   final String channelType;
-  final double amount;
+  final int amount;
   final int num;
   final int checkUpNum;
   final String paymentType;

@@ -4,7 +4,8 @@ import 'package:desktop_system/core/di/setup_dependencies.dart';
 import 'package:desktop_system/core/constants/app_colors.dart';
 
 class DictDropdown extends StatefulWidget {
-  final String dictId;
+  final String? dictId;
+  final Map<String, String>? dict;
   final String? value;
   final ValueChanged<String?>? onChanged;
   final String? labelText;
@@ -17,7 +18,8 @@ class DictDropdown extends StatefulWidget {
 
   const DictDropdown({
     super.key,
-    required this.dictId,
+    this.dictId,
+    this.dict,
     this.value,
     this.onChanged,
     this.labelText,
@@ -38,6 +40,8 @@ class _DictDropdownState extends State<DictDropdown> {
   bool _loading = true;
   String? _error;
 
+  DictService get _service => widget.dictService ?? getIt<DictService>();
+
   @override
   void initState() {
     super.initState();
@@ -47,19 +51,39 @@ class _DictDropdownState extends State<DictDropdown> {
   @override
   void didUpdateWidget(DictDropdown oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.dictId != widget.dictId) {
+    if (oldWidget.dict != widget.dict || oldWidget.dictId != widget.dictId) {
       _loadDict();
     }
   }
 
   Future<void> _loadDict() async {
+    if (widget.dict != null) {
+      if (!mounted) return;
+      setState(() {
+        _options = widget.dict!;
+        _loading = false;
+        _error = null;
+      });
+      return;
+    }
+
+    if (widget.dictId == null) {
+      if (!mounted) return;
+      setState(() {
+        _options = {};
+        _loading = false;
+        _error = null;
+      });
+      return;
+    }
+
     setState(() {
       _loading = true;
       _error = null;
     });
+
     try {
-      final service = widget.dictService ?? getIt<DictService>();
-      final dict = await service.getDict(widget.dictId);
+      final dict = await _service.getDict(widget.dictId!);
       if (!mounted) return;
       setState(() {
         _options = dict;

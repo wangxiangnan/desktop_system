@@ -40,7 +40,7 @@ class SearchForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.symmetric(vertical: 16.0),
       child: Form(
         key: _formKey,
         child: Wrap(
@@ -58,6 +58,7 @@ class SearchForm extends StatelessWidget {
                   border: OutlineInputBorder(),
                   isDense: true,
                 ),
+                onChanged: (_) => onUpdateParams(),
               ),
             ),
             SizedBox(
@@ -69,6 +70,7 @@ class SearchForm extends StatelessWidget {
                   border: OutlineInputBorder(),
                   isDense: true,
                 ),
+                onChanged: (_) => onUpdateParams(),
               ),
             ),
             SizedBox(
@@ -80,6 +82,7 @@ class SearchForm extends StatelessWidget {
                   border: OutlineInputBorder(),
                   isDense: true,
                 ),
+                onChanged: (_) => onUpdateParams(),
               ),
             ),
             SizedBox(
@@ -91,6 +94,7 @@ class SearchForm extends StatelessWidget {
                   border: OutlineInputBorder(),
                   isDense: true,
                 ),
+                onChanged: (_) => onUpdateParams(),
               ),
             ),
             SizedBox(
@@ -102,6 +106,7 @@ class SearchForm extends StatelessWidget {
                   border: OutlineInputBorder(),
                   isDense: true,
                 ),
+                onChanged: (_) => onUpdateParams(),
               ),
             ),
             SizedBox(
@@ -114,6 +119,7 @@ class SearchForm extends StatelessWidget {
                   border: OutlineInputBorder(),
                   isDense: true,
                 ),
+                onChanged: (_) => onUpdateParams(),
               ),
             ),
             SizedBox(
@@ -126,6 +132,7 @@ class SearchForm extends StatelessWidget {
                   border: OutlineInputBorder(),
                   isDense: true,
                 ),
+                onChanged: (_) => onUpdateParams(),
               ),
             ),
             SizedBox(

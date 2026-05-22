@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../constants/app_colors.dart';
+import '../constants/app_strings.dart';
 
 class AppSidebar extends StatefulWidget {
   final String currentPath;
@@ -34,13 +35,11 @@ class _AppSidebarState extends State<AppSidebar> {
             height: 80,
             padding: EdgeInsets.all(isExpanded ? 16 : 12),
             child: isExpanded
-                ? const Row(
+                ? Row(
                     children: [
-                      Icon(Icons.directions_bus, color: Colors.white, size: 32),
-                      SizedBox(width: 12),
                       Expanded(
                         child: Text(
-                          'Desktop System',
+                          AppStrings.appName,
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 18,
@@ -62,10 +61,10 @@ class _AppSidebarState extends State<AppSidebar> {
             child: ListView(
               padding: const EdgeInsets.symmetric(vertical: 8),
               children: [
-                _buildMenuItem(context, 'Home', Icons.home, '/home'),
+                _buildMenuItem(context, '首页', Icons.home, '/home'),
                 _buildMenuItem(
                   context,
-                  'Orders',
+                  '未出票列表',
                   Icons.shopping_cart,
                   '/orders',
                 ),
