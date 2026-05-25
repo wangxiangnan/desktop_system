@@ -70,13 +70,6 @@ class _AppSidebarState extends State<AppSidebar> {
                 ),
                 _buildMenuItem(
                   context,
-                  'Tickets',
-                  Icons.confirmation_number,
-                  '/tickets',
-                ),
-                _buildMenuItem(context, 'SVG Editor', Icons.image, '/svg'),
-                _buildMenuItem(
-                  context,
                   'Settings',
                   Icons.settings,
                   '/settings',

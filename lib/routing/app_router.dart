@@ -6,11 +6,7 @@ import 'package:desktop_system/features/auth/bloc/auth_bloc.dart';
 import 'package:desktop_system/features/auth/bloc/auth_state.dart';
 import 'package:desktop_system/features/auth/pages/login_page.dart';
 import 'package:desktop_system/features/home/pages/home_page.dart';
-import 'package:desktop_system/features/ticket/pages/ticket_list_page.dart';
 import 'package:desktop_system/features/order/pages/order_list_page.dart';
-import 'package:desktop_system/features/ticket/pages/ticket_detail_page.dart';
-import 'package:desktop_system/features/svg/pages/svg_list_page.dart';
-import 'package:desktop_system/features/svg/pages/svg_editor_page.dart';
 import 'package:desktop_system/features/settings/pages/settings_page.dart';
 import 'package:desktop_system/core/widgets/app_shell.dart';
 
@@ -61,34 +57,12 @@ class AppRouter {
         routes: [
           GoRoute(path: Routes.home, builder: (context, state) => const HomePage()),
           GoRoute(
-            path: Routes.tickets,
-            builder: (context, state) => const TicketListPage(),
-          ),
-          GoRoute(
             path: Routes.orders,
             builder: (context, state) => const OrderListPage(),
           ),
           GoRoute(
-            path: '/tickets/:id',
-            builder: (context, state) {
-              final id = state.pathParameters['id']!;
-              return TicketDetailPage(ticketId: id);
-            },
-          ),
-          GoRoute(
             path: Routes.settings,
             builder: (context, state) => const SettingsPage(),
-          ),
-          GoRoute(
-            path: Routes.svg,
-            builder: (context, state) => const SvgListPage(),
-          ),
-          GoRoute(
-            path: '/svg/:id',
-            builder: (context, state) {
-              final id = state.pathParameters['id']!;
-              return SvgEditorPage(canvasId: id);
-            },
           ),
         ],
       ),

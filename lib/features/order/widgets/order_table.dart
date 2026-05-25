@@ -114,15 +114,30 @@ class _OrderTableState extends State<OrderTable> {
           children: [
             SizedBox(
               width: constraints.maxWidth,
-              height: widget.total > 0 ? constraints.maxHeight - _dataPagerHeight : constraints.maxHeight,
+              height: constraints.maxHeight - _dataPagerHeight,
               child: _buildDataGrid(),
             ),
-            if (widget.total > 0)
-              SizedBox(
-                width: constraints.maxWidth,
-                height: _dataPagerHeight,
-                child: _buildDataPager(),
-              )
+            Row(
+              children: [
+                SizedBox(
+                  width: 80,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      print('打印');
+                    },
+                    child: const Text('打印'),
+                  ),
+                ),
+                
+                SizedBox(width: 16),
+                if (widget.total > 0)
+                SizedBox(
+                  width: constraints.maxWidth - 100,
+                  height: _dataPagerHeight,
+                  child: _buildDataPager(),
+                )
+              ]
+            ),
           ],
         );
       },

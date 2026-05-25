@@ -145,15 +145,12 @@ class SearchForm extends StatelessWidget {
             ),
             SizedBox(
               width: 160,
+              height: 40,
               child: OutlinedButton(
                 onPressed: onReset,
                 child: const Text('重置'),
               ),
             ),
-            SizedBox(
-              width: 200,
-              child: SfDateRangePicker(),
-            )
           ],
         ),
       ),
