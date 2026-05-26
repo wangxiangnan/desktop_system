@@ -56,10 +56,17 @@ class HomePage extends StatelessWidget {
                   children: [
                     _buildDashboardCard(
                       context,
-                      'Tickets',
-                      'View and manage tickets',
+                      '订单管理',
+                      '查看和管理订单',
                       Icons.confirmation_number,
-                      () => context.push('/tickets'),
+                      () => context.push('/orders'),
+                    ),
+                    _buildDashboardCard(
+                      context,
+                      '打印设置',
+                      '配置打印页面和边距',
+                      Icons.print,
+                      () => context.push('/print-settings'),
                     ),
                     _buildDashboardCard(
                       context,

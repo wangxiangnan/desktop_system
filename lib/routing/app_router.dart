@@ -8,6 +8,9 @@ import 'package:desktop_system/features/auth/pages/login_page.dart';
 import 'package:desktop_system/features/home/pages/home_page.dart';
 import 'package:desktop_system/features/order/pages/order_list_page.dart';
 import 'package:desktop_system/features/settings/pages/settings_page.dart';
+import 'package:desktop_system/features/print_preview/pages/print_preview_page.dart';
+import 'package:desktop_system/features/settings/pages/print_settings_page.dart';
+import 'package:desktop_system/core/models/print_content.dart';
 import 'package:desktop_system/core/widgets/app_shell.dart';
 
 class AppRouter {
@@ -63,6 +66,17 @@ class AppRouter {
           GoRoute(
             path: Routes.settings,
             builder: (context, state) => const SettingsPage(),
+          ),
+          GoRoute(
+            path: Routes.printSettings,
+            builder: (context, state) => const PrintSettingsPage(),
+          ),
+          GoRoute(
+            path: Routes.printPreview,
+            builder: (context, state) {
+              final content = state.extra! as PrintContent;
+              return PrintPreviewPage(content: content);
+            },
           ),
         ],
       ),

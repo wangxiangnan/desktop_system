@@ -10,7 +10,9 @@
       "Bash(dart pub *)",
       "Read(//c/Users/39364/**)",
       "Read(//c/Users/39364/AppData/Local/Pub/**)",
-      "Bash(dart run *)"
+      "Bash(dart run *)",
+      "Bash(git show *)",
+      "Bash(flutter analyze *)"
     ]
   }
 }

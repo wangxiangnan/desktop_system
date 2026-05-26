@@ -9,6 +9,8 @@ import 'package:desktop_system/data/datasources/remote/auth_remote_datasource.da
 import 'package:desktop_system/data/datasources/remote/system_remote_datasource.dart';
 import 'package:desktop_system/data/datasources/remote/order_remote_datasource.dart';
 import 'package:desktop_system/core/services/dict_service.dart';
+import 'package:desktop_system/core/services/print_service.dart';
+import 'package:desktop_system/core/services/print_settings_service.dart';
 import 'package:desktop_system/data/datasources/local/storage_datasource.dart';
 
 // Repositories (using domain interfaces)
@@ -57,6 +59,10 @@ Future<void> setupDependencies() async {
   );
   getIt.registerLazySingleton<DictService>(
     () => DictService(getIt<DictRepository>()),
+  );
+  getIt.registerLazySingleton<PrintService>(() => PrintService());
+  getIt.registerLazySingleton<PrintSettingsService>(
+    () => PrintSettingsService(getIt<SharedPreferences>()),
   );
   getIt.registerLazySingleton<OrderRemoteDataSource>(
     () => OrderRemoteDataSource(getIt<DioClient>()),

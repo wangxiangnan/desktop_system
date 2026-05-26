@@ -74,6 +74,12 @@ class _AppSidebarState extends State<AppSidebar> {
                   Icons.settings,
                   '/settings',
                 ),
+                _buildMenuItem(
+                  context,
+                  '打印设置',
+                  Icons.print,
+                  '/print-settings',
+                ),
               ],
             ),
           ),
