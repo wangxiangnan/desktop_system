@@ -63,6 +63,25 @@ The app follows a layered architecture:
 3. **Data Layer**: Repositories and services
 4. **Core**: Configuration, routing, and utilities
 
+### Feature Directory Structure                                                                                                                                                                   
+                                                                                                                                                                                                  
+每个 feature 目录遵循以下分层约定：                                                                                                                                                               
+                                                                                                                                                                                                  
+```                                                                                                                                                                                               
+lib/features/<feature>/                                                                                                                                                                           
+  bloc/       # 状态管理 (Bloc, Event, State)                                                                                                                                                     
+  pages/      # 完整页面，通过路由直接访问                                                                                                                                                        
+  widgets/    # 可复用的 UI 组件，仅供同 feature 内页面使用                                                                                                                                       
+```                                                                                                                                                                                               
+                                                                                                                                                                                                  
+**硬性约束：**                                                                                                                                                                                    
+                                                                                                                                                                                                  
+- `widgets/` 目录只能包含 widget 组件文件，`widgets/widgets.dart` barrel 只能导出同目录下的 widget 文件。**禁止**从 `widgets/` 导出 `pages/` 或跨 feature 导出。                                  
+- `pages/` 目录只能包含完整页面。页面之间不应相互导入，页面通过路由（`app_router.dart`）访问。                                                                                                    
+- 页面导入同 feature 的 widget 使用相对路径：`import '../widgets/widgets.dart';`                                                                                                                  
+- 外部（路由、其他 feature）导入页面使用绝对包路径：`import 'package:desktop_system/features/<feature>/pages/<page>.dart';`                                                                       
+- 如果一个 feature 没有可复用的 widget 组件，不创建 `widgets/` 目录（参考 `splash/`）。                                                                                                           
+  
 When modifying the app:
 - Add new features under `lib/features/<feature>`
 - Keep business logic in Blocs

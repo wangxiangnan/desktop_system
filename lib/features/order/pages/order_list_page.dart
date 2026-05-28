@@ -1,8 +1,17 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter/material.dart';                                                                                                                                                                  
+import 'package:flutter_bloc/flutter_bloc.dart';  
+import 'package:go_router/go_router.dart';                                                                                                                                                               
+import 'package:pdf/widgets.dart' as pw;                                                                                                                                                          
+                                                                                                                                                                               
 import 'package:desktop_system/core/di/setup_dependencies.dart';
+import 'package:desktop_system/core/models/print_content.dart';                                                                                                                                   
+import 'package:desktop_system/core/services/print_service.dart';                                                                                                                                 
+import 'package:desktop_system/core/services/print_settings_service.dart';                                                                                                                        
+import 'package:desktop_system/core/utils/money_calculator.dart';                                                                                                                                 
 import 'package:desktop_system/core/widgets/dict_builder.dart';
 import 'package:desktop_system/domain/usecases/order_usecase.dart';
+import 'package:desktop_system/routing/routes.dart';                                                                                                                                              
+import '../bloc/order_bloc.dart';
 import '../bloc/order_bloc.dart';
 import '../bloc/order_event.dart';
 import '../bloc/order_state.dart';
@@ -59,6 +68,46 @@ class _OrderListViewState extends State<_OrderListView> {
       createBeginTime: createBeginTime.isNotEmpty ? createBeginTime : null,
       createEndTime: createEndTime.isNotEmpty ? createEndTime : null,
     );
+  }
+
+  void _onPrint() {                                                                                                                                                                                     
+    final orders = context.read<OrderBloc>().state.orders;                                                                                                                                       
+    if (orders.isEmpty) return;                                                                                                                                                                         
+    final content = PrintContent.pdf(                                                                                                                                                            
+      title: '订单列表',                                                                                                                                                                         
+      builder: () async {                                                                                                                                                                        
+        final settings = getIt<PrintSettingsService>().loadSettings();                                                                                                                           
+        final font = await PrintService.loadCjkFont();                                                                                                                                           
+        final headerStyle = pw.TextStyle(font: font, fontSize: 18);                                                                                                                              
+        final cellStyle = pw.TextStyle(font: font, fontSize: 10);                                                                                                                                
+        final doc = pw.Document();                                                                                                                                                               
+        doc.addPage(                                                                                                                                                                             
+          pw.MultiPage(                                                                                                                                                                          
+            pageFormat: settings.pageFormat,                                                                                                                                                     
+            build: (ctx) => [                                                                                                                                                                    
+              pw.Header(text: '订单列表', textStyle: headerStyle),                                                                                                                               
+              pw.TableHelper.fromTextArray(                                                                                                                                                      
+                headerStyle: pw.TextStyle(font: font, fontSize: 11),                                                                                                                             
+                cellStyle: cellStyle,                                                                                                                                                            
+                headers: ['订单ID', '项目名称', '场次名称', '金额', '数量', '购票人', '手机号', '创建时间'],                                                                                     
+                data: orders.map((o) => [                                                                                                                                                        
+                  o.id,                                                                                                                                                                          
+                  o.performanceName,                                                                                                                                                             
+                  o.showName,                                                                                                                                                                    
+                  MoneyCalculator.centsToYuan(o.amount),                                                                                                                                         
+                  o.num.toString(),                                                                                                                                                              
+                  o.customerName,                                                                                                                                                                
+                  o.customerPhone,                                                                                                                                                               
+                  o.createTime,                                                                                                                                                                  
+                ]).toList(),                                                                                                                                                                     
+              ),                                                                                                                                                                                 
+            ],                                                                                                                                                                                   
+          ),                                                                                                                                                                                     
+        );                                                                                                                                                                                       
+        return doc.save();                                                                                                                                                                       
+      },                                                                                                                                                                                         
+    );                                                                                                                                                                                           
+    context.push(Routes.printPreview, extra: content);                                                                                                                                           
   }
 
   void _onUpdateParams() {
@@ -153,6 +202,7 @@ class _OrderListViewState extends State<_OrderListView> {
               pageNum: state.searchParams.pageNum ?? 1,
               totalPages: state.totalPages,
               dicts: dicts,
+              onPrint: _onPrint, 
               onPageChanged: (pageNum, pageSize) {
                 context.read<OrderBloc>().add(OrderPageChanged(pageNum, pageSize));
               },

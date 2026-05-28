@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:pdf/widgets.dart' as pw;
 
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
@@ -8,11 +6,6 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:desktop_system/domain/entities/order_entity.dart';
 import 'package:desktop_system/core/constants/app_colors.dart';
 import 'package:desktop_system/core/utils/money_calculator.dart';
-import 'package:desktop_system/core/di/setup_dependencies.dart';
-import 'package:desktop_system/core/models/print_content.dart';
-import 'package:desktop_system/core/services/print_service.dart';
-import 'package:desktop_system/core/services/print_settings_service.dart';
-import 'package:desktop_system/routing/routes.dart';
 
 class OrderTable extends StatefulWidget {
   final List<Order> orders;
@@ -21,6 +14,7 @@ class OrderTable extends StatefulWidget {
   final int total;
   final double totalPages;
   final void Function(int pageNum, int pageSize) onPageChanged;
+  final VoidCallback? onPrint; 
   final Map<String, Map<String, String>> dicts;
 
   const OrderTable({
@@ -31,6 +25,7 @@ class OrderTable extends StatefulWidget {
     required this.total,
     required this.totalPages,
     required this.onPageChanged,
+    this.onPrint,
     this.dicts = const {},
   });
 
@@ -129,45 +124,7 @@ class _OrderTableState extends State<OrderTable> {
                 SizedBox(
                   width: 80,
                   child: ElevatedButton(
-                    onPressed: () {
-                      if (widget.orders.isEmpty) return;
-                      final content = PrintContent.pdf(
-                        title: '订单列表',
-                        builder: () async {
-                          final settings =
-                              getIt<PrintSettingsService>().loadSettings();
-                          final font = await PrintService.loadCjkFont();
-                          final headerStyle = pw.TextStyle(font: font, fontSize: 18);
-                          final cellStyle = pw.TextStyle(font: font, fontSize: 10);
-                          final doc = pw.Document();
-                          doc.addPage(
-                            pw.MultiPage(
-                              pageFormat: settings.pageFormat,
-                              build: (ctx) => [
-                                pw.Header(text: '订单列表', textStyle: headerStyle),
-                                pw.TableHelper.fromTextArray(
-                                  headerStyle: pw.TextStyle(font: font, fontSize: 11),
-                                  cellStyle: cellStyle,
-                                  headers: ['订单ID', '项目名称', '场次名称', '金额', '数量', '购票人', '手机号', '创建时间'],
-                                  data: widget.orders.map((o) => [
-                                    o.id,
-                                    o.performanceName,
-                                    o.showName,
-                                    MoneyCalculator.centsToYuan(o.amount),
-                                    o.num.toString(),
-                                    o.customerName,
-                                    o.customerPhone,
-                                    o.createTime,
-                                  ]).toList(),
-                                ),
-                              ],
-                            ),
-                          );
-                          return doc.save();
-                        },
-                      );
-                      context.push(Routes.printPreview, extra: content);
-                    },
+                    onPressed: widget.onPrint,
                     child: const Text('打印'),
                   ),
                 ),
