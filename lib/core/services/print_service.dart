@@ -8,6 +8,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
+import 'package:flutter/services.dart' show rootBundle;
+
 
 import 'package:desktop_system/core/di/setup_dependencies.dart';
 import 'package:desktop_system/core/models/print_content.dart';
@@ -22,34 +24,36 @@ class PrintService {
   static Future<pw.Font> loadCjkFont() async {
     if (_cachedCjkFont != null) return _cachedCjkFont!;
 
-    final paths = switch (defaultTargetPlatform) {
-      TargetPlatform.windows => [
-        r'C:\Windows\Fonts\NotoSansSC-VF.ttf',
-        r'C:\Windows\Fonts\simhei.ttf',
-        r'C:\Windows\Fonts\msyh.ttc',
-      ],
-      TargetPlatform.macOS => [
-        '/System/Library/Fonts/PingFang.ttc',
-        '/System/Library/Fonts/STHeiti Light.ttc',
-        '/System/Library/Fonts/Hiragino Sans GB.ttc',
-      ],
-      TargetPlatform.linux => [
-        '/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc',
-        '/usr/share/fonts/truetype/noto/NotoSansCJK-Regular.ttc',
-        '/usr/share/fonts/noto-cjk/NotoSansCJK-Regular.ttc',
-      ],
-      _ => <String>[],
-    };
+    // final paths = switch (defaultTargetPlatform) {
+    //   TargetPlatform.windows => [
+    //     r'C:\Windows\Fonts\NotoSansSC-VF.ttf',
+    //     r'C:\Windows\Fonts\simhei.ttf',
+    //     r'C:\Windows\Fonts\msyh.ttc',
+    //   ],
+    //   TargetPlatform.macOS => [
+    //     '/System/Library/Fonts/PingFang.ttc',
+    //     '/System/Library/Fonts/STHeiti Light.ttc',
+    //     '/System/Library/Fonts/Hiragino Sans GB.ttc',
+    //   ],
+    //   TargetPlatform.linux => [
+    //     '/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc',
+    //     '/usr/share/fonts/truetype/noto/NotoSansCJK-Regular.ttc',
+    //     '/usr/share/fonts/noto-cjk/NotoSansCJK-Regular.ttc',
+    //   ],
+    //   _ => <String>[],
+    // };
 
-    for (final path in paths) {
-      final file = File(path);
-      if (file.existsSync()) {
-        final bytes = await file.readAsBytes();
-        _cachedCjkFont = pw.Font.ttf(bytes.buffer.asByteData());
-        return _cachedCjkFont!;
-      }
-    }
-    return pw.Font.courier();
+    // for (final path in paths) {
+    //   final file = File(path);
+    //   if (file.existsSync()) {
+    //     final bytes = await file.readAsBytes();
+    //     _cachedCjkFont = pw.Font.ttf(bytes.buffer.asByteData());
+    //     return _cachedCjkFont!;
+    //   }
+    // }
+    final font = await rootBundle.load('assets/fonts/SimHei.ttf');
+    _cachedCjkFont = pw.Font.ttf(font);
+    return _cachedCjkFont!;
   }
 
   Future<Uint8List> generatePdf(PrintContent content, {PrintSettings? settings}) async {
