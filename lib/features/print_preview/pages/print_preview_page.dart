@@ -43,9 +43,6 @@ class _PrintPreviewPageState extends State<PrintPreviewPage> {
     _loadSettings();
   }
 
-  bool get _useDirectPrint =>
-      _settings.directPrint && _settings.hasPrinterSelected;
-
   Future<void> _doDirectPrint(
     BuildContext actionContext,
     LayoutCallback build,
@@ -116,17 +113,7 @@ class _PrintPreviewPageState extends State<PrintPreviewPage> {
     }
   }
 
-  void _onSystemPrinted(BuildContext printContext) {
-    ScaffoldMessenger.of(printContext).showSnackBar(
-      const SnackBar(content: Text('打印成功'), duration: Duration(seconds: 2)),
-    );
-    Future.delayed(const Duration(milliseconds: 800), () {
-      if (printContext.mounted) printContext.pop();
-    });
-  }
-
   List<Widget> _buildActions() {
-    if (!_useDirectPrint) return [];
     return [
       PdfPreviewAction(
         icon: const Icon(Icons.print),
@@ -162,11 +149,10 @@ class _PrintPreviewPageState extends State<PrintPreviewPage> {
               initialPageFormat: _settings.pageFormat,
               canChangeOrientation: false,
               canChangePageFormat: false,
-              allowPrinting: !_useDirectPrint,
+              allowPrinting: false,
               allowSharing: true,
               pdfFileName: _settings.jobName,
               actions: _buildActions(),
-              onPrinted: _onSystemPrinted,
             ),
           ),
         ],
@@ -178,10 +164,10 @@ class _PrintPreviewPageState extends State<PrintPreviewPage> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        color: _useDirectPrint ? Colors.green.shade50 : Colors.grey.shade100,
+        color: _settings.hasPrinterSelected ? Colors.green.shade50 : Colors.grey.shade100,
         border: Border(
           bottom: BorderSide(
-            color: _useDirectPrint ? Colors.green.shade300 : Colors.grey,
+            color: _settings.hasPrinterSelected ? Colors.green.shade300 : Colors.grey,
             width: 0.5,
           ),
         ),
@@ -213,7 +199,7 @@ class _PrintPreviewPageState extends State<PrintPreviewPage> {
       _settings.orientationLabel,
       '边距${_settings.marginLeft.toStringAsFixed(0)}mm',
     ];
-    if (_useDirectPrint) {
+    if (_settings.hasPrinterSelected) {
       parts.add('直接打印至: ${_settings.selectedPrinterName}');
     }
     return parts.join(' · ');
