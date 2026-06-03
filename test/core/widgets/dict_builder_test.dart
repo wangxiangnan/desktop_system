@@ -34,11 +34,11 @@ void main() {
   });
 
   testWidgets('shows loading then loaded state', (tester) async {
-    mockRepo.addDict('test', [DictData(dictLabel: '标签', dictValue: 'v')]);
+    mockRepo.addDict('test', [const DictData(dictLabel: '标签', dictValue: 'v')]);
 
     await tester.pumpWidget(_buildTestApp(
       DictBuilder(
-        dictIds: ['test'],
+        dictIds: const ['test'],
         dictService: service,
         builder: (context, dicts, state) {
           if (state.isLoading) return const Text('loading...');
@@ -60,7 +60,7 @@ void main() {
 
     await tester.pumpWidget(_buildTestApp(
       DictBuilder(
-        dictIds: ['test'],
+        dictIds: const ['test'],
         dictService: service,
         builder: (context, dicts, state) {
           if (state.isLoading) return const Text('loading...');
@@ -76,12 +76,12 @@ void main() {
   });
 
   testWidgets('loads multiple dicts', (tester) async {
-    mockRepo.addDict('a', [DictData(dictLabel: 'A', dictValue: 'a')]);
-    mockRepo.addDict('b', [DictData(dictLabel: 'B', dictValue: 'b')]);
+    mockRepo.addDict('a', [const DictData(dictLabel: 'A', dictValue: 'a')]);
+    mockRepo.addDict('b', [const DictData(dictLabel: 'B', dictValue: 'b')]);
 
     await tester.pumpWidget(_buildTestApp(
       DictBuilder(
-        dictIds: ['a', 'b'],
+        dictIds: const ['a', 'b'],
         dictService: service,
         builder: (context, dicts, state) {
           if (state.isLoading) return const Text('loading...');
@@ -96,12 +96,12 @@ void main() {
   });
 
   testWidgets('reloads when dictIds change', (tester) async {
-    mockRepo.addDict('a', [DictData(dictLabel: 'A', dictValue: 'a')]);
-    mockRepo.addDict('b', [DictData(dictLabel: 'B', dictValue: 'b')]);
+    mockRepo.addDict('a', [const DictData(dictLabel: 'A', dictValue: 'a')]);
+    mockRepo.addDict('b', [const DictData(dictLabel: 'B', dictValue: 'b')]);
 
     await tester.pumpWidget(_buildTestApp(
       DictBuilder(
-        dictIds: ['a'],
+        dictIds: const ['a'],
         dictService: service,
         builder: (context, dicts, state) {
           if (state.isLoading) return const Text('loading...');
@@ -115,7 +115,7 @@ void main() {
 
     await tester.pumpWidget(_buildTestApp(
       DictBuilder(
-        dictIds: ['a', 'b'],
+        dictIds: const ['a', 'b'],
         dictService: service,
         builder: (context, dicts, state) {
           if (state.isLoading) return const Text('loading...');

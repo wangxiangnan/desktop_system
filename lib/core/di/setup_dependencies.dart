@@ -3,6 +3,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../network/dio_client.dart';
 import '../config/app_config.dart';
+import '../services/error_handler.dart';
+import '../services/app_logger.dart';
 
 // Data sources
 import 'package:desktop_system/data/datasources/remote/auth_remote_datasource.dart';
@@ -22,7 +24,6 @@ import 'package:desktop_system/data/repositories/auth_repository_impl.dart';
 import 'package:desktop_system/data/repositories/order_repository_impl.dart';
 
 // BLoCs
-import 'package:desktop_system/features/splash/bloc/splash_bloc.dart';
 import 'package:desktop_system/features/auth/bloc/auth_bloc.dart';
 import 'package:desktop_system/features/order/bloc/order_bloc.dart';
 
@@ -43,7 +44,14 @@ Future<void> setupDependencies() async {
   getIt.registerLazySingleton<StorageDataSource>(
     () => StorageDataSource(getIt<SharedPreferences>()),
   );
-  DioClient().setStorageDataSource(getIt<StorageDataSource>());
+  DioClient().storageDataSource = getIt<StorageDataSource>();
+
+  // Error handler (decouples network errors from UI)
+  getIt.registerLazySingleton<ErrorHandler>(() => ErrorHandler());
+  DioClient().errorHandler = getIt<ErrorHandler>();
+
+  // App logger
+  getIt.registerLazySingleton<AppLogger>(() => AppLogger());
 
   // ========== Data Sources ==========
 
@@ -60,7 +68,12 @@ Future<void> setupDependencies() async {
   getIt.registerLazySingleton<DictService>(
     () => DictService(getIt<DictRepository>()),
   );
-  getIt.registerLazySingleton<PrintService>(() => PrintService());
+  getIt.registerLazySingleton<PrintService>(
+    () => PrintService(
+      printSettingsService: getIt<PrintSettingsService>(),
+      dioClient: getIt<DioClient>(),
+    ),
+  );
   getIt.registerLazySingleton<PrintSettingsService>(
     () => PrintSettingsService(getIt<SharedPreferences>()),
   );
@@ -92,8 +105,6 @@ Future<void> setupDependencies() async {
   );
 
   // ========== BLoCs ==========
-  getIt.registerFactory<SplashBloc>(() => SplashBloc());
-
   getIt.registerFactory<AuthBloc>(
     () => AuthBloc(authUseCase: getIt<AuthUseCase>()),
   );
@@ -104,10 +115,11 @@ Future<void> setupDependencies() async {
 
   // Log configuration
   if (AppConfig.debugMode) {
-    print('=== Dependency Injection Config ===');
-    print('Environment: ${AppConfig.environment}');
-    print('Use Mock Data: ${AppConfig.useMockData}');
-    print('API Base URL: ${AppConfig.apiBaseUrl}');
-    print('===================================');
+    final log = getIt<AppLogger>();
+    log.d('=== Dependency Injection Config ===');
+    log.d('Environment: ${AppConfig.environment}');
+    log.d('Use Mock Data: ${AppConfig.useMockData}');
+    log.d('API Base URL: ${AppConfig.apiBaseUrl}');
+    log.d('===================================');
   }
 }

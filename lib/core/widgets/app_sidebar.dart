@@ -40,7 +40,7 @@ class _AppSidebarState extends State<AppSidebar> {
                       Expanded(
                         child: Text(
                           AppStrings.appName,
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.white,
                             fontSize: 18,
                             fontWeight: FontWeight.bold,

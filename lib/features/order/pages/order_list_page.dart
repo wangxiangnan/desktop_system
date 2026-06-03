@@ -12,7 +12,6 @@ import 'package:desktop_system/core/widgets/dict_builder.dart';
 import 'package:desktop_system/domain/usecases/order_usecase.dart';
 import 'package:desktop_system/routing/routes.dart';                                                                                                                                              
 import '../bloc/order_bloc.dart';
-import '../bloc/order_bloc.dart';
 import '../bloc/order_event.dart';
 import '../bloc/order_state.dart';
 import '../widgets/widgets.dart';
@@ -143,7 +142,7 @@ class _OrderListViewState extends State<_OrderListView> {
   void initState() {
     super.initState();
     final now = DateTime.now();
-    final begin = DateTime.now().subtract(Duration(days: 20));
+    final begin = DateTime.now().subtract(const Duration(days: 20));
     final end = DateTime(now.year, now.month, now.day, 23, 59, 59);
     _calendarValue = [begin.millisecondsSinceEpoch, end.millisecondsSinceEpoch];
     _controller('createBeginTime').text = begin.toString().substring(0, 19);
@@ -164,7 +163,7 @@ class _OrderListViewState extends State<_OrderListView> {
   @override
   Widget build(BuildContext context) {
     return DictBuilder(
-      dictIds: ['ctms_channel_type', 'ctms_payment_type', 'payment_status', 'ctms_refund_status', 'ctms_print_type', 'ctms_draw_out_status', 'invoice_status'],
+      dictIds: const ['ctms_channel_type', 'ctms_payment_type', 'payment_status', 'ctms_refund_status', 'ctms_print_type', 'ctms_draw_out_status', 'invoice_status'],
       builder: (context, dicts, state) {
         return Scaffold(
           // appBar: AppBar(title: const Text('订单列表')),

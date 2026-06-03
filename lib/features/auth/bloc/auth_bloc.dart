@@ -1,6 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:desktop_system/domain/usecases/usecases.dart';
+import 'package:desktop_system/core/services/app_logger.dart';
+import 'package:desktop_system/core/di/setup_dependencies.dart';
 import 'auth_event.dart';
 import 'auth_state.dart';
 
@@ -34,6 +36,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       success: (user) => emit(state.copyWith(
         status: AuthStatus.authenticated,
         user: user,
+        errorMessage: null,
       )),
       failure: (error) => emit(state.copyWith(
         status: AuthStatus.failure,
@@ -111,7 +114,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         copyrightText: config.copyrightText,
         backgroundImageUrl: config.backgroundImageUrl,
       )),
-      failure: (_) {}, // silently ignore login config fetch failure
+      failure: (error) {
+        getIt<AppLogger>().w('Failed to fetch login config: ${error.message}');
+      },
     );
   }
 }

@@ -100,7 +100,7 @@ class _LoginPageState extends State<LoginPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       ClipRRect(
-                        borderRadius: BorderRadius.only(topLeft: Radius.circular(32), bottomLeft: Radius.circular(32)),
+                        borderRadius: const BorderRadius.only(topLeft: Radius.circular(32), bottomLeft: Radius.circular(32)),
                         child: Image.network(
                           'https://res.dasheng.top/ctms_log/log_two_bg.png',
                           height: 586,
@@ -112,7 +112,7 @@ class _LoginPageState extends State<LoginPage> {
                           borderRadius: BorderRadius.circular(24),
                           color: Colors.white,
                         ),
-                        padding: EdgeInsets.fromLTRB(50, 76, 50, 76),
+                        padding: const EdgeInsets.fromLTRB(50, 76, 50, 76),
                         child: Form(
                           key: _formKey,
                           child: Column(

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class SearchForm extends StatelessWidget {
   final VoidCallback onSearch;
@@ -20,22 +18,6 @@ class SearchForm extends StatelessWidget {
     required this.calendarValue,
     required this.onCalendarConfirm,
   });
-
-  String get _calendarButtonLabel {
-    print('当前时间');
-    print(DateTime.now());
-    print(DateTime.fromMicrosecondsSinceEpoch(DateTime.now().microsecondsSinceEpoch));
-    if (calendarValue != null && calendarValue!.length == 2) {
-      final begin =
-          DateFormat('yyyy-MM-dd').format(
-              DateTime.fromMillisecondsSinceEpoch(calendarValue![0]));
-      final end =
-          DateFormat('yyyy-MM-dd').format(
-              DateTime.fromMillisecondsSinceEpoch(calendarValue![1]));
-      return '$begin - $end';
-    }
-    return '创建开始时间 - 创建结束时间';
-  }
 
   @override
   Widget build(BuildContext context) {

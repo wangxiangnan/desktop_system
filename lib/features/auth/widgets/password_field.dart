@@ -28,7 +28,7 @@ class PasswordField extends StatelessWidget {
       ),
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return '请输入密码';
+          return AppStrings.passwordRequired;
         }
         return null;
       },

@@ -58,7 +58,7 @@ void main() {
 
   testWidgets('loads dicts on init and exposes dictLabel', (tester) async {
     repo.addDict('test_dict', [
-      DictData(dictLabel: '测试值', dictValue: 'val'),
+      const DictData(dictLabel: '测试值', dictValue: 'val'),
     ]);
 
     await tester.pumpWidget(MaterialApp(home: _TestWidget(repo)));

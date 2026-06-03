@@ -39,29 +39,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     Emitter<OrderState> emit,
   ) async {
     final params = state.searchParams.copyWith(pageNum: 1);
-    emit(state.copyWith(
-      status: OrderListStatus.loading,
-      searchParams: params,
-    ));
-
-    try {
-      final result = await _orderUsecase.getOrders(params.toJson());
-      emit(state.copyWith(
-        status: OrderListStatus.success,
-        orders: result.rows,
-        total: result.total,
-        totalPages: result.totalPages,
-        searchParams: params.copyWith(
-          pageNum: result.pageNum,
-          pageSize: result.pageSize,
-        ),
-      ));
-    } on AppError catch (e) {
-      emit(state.copyWith(
-        status: OrderListStatus.failure,
-        errorMessage: e.message,
-      ));
-    }
+    await _fetchOrders(params, emit);
   }
 
   Future<void> _onPageChanged(
@@ -72,6 +50,13 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
       pageNum: event.pageNum,
       pageSize: event.pageSize,
     );
+    await _fetchOrders(params, emit);
+  }
+
+  Future<void> _fetchOrders(
+    OrderSearchParams params,
+    Emitter<OrderState> emit,
+  ) async {
     emit(state.copyWith(
       status: OrderListStatus.loading,
       searchParams: params,

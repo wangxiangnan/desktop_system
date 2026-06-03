@@ -1,4 +1,5 @@
 import 'package:desktop_system/domain/entities/order_entity.dart';
+import 'package:desktop_system/core/utils/money_calculator.dart';
 
 class OrderModel {
   final String id;
@@ -75,7 +76,7 @@ class OrderModel {
     return Order(
       id: id,
       channelType: channelType,
-      amount: amount.toInt(), // Convert yuan to cents
+      amount: MoneyCalculator.yuanToCents(amount),
       num: num,
       checkUpNum: checkUpNum,
       paymentType: paymentType,

@@ -1,7 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
+
+import 'package:desktop_system/core/constants/app_strings.dart';
 
 import 'package:desktop_system/core/di/setup_dependencies.dart';
 import 'package:desktop_system/core/models/print_content.dart';
@@ -52,12 +56,12 @@ class _PrintPreviewPageState extends State<PrintPreviewPage> {
     setState(() => _isPrinting = true);
 
     if (!mounted) return;
-    showDialog(
+    unawaited(showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (_) => PopScope(
+      builder: (_) => const PopScope(
         canPop: false,
-        child: const Center(
+        child: Center(
           child: Card(
             child: Padding(
               padding: EdgeInsets.all(24),
@@ -66,14 +70,14 @@ class _PrintPreviewPageState extends State<PrintPreviewPage> {
                 children: [
                   CircularProgressIndicator(),
                   SizedBox(height: 16),
-                  Text('打印中...'),
+                  Text(AppStrings.printing),
                 ],
               ),
             ),
           ),
         ),
       ),
-    );
+    ));
 
     bool success = false;
     try {
@@ -81,7 +85,7 @@ class _PrintPreviewPageState extends State<PrintPreviewPage> {
       success = await Printing.directPrintPdf(
         printer: Printer(
           url: _settings.selectedPrinterUrl!,
-          name: _settings.selectedPrinterName!,
+          name: _settings.selectedPrinterName,
         ),
         onLayout: (format) => pdfBytes,
         name: _settings.jobName,

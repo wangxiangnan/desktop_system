@@ -163,7 +163,7 @@ class _PrintSettingsPageState extends State<PrintSettingsPage> {
                   style: TextStyle(color: Colors.grey))
             else
               DropdownButtonFormField<String>(
-                value: _settings.selectedPrinterUrl,
+                initialValue: _settings.selectedPrinterUrl,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   contentPadding:
@@ -237,7 +237,7 @@ class _PrintSettingsPageState extends State<PrintSettingsPage> {
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             const SizedBox(height: 12),
             DropdownButtonFormField<String>(
-              value: _settings.pageFormatName,
+              initialValue: _settings.pageFormatName,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 contentPadding:

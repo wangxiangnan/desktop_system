@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:desktop_system/core/constants/app_colors.dart';
+import 'package:desktop_system/core/constants/app_strings.dart';
 import 'package:desktop_system/core/config/app_config.dart';
 
 class HomePage extends StatelessWidget {
@@ -44,7 +45,7 @@ class HomePage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                'Dashboard',
+                AppStrings.dashboard,
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 24),
@@ -56,22 +57,22 @@ class HomePage extends StatelessWidget {
                   children: [
                     _buildDashboardCard(
                       context,
-                      '订单管理',
-                      '查看和管理订单',
+                      AppStrings.orderManagement,
+                      AppStrings.orderManagementDesc,
                       Icons.confirmation_number,
                       () => context.push('/orders'),
                     ),
                     _buildDashboardCard(
                       context,
-                      '打印设置',
-                      '配置打印页面和边距',
+                      AppStrings.printSettings,
+                      AppStrings.printSettingsDesc,
                       Icons.print,
                       () => context.push('/print-settings'),
                     ),
                     _buildDashboardCard(
                       context,
-                      'Settings',
-                      'App settings',
+                      AppStrings.settings,
+                      AppStrings.appSettings,
                       Icons.settings,
                       () => context.push('/settings'),
                     ),

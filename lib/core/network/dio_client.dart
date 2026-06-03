@@ -2,12 +2,12 @@ import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 import '../config/app_config.dart';
-import 'package:desktop_system/routing/app_router.dart';
+import '../constants/app_strings.dart';
 import 'package:desktop_system/data/datasources/local/storage_datasource.dart';
+import 'package:desktop_system/core/result/network_error.dart';
+import 'package:desktop_system/core/services/error_handler.dart';
 
 /// Recursively sort all map keys in ascending order.
 dynamic _sortMap(dynamic value) {
@@ -30,8 +30,6 @@ dynamic _sortMap(dynamic value) {
 /// 3. Append salt "ctms"
 /// 4. MD5 hash
 String _generateSign(Map<String, dynamic> data) {
-  // if (data.isEmpty) return '';
-
   final sorted = _sortMap(data);
   final plain = '${jsonEncode(sorted)}ctms';
   return md5.convert(utf8.encode(plain)).toString();
@@ -76,8 +74,12 @@ class DioClient {
     }
   }
 
-  void setStorageDataSource(StorageDataSource storageDataSource) {
-    _AuthInterceptor().setStorageDataSource(storageDataSource);
+  set storageDataSource(StorageDataSource value) {
+    _AuthInterceptor().storageDataSource = value;
+  }
+
+  set errorHandler(ErrorHandler value) {
+    _ErrorInterceptor().errorHandler = value;
   }
 
   /// 获取Dio实例
@@ -192,8 +194,8 @@ class _AuthInterceptor extends Interceptor {
 
   StorageDataSource? _storageDataSource;
 
-  void setStorageDataSource(StorageDataSource storageDataSource) {
-    _storageDataSource = storageDataSource;
+  set storageDataSource(StorageDataSource? value) {
+    _storageDataSource = value;
   }
 
   @override
@@ -224,60 +226,74 @@ class _AuthInterceptor extends Interceptor {
 }
 
 class _ErrorInterceptor extends Interceptor {
+  static final _ErrorInterceptor _instance = _ErrorInterceptor._internal();
+
+  factory _ErrorInterceptor() {
+    return _instance;
+  }
+
+  _ErrorInterceptor._internal();
+
+  ErrorHandler? _errorHandler;
+
+  set errorHandler(ErrorHandler value) {
+    _errorHandler = value;
+  }
+
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) {
-    BuildContext? context = AppRouter.navigatorKey.currentContext;
+    final errorHandler = _errorHandler;
+    if (errorHandler == null) {
+      handler.next(err);
+      return;
+    }
+
     String msg;
-    int? errorCode;
+    bool isUnauthorized = false;
 
     if (err.error is ApiException) {
       final apiErr = err.error as ApiException;
-      errorCode = apiErr.code;
       msg = apiErr.message;
     } else if (err.response != null) {
       final statusCode = err.response!.statusCode ?? 0;
-      errorCode = err.response!.data?['code'];
       final errorMsg = err.response!.data?['msg'] ?? err.message;
       switch (statusCode) {
         case 401:
-          msg = '登录已过期，请重新登录';
-          context?.go('/login');
+          msg = AppStrings.errorSessionExpired;
+          isUnauthorized = true;
           break;
         case 403:
-          msg = '没有权限访问该资源';
+          msg = AppStrings.errorForbidden;
           break;
         case 404:
-          msg = '请求的资源不存在';
+          msg = AppStrings.errorNotFound;
           break;
         case 500:
-          msg = '服务器内部错误';
+          msg = AppStrings.errorServerError;
           break;
         default:
-          msg = errorMsg ?? '请求失败';
+          msg = errorMsg ?? AppStrings.errorRequestFailed;
       }
     } else {
       switch (err.type) {
         case DioExceptionType.connectionTimeout:
         case DioExceptionType.sendTimeout:
         case DioExceptionType.receiveTimeout:
-          msg = '网络连接超时，请检查网络';
+          msg = AppStrings.errorTimeout;
           break;
         case DioExceptionType.connectionError:
-          msg = '网络连接失败，请检查网络';
+          msg = AppStrings.errorConnection;
           break;
         default:
-          msg = err.message ?? '网络请求失败';
+          msg = err.message ?? AppStrings.errorNetworkFailed;
       }
     }
 
-    if (context != null && context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(msg),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
+    errorHandler.reportError(NetworkError(
+      message: msg,
+      statusCode: err.response?.statusCode,
+      isUnauthorized: isUnauthorized,
+    ));
 
     handler.next(err);
   }

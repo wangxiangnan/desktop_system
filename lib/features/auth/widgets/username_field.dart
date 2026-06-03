@@ -16,7 +16,7 @@ class UsernameField extends StatelessWidget {
       ),
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return '请输入用户名';
+          return AppStrings.usernameRequired;
         }
         return null;
       },

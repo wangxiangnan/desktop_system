@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:desktop_system/core/constants/app_strings.dart';
 
 class CaptchaField extends StatelessWidget {
   final TextEditingController controller;
@@ -25,12 +26,12 @@ class CaptchaField extends StatelessWidget {
           child: TextFormField(
             controller: controller,
             decoration: const InputDecoration(
-              labelText: '验证码',
+              labelText: AppStrings.captcha,
               prefixIcon: Icon(Icons.security),
             ),
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return '请输入验证码';
+                return AppStrings.captchaRequired;
               }
               return null;
             },

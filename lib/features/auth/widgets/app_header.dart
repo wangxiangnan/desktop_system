@@ -10,7 +10,7 @@ class AppHeader extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text('👏 Hi，欢迎登录～'),
+        const Text(AppStrings.loginWelcome),
         const SizedBox(height: 16),
         Text(
           AppStrings.appName,

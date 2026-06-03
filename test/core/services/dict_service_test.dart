@@ -34,8 +34,8 @@ void main() {
   group('getDict', () {
     test('fetches and caches dict', () async {
       mockRepo.addDict('payment', [
-        DictData(dictLabel: '支付宝', dictValue: 'alipay'),
-        DictData(dictLabel: '微信支付', dictValue: 'wechat'),
+        const DictData(dictLabel: '支付宝', dictValue: 'alipay'),
+        const DictData(dictLabel: '微信支付', dictValue: 'wechat'),
       ]);
 
       final result = await service.getDict('payment');
@@ -49,7 +49,7 @@ void main() {
 
     test('returns cached data on second call', () async {
       mockRepo.addDict('payment', [
-        DictData(dictLabel: '支付宝', dictValue: 'alipay'),
+        const DictData(dictLabel: '支付宝', dictValue: 'alipay'),
       ]);
 
       await service.getDict('payment');
@@ -59,7 +59,7 @@ void main() {
     });
 
     test('deduplicates concurrent requests', () async {
-      mockRepo.addDict('test', [DictData(dictLabel: '值', dictValue: 'v')]);
+      mockRepo.addDict('test', [const DictData(dictLabel: '值', dictValue: 'v')]);
 
       final results = await Future.wait([
         service.getDict('test'),
@@ -74,15 +74,15 @@ void main() {
     });
 
     test('stale-while-revalidate: returns stale data then refreshes in background', () async {
-      final shortTtl = DictService(mockRepo, defaultTtl: Duration(milliseconds: 50));
-      mockRepo.addDict('test', [DictData(dictLabel: '旧值', dictValue: 'v')]);
+      final shortTtl = DictService(mockRepo, defaultTtl: const Duration(milliseconds: 50));
+      mockRepo.addDict('test', [const DictData(dictLabel: '旧值', dictValue: 'v')]);
 
       await shortTtl.getDict('test');
       expect(mockRepo.fetchCount, 1);
 
       await Future.delayed(const Duration(milliseconds: 60));
 
-      mockRepo.addDict('test', [DictData(dictLabel: '新值', dictValue: 'v')]);
+      mockRepo.addDict('test', [const DictData(dictLabel: '新值', dictValue: 'v')]);
 
       final stale = await shortTtl.getDict('test');
       expect(stale, {'v': '旧值'});
@@ -98,7 +98,7 @@ void main() {
   group('getLabel', () {
     test('returns label for known value', () async {
       mockRepo.addDict('type', [
-        DictData(dictLabel: '个人', dictValue: 'personal'),
+        const DictData(dictLabel: '个人', dictValue: 'personal'),
       ]);
 
       final label = await service.getLabel('type', 'personal');
@@ -108,7 +108,7 @@ void main() {
 
     test('returns value itself for unknown value', () async {
       mockRepo.addDict('type', [
-        DictData(dictLabel: '个人', dictValue: 'personal'),
+        const DictData(dictLabel: '个人', dictValue: 'personal'),
       ]);
 
       final label = await service.getLabel('type', 'unknown');
@@ -119,8 +119,8 @@ void main() {
 
   group('getDicts', () {
     test('fetches multiple dicts in parallel', () async {
-      mockRepo.addDict('a', [DictData(dictLabel: 'A', dictValue: 'a')]);
-      mockRepo.addDict('b', [DictData(dictLabel: 'B', dictValue: 'b')]);
+      mockRepo.addDict('a', [const DictData(dictLabel: 'A', dictValue: 'a')]);
+      mockRepo.addDict('b', [const DictData(dictLabel: 'B', dictValue: 'b')]);
 
       final results = await service.getDicts(['a', 'b']);
 
@@ -142,8 +142,8 @@ void main() {
     });
 
     test('returns stale cache when network fails and cache exists', () async {
-      final shortTtl = DictService(mockRepo, defaultTtl: Duration(milliseconds: 50));
-      mockRepo.addDict('test', [DictData(dictLabel: '旧值', dictValue: 'v')]);
+      final shortTtl = DictService(mockRepo, defaultTtl: const Duration(milliseconds: 50));
+      mockRepo.addDict('test', [const DictData(dictLabel: '旧值', dictValue: 'v')]);
 
       await shortTtl.getDict('test');
 
@@ -158,7 +158,7 @@ void main() {
 
   group('clearCache / clearDict', () {
     test('clearCache forces a refetch', () async {
-      mockRepo.addDict('x', [DictData(dictLabel: 'X', dictValue: 'x')]);
+      mockRepo.addDict('x', [const DictData(dictLabel: 'X', dictValue: 'x')]);
       await service.getDict('x');
       service.clearCache();
       await service.getDict('x');
@@ -167,8 +167,8 @@ void main() {
     });
 
     test('clearDict forces a refetch for specific dict only', () async {
-      mockRepo.addDict('a', [DictData(dictLabel: 'A', dictValue: 'a')]);
-      mockRepo.addDict('b', [DictData(dictLabel: 'B', dictValue: 'b')]);
+      mockRepo.addDict('a', [const DictData(dictLabel: 'A', dictValue: 'a')]);
+      mockRepo.addDict('b', [const DictData(dictLabel: 'B', dictValue: 'b')]);
       await service.getDict('a');
       await service.getDict('b');
       service.clearDict('a');
@@ -181,7 +181,7 @@ void main() {
 
   group('refreshDict / refreshAll', () {
     test('refreshDict forces a single dict refetch', () async {
-      mockRepo.addDict('x', [DictData(dictLabel: 'X', dictValue: 'x')]);
+      mockRepo.addDict('x', [const DictData(dictLabel: 'X', dictValue: 'x')]);
       await service.getDict('x');
       await service.refreshDict('x');
 
@@ -189,8 +189,8 @@ void main() {
     });
 
     test('refreshAll refetches all cached dicts', () async {
-      mockRepo.addDict('a', [DictData(dictLabel: 'A', dictValue: 'a')]);
-      mockRepo.addDict('b', [DictData(dictLabel: 'B', dictValue: 'b')]);
+      mockRepo.addDict('a', [const DictData(dictLabel: 'A', dictValue: 'a')]);
+      mockRepo.addDict('b', [const DictData(dictLabel: 'B', dictValue: 'b')]);
       await service.getDict('a');
       await service.getDict('b');
       await service.refreshAll();
@@ -205,7 +205,7 @@ void main() {
     });
 
     test('getCachedLabel returns label when cached', () async {
-      mockRepo.addDict('x', [DictData(dictLabel: '标签', dictValue: 'v')]);
+      mockRepo.addDict('x', [const DictData(dictLabel: '标签', dictValue: 'v')]);
       await service.getDict('x');
 
       expect(service.getCachedLabel('x', 'v'), '标签');
@@ -217,7 +217,7 @@ void main() {
     });
 
     test('getCachedDict returns map when cached', () async {
-      mockRepo.addDict('x', [DictData(dictLabel: '标签', dictValue: 'v')]);
+      mockRepo.addDict('x', [const DictData(dictLabel: '标签', dictValue: 'v')]);
       await service.getDict('x');
 
       expect(service.getCachedDict('x'), {'v': '标签'});
@@ -226,8 +226,8 @@ void main() {
 
   group('setDictTtl', () {
     test('per-dict TTL overrides default', () async {
-      mockRepo.addDict('a', [DictData(dictLabel: 'A', dictValue: 'a')]);
-      service.setDictTtl('a', Duration(hours: 24));
+      mockRepo.addDict('a', [const DictData(dictLabel: 'A', dictValue: 'a')]);
+      service.setDictTtl('a', const Duration(hours: 24));
 
       // Cache should persist longer than default 10min
       await service.getDict('a');

@@ -58,37 +58,37 @@ class _OrderTableState extends State<OrderTable> {
       headerRowHeight: 50,
       rowsPerPage: widget.pageSize,
       columns: [
-        GridColumn(label: Center(child: Text('订单ID')), columnName: 'id'),
-        GridColumn(label: Center(child: Text('项目ID')), columnName: 'performanceId'),
-        GridColumn(label: Center(child: Text('项目名称')), columnName: 'performanceName'),
-        GridColumn(label: Center(child: Text('场次名称')), columnName: 'showName'),
-        GridColumn(label: Center(child: Text('订单来源')), columnName: 'channelType'),
-        GridColumn(label: Center(child: Text('订单金额')), columnName: 'amount'),
-        GridColumn(label: Center(child: Text('支付方式')), columnName: 'paymentType'),
-        GridColumn(label: Center(child: Text('支付状态')), columnName: 'paymentStatus'),
-        GridColumn(label: Center(child: Text('销售政策')), columnName: 'discountPolicyName'),
-        GridColumn(label: Center(child: Text('退款状态')), columnName: 'refundStatus'),
-        GridColumn(label: Center(child: Text('购票数量')), columnName: 'num'),
-        GridColumn(label: Center(child: Text('出票方式')), columnName: 'drawOutType'),
-        GridColumn(label: Center(child: Text('出票状态')), columnName: 'drawOutStatus'),
-        GridColumn(label: Center(child: Text('检票数')), columnName: 'checkUpNum'),
-        GridColumn(label: Center(child: Text('开发票')), columnName: 'invoiceStatus'),
-        GridColumn(label: Center(child: Text('购票人姓名')), columnName: 'customerName'),
-        GridColumn(label: Center(child: Text('购票人手机号')), columnName: 'customerPhone'),
-        GridColumn(label: Center(child: Text('邀请函code/套票关联ID')), columnName: 'mainOrderInfoId'),
-        GridColumn(label: Center(child: Text('套票活动ID')), columnName: 'packageOrderActivityId'),
-        GridColumn(label: Center(child: Text('售票网点机构')), columnName: 'ticketOutletName'),
-        GridColumn(label: Center(child: Text('主办方')), columnName: 'organizerName'),
-        GridColumn(label: Center(child: Text('订单创建时间')), columnName: 'createTime'),
-        GridColumn(label: Center(child: Text('支付完成时间')), columnName: 'paymentTime'),
-        GridColumn(label: Center(child: Text('出票控制')), columnName: 'drawOutControl'),
+        GridColumn(label: const Center(child: Text('订单ID')), columnName: 'id'),
+        GridColumn(label: const Center(child: Text('项目ID')), columnName: 'performanceId'),
+        GridColumn(label: const Center(child: Text('项目名称')), columnName: 'performanceName'),
+        GridColumn(label: const Center(child: Text('场次名称')), columnName: 'showName'),
+        GridColumn(label: const Center(child: Text('订单来源')), columnName: 'channelType'),
+        GridColumn(label: const Center(child: Text('订单金额')), columnName: 'amount'),
+        GridColumn(label: const Center(child: Text('支付方式')), columnName: 'paymentType'),
+        GridColumn(label: const Center(child: Text('支付状态')), columnName: 'paymentStatus'),
+        GridColumn(label: const Center(child: Text('销售政策')), columnName: 'discountPolicyName'),
+        GridColumn(label: const Center(child: Text('退款状态')), columnName: 'refundStatus'),
+        GridColumn(label: const Center(child: Text('购票数量')), columnName: 'num'),
+        GridColumn(label: const Center(child: Text('出票方式')), columnName: 'drawOutType'),
+        GridColumn(label: const Center(child: Text('出票状态')), columnName: 'drawOutStatus'),
+        GridColumn(label: const Center(child: Text('检票数')), columnName: 'checkUpNum'),
+        GridColumn(label: const Center(child: Text('开发票')), columnName: 'invoiceStatus'),
+        GridColumn(label: const Center(child: Text('购票人姓名')), columnName: 'customerName'),
+        GridColumn(label: const Center(child: Text('购票人手机号')), columnName: 'customerPhone'),
+        GridColumn(label: const Center(child: Text('邀请函code/套票关联ID')), columnName: 'mainOrderInfoId'),
+        GridColumn(label: const Center(child: Text('套票活动ID')), columnName: 'packageOrderActivityId'),
+        GridColumn(label: const Center(child: Text('售票网点机构')), columnName: 'ticketOutletName'),
+        GridColumn(label: const Center(child: Text('主办方')), columnName: 'organizerName'),
+        GridColumn(label: const Center(child: Text('订单创建时间')), columnName: 'createTime'),
+        GridColumn(label: const Center(child: Text('支付完成时间')), columnName: 'paymentTime'),
+        GridColumn(label: const Center(child: Text('出票控制')), columnName: 'drawOutControl'),
       ]
     );
   }
 
   Widget _buildDataPager() {
     return SfDataPagerTheme(
-      data: SfDataPagerThemeData(selectedItemColor: AppColors.primary),
+      data: const SfDataPagerThemeData(selectedItemColor: AppColors.primary),
       child: SfDataPager(
         initialPageIndex: widget.pageNum - 1,
         delegate: _orderDataSource,
@@ -129,7 +129,7 @@ class _OrderTableState extends State<OrderTable> {
                   ),
                 ),
                 
-                SizedBox(width: 16),
+                const SizedBox(width: 16),
                 if (widget.total > 0)
                 SizedBox(
                   width: constraints.maxWidth - 100,
@@ -203,7 +203,7 @@ class OrderDataSource extends DataGridSource {
       cells: row.getCells().map((dataGridCell) {
         return Container(
           alignment: Alignment.center,
-          padding: EdgeInsets.all(6.0),
+          padding: const EdgeInsets.all(6.0),
           child: Text(dataGridCell.value?.toString() ?? ''),
         );
       }).toList(),

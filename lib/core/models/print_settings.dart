@@ -1,4 +1,3 @@
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pdf/pdf.dart';
 
 class PrintSettings {
@@ -98,50 +97,5 @@ class PrintSettings {
       selectedPrinterName:
           clearPrinter ? null : selectedPrinterName ?? this.selectedPrinterName,
     );
-  }
-
-  // SharedPreferences serialization
-  static const _keyPageFormat = 'print_page_format';
-  static const _keyOrientation = 'print_orientation';
-  static const _keyMarginLeft = 'print_margin_left';
-  static const _keyMarginTop = 'print_margin_top';
-  static const _keyMarginRight = 'print_margin_right';
-  static const _keyMarginBottom = 'print_margin_bottom';
-  static const _keyJobName = 'print_job_name';
-  static const _keyDirectPrint = 'print_direct_print';
-  static const _keyPrinterUrl = 'print_printer_url';
-  static const _keyPrinterName = 'print_printer_name';
-
-  factory PrintSettings.fromPrefs(SharedPreferences prefs) {
-    return PrintSettings(
-      pageFormatName: prefs.getString(_keyPageFormat) ?? 'a4',
-      isLandscape: (prefs.getString(_keyOrientation) ?? 'portrait') == 'landscape',
-      marginLeft: prefs.getDouble(_keyMarginLeft) ?? 10.0,
-      marginTop: prefs.getDouble(_keyMarginTop) ?? 10.0,
-      marginRight: prefs.getDouble(_keyMarginRight) ?? 10.0,
-      marginBottom: prefs.getDouble(_keyMarginBottom) ?? 10.0,
-      jobName: prefs.getString(_keyJobName) ?? 'Print Job',
-      directPrint: prefs.getBool(_keyDirectPrint) ?? false,
-      selectedPrinterUrl: prefs.getString(_keyPrinterUrl),
-      selectedPrinterName: prefs.getString(_keyPrinterName),
-    );
-  }
-
-  Future<void> saveToPrefs(SharedPreferences prefs) async {
-    await prefs.setString(_keyPageFormat, pageFormatName);
-    await prefs.setString(_keyOrientation, orientationKey);
-    await prefs.setDouble(_keyMarginLeft, marginLeft);
-    await prefs.setDouble(_keyMarginTop, marginTop);
-    await prefs.setDouble(_keyMarginRight, marginRight);
-    await prefs.setDouble(_keyMarginBottom, marginBottom);
-    await prefs.setString(_keyJobName, jobName);
-    await prefs.setBool(_keyDirectPrint, directPrint);
-    if (selectedPrinterUrl != null) {
-      await prefs.setString(_keyPrinterUrl, selectedPrinterUrl!);
-      await prefs.setString(_keyPrinterName, selectedPrinterName ?? '');
-    } else {
-      await prefs.remove(_keyPrinterUrl);
-      await prefs.remove(_keyPrinterName);
-    }
   }
 }

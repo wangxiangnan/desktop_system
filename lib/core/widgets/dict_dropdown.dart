@@ -123,10 +123,10 @@ class _DictDropdownState extends State<DictDropdown> {
       return _buildInput(
         child: InkWell(
           onTap: _loadDict,
-          child: Row(
+          child: const Row(
             children: [
-              const Icon(Icons.error_outline, size: 16, color: AppColors.error),
-              const SizedBox(width: 8),
+              Icon(Icons.error_outline, size: 16, color: AppColors.error),
+              SizedBox(width: 8),
               Text('加载失败，点击重试', style: TextStyle(color: AppColors.error, fontSize: 13)),
             ],
           ),
